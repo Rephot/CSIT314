@@ -14,7 +14,8 @@ sends affirmative to professional
 */
 
 Service recentRequests[]; // dynamically allocated as learnt in CSCI203
-// displayAcceptedSpecialists[];
+static int activeRequests;
+string displayAcceptedSpecialists[];
 
 struct location{
 	int streetNo;
@@ -34,6 +35,7 @@ ServiceRequest::ServiceRequest(){
 	//customer who created and all associated data(name, user type, car information), location details provided, 
 	customerInfo raisedBy;
 	location incidentOccuredAt;
+	broadcastServiceRequest();
 }
 
 ServiceRequest::createServiceRequest(/*needs customer who called*/){//(Customer currentCustomer)
@@ -56,11 +58,14 @@ ServiceRequest::createServiceRequest(/*needs customer who called*/){//(Customer 
 ServiceRequest::broadcastServiceRequest{
 	// place into an array for the specialists to view
 	// will be called from the constructor
+	recentRequests[activeRequests++] = newRequest;
 }
 
+// a get function that returns the array of professionals that accepted
 ServiceRequest::displayProfessionalsWhoAccepted{
 	// lets client see who is available to help
 	// displays formatted data from an array
+	return displayAcceptedSpecialists;
 }
 
 ServiceRequest::sendAffirmitiveToProfessional{
