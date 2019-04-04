@@ -1,0 +1,3 @@
+// inherits User
+
+Customer
