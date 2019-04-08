@@ -1,0 +1,1 @@
+//administrator inherits user
