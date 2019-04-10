@@ -43,12 +43,15 @@ ServiceRequest::ServiceRequest(string client, string location, string serviceTyp
 	serviceRequestedAt = dateTimeRequested;
 }
 
-ServiceRequest ServiceRequest::createServiceRequest(/*needs customer who called*/){//(Customer currentCustomer)
+void ServiceRequest::createServiceRequest(/*needs customer who called*/){//(Customer currentCustomer)
 	/*
 	some way of acquiring location info
 	*/
-	// test
+	/* Test 
+	
+	*/
 	ServiceRequest newRequest;
+	// identifying number
 	string sType, location, client;
 	time_t dateTimeRequested, timer;
 	cout << "This is a Test:\nPlease Enter the details of the incident.\nIs it a breakdown or something like a flat tyre? ";
@@ -57,14 +60,15 @@ ServiceRequest ServiceRequest::createServiceRequest(/*needs customer who called*
 	getline(cin, location);
 	dateTimeRequested = time(&timer);
 	client = "Joshua Groucutt";
-	newRequest = new ServiceRequest(client, location, sType, dateTimeRequested);
-	//broadcastServiceRequest(newRequest);
+	newRequest = { client, location, sType, dateTimeRequested };
+	broadcastServiceRequest(newRequest);
 }
 
 void ServiceRequest::broadcastServiceRequest(ServiceRequest newRequest){
 	// place into an array for the specialists to view
 	// will be called from the constructor
-
+	// add service request to static member of specialist class
+	cout << "This is where the request would be broadcast from!\n" << endl;
 }
 
 // a get function that returns the array of professionals that accepted

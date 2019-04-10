@@ -28,8 +28,9 @@ int main(){
 	6. client chooses a specialist
 	7. specialist receives a go ahead notification
 	*/
-
+	int exitCode;
 	ServiceRequest testRequest;
 	testRequest.createServiceRequest();
-
+	cin >> exitCode;
+	return 0;
 }

@@ -8,7 +8,7 @@ class ServiceRequest {
 public:
 	ServiceRequest();
 	ServiceRequest(string, string, string, time_t);
-	ServiceRequest createServiceRequest();
+	void createServiceRequest();
 	void broadcastServiceRequest(ServiceRequest);
 	void displayProfessionalsWhoAccepted();
 	void sendAffirmitiveToProfessional();
