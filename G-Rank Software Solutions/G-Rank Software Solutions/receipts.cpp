@@ -7,14 +7,8 @@ create and update system with reviews and info about customer if needed
 
 */
 
-receipts::createInvoice{
+#include"Receipts.h"
 
-}
-
-receipts::createSendReceipt{
-
-}
-
-receipts::createUpdateReviewAndCustInfo{
+Receipts::Receipts() {
 
 }

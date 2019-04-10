@@ -22,32 +22,32 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{50D6D8F3-E98A-4406-8236-10EBD179704D}</ProjectGuid>
     <RootNamespace>GRankSoftwareSolutions</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -116,21 +116,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Administrator.h" />
-    <ClInclude Include="car.h" />
+    <ClInclude Include="Car.h" />
     <ClInclude Include="Customer.h" />
-    <ClInclude Include="receipts.h" />
-    <ClInclude Include="reviews.h" />
+    <ClInclude Include="Receipts.h" />
+    <ClInclude Include="Reviews.h" />
     <ClInclude Include="ServiceRequest.h" />
     <ClInclude Include="Specialist.h" />
     <ClInclude Include="User.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Administrator.cpp" />
-    <ClCompile Include="car.cpp" />
+    <ClCompile Include="Car.cpp" />
     <ClCompile Include="Customer.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="receipts.cpp" />
-    <ClCompile Include="reviews.cpp" />
+    <ClCompile Include="Receipts.cpp" />
+    <ClCompile Include="Reviews.cpp" />
     <ClCompile Include="ServiceRequest.cpp" />
     <ClCompile Include="Specialist.cpp" />
     <ClCompile Include="User.cpp" />

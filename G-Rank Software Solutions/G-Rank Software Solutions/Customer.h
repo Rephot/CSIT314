@@ -1,3 +1,8 @@
 // inherits User
 
-Customer
+using namespace std;
+
+class Customer {
+public:
+	Customer();
+};

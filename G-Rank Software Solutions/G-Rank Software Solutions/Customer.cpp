@@ -1,5 +1,7 @@
 //customer inherits user
 
-car Customer::getCarDetails(){
+#include"Customer.h"
+
+Customer::Customer(){
 	
 }

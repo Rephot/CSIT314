@@ -1,5 +1,7 @@
 //?extends customer?
 
-car::car(){
-	
+#include"Car.h"
+
+Car::Car() {
+
 }
