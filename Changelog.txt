@@ -1,5 +1,0 @@
-03/04/19 
-- Uploaded to Drive
-- Specialist Class functions identified, but not yet implemented
-@ Chris if you have ideas for functions or what might be necessary go ahead and add them
-

@@ -1,5 +1,0 @@
-//?extends customer?
-
-car::car(){
-	
-}

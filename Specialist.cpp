@@ -1,3 +1,0 @@
-//specialist inherits user
-
-Specialist
