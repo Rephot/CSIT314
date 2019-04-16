@@ -7,7 +7,7 @@ using namespace std;
 class ServiceRequest {
 public:
 	ServiceRequest();
-	ServiceRequest(string, string, string, time_t);
+	ServiceRequest(string, string, string, string);
 	void createServiceRequest();
 	void broadcastServiceRequest(ServiceRequest);
 	void displayProfessionalsWhoAccepted();
@@ -15,7 +15,9 @@ public:
 	void specialisAcceptServiceRequest();
 	void professionalAcknowledgment();
 	void clientChoosesProfessional();
+	string toString();
+	static ServiceRequest currentRequests[50];
+	static int numRequests;
 private:
-	string clientName, incidentLocation, sType;
-	time_t serviceRequestedAt;
+	string clientName, incidentLocation, sType, serviceRequestedAt;
 };

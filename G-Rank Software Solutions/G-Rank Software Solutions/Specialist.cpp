@@ -8,6 +8,4 @@ Specialist::Specialist() {
 
 }
 
-void Specialist::addToCurrentRequests() {
 
-}

@@ -1,10 +1,10 @@
-#include"ServiceRequest.h"
+using namespace std;
+
 // inherits user
 
 class Specialist {
 public:
 	Specialist();
-	void addToCurrentRequests();
-	static ServiceRequest currentRequests[];
+	// temporary array
 private:
 };

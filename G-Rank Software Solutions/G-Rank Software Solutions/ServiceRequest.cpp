@@ -1,6 +1,8 @@
 #include<iostream>
+#include<sstream>
 #include<string>
 #include"ServiceRequest.h"
+#include"Specialist.h"
 
 using namespace std;
 
@@ -28,14 +30,17 @@ sends affirmative to professional
 //	// will add more if necessary, if you happen to think of any, please add them
 //};
 
+int ServiceRequest::numRequests = 0;
+
 ServiceRequest::ServiceRequest() {
 	clientName = "";
 	incidentLocation = "";
 	sType = "";
-	serviceRequestedAt = NULL;
+	serviceRequestedAt = "";
 }
 
-ServiceRequest::ServiceRequest(string client, string location, string serviceType, time_t dateTimeRequested){
+// ?
+ServiceRequest::ServiceRequest(string client, string location, string serviceType, string dateTimeRequested){
 	//customer who created and all associated data(name, user type, car information), location details provided, 
 	clientName = client;
 	incidentLocation = location;
@@ -52,13 +57,13 @@ void ServiceRequest::createServiceRequest(/*needs customer who called*/){//(Cust
 	*/
 	ServiceRequest newRequest;
 	// identifying number
-	string sType, location, client;
-	time_t dateTimeRequested, timer;
+	string sType, location, client, dateTimeRequested;
+	/*time_t rawtime;*/
 	cout << "This is a Test:\nPlease Enter the details of the incident.\nIs it a breakdown or something like a flat tyre? ";
 	getline(cin, sType);
 	cout << "Where did the incident happen? ";
 	getline(cin, location);
-	dateTimeRequested = time(&timer);
+	dateTimeRequested = "TIME LITERAL FFFFFFFFFFFFF!!";
 	client = "Joshua Groucutt";
 	newRequest = { client, location, sType, dateTimeRequested };
 	broadcastServiceRequest(newRequest);
@@ -69,6 +74,9 @@ void ServiceRequest::broadcastServiceRequest(ServiceRequest newRequest){
 	// will be called from the constructor
 	// add service request to static member of specialist class
 	cout << "This is where the request would be broadcast from!\n" << endl;
+	currentRequests[numRequests++];
+	string output = newRequest.toString();
+	cout << output;
 }
 
 // a get function that returns the array of professionals that accepted
@@ -99,4 +107,10 @@ void ServiceRequest::clientChoosesProfessional(){
 	// client chooses from the array of accepted specialists
 }
 
+string ServiceRequest::toString() {
+	stringstream request;
+	request << "At " << serviceRequestedAt << ", " << clientName << " has requested assistance for a " << sType << " service, at " << incidentLocation;
+	string requested = request.str();
+	return requested;
+}
 
