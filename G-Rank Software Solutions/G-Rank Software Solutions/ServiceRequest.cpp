@@ -1,6 +1,8 @@
 #include<iostream>
 #include<sstream>
 #include<string>
+#include<ctime>
+#include<chrono>
 #include"ServiceRequest.h"
 #include"Specialist.h"
 
@@ -39,37 +41,7 @@ ServiceRequest::ServiceRequest() {
 	serviceRequestedAt = "";
 }
 
-// ?
-ServiceRequest::ServiceRequest(string client, string location, string serviceType, string dateTimeRequested){
-	//customer who created and all associated data(name, user type, car information), location details provided, 
-	clientName = client;
-	incidentLocation = location;
-	sType = serviceType;
-	serviceRequestedAt = dateTimeRequested;
-}
-
-void ServiceRequest::createServiceRequest(/*needs customer who called*/){//(Customer currentCustomer)
-	/*
-	some way of acquiring location info
-	*/
-	/* Test 
-	
-	*/
-	ServiceRequest newRequest;
-	// identifying number
-	string sType, location, client, dateTimeRequested;
-	/*time_t rawtime;*/
-	cout << "This is a Test:\nPlease Enter the details of the incident.\nIs it a breakdown or something like a flat tyre? ";
-	getline(cin, sType);
-	cout << "Where did the incident happen? ";
-	getline(cin, location);
-	dateTimeRequested = "TIME LITERAL FFFFFFFFFFFFF!!";
-	client = "Joshua Groucutt";
-	newRequest = { client, location, sType, dateTimeRequested };
-	broadcastServiceRequest(newRequest);
-}
-
-void ServiceRequest::broadcastServiceRequest(ServiceRequest newRequest){
+void ServiceRequest::broadcastServiceRequest(ServiceRequest newRequest) {
 	// place into an array for the specialists to view
 	// will be called from the constructor
 	// add service request to static member of specialist class
@@ -77,6 +49,33 @@ void ServiceRequest::broadcastServiceRequest(ServiceRequest newRequest){
 	currentRequests[numRequests++];
 	string output = newRequest.toString();
 	cout << output;
+}
+
+void ServiceRequest::createServiceRequest(/*needs customer who called*/) {//(Customer currentCustomer)
+	/*
+	some way of acquiring location info
+	*/
+	/* Test
+
+	*/
+	ServiceRequest newRequest;
+	// identifying number
+	string sType, location, client;
+	// shall be replaced by WT form code
+	cout << "This is a Test:\nPlease Enter the details of the incident.\nIs it a breakdown or something like a flat tyre? ";
+	getline(cin, sType);
+	cout << "Where did the incident happen? ";
+	getline(cin, location);
+	client = "Joshua Groucutt";
+	time_t timeCreated = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+	char timeCreatedTime[26];
+	ctime_s(timeCreatedTime, 26, &timeCreated);
+	string dateTimeRequested = timeCreatedTime;
+	newRequest.clientName = client;
+	newRequest.incidentLocation = location;
+	newRequest.sType = sType;
+	newRequest.serviceRequestedAt = dateTimeRequested;
+	broadcastServiceRequest(newRequest);
 }
 
 // a get function that returns the array of professionals that accepted
@@ -109,7 +108,7 @@ void ServiceRequest::clientChoosesProfessional(){
 
 string ServiceRequest::toString() {
 	stringstream request;
-	request << "At " << serviceRequestedAt << ", " << clientName << " has requested assistance for a " << sType << " service, at " << incidentLocation;
+	request << clientName << " has requested assistance for a " << sType << " service, at " << incidentLocation << ", at the time, " << serviceRequestedAt;
 	string requested = request.str();
 	return requested;
 }
