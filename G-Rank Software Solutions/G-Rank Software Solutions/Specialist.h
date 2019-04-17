@@ -1,3 +1,5 @@
+
+
 using namespace std;
 
 // inherits user
@@ -5,6 +7,7 @@ using namespace std;
 class Specialist {
 public:
 	Specialist();
-	// temporary array
+	void viewRequests();
+	void sendAvailable();
 private:
 };

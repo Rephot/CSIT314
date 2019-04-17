@@ -3,6 +3,7 @@
 #include<cstring>
 #include<ctime>
 #include"ServiceRequest.h"
+#include"Specialist.h"
 
 using namespace std;
 
@@ -12,7 +13,7 @@ int main(){
 	1b. runs UI render loop
 	2. performs functions as requested by user
 	3. save info to file
-	3b. closes webGL interface
+	3b. closes interface
 	*/
 	/*
 	Service Request Test
@@ -30,7 +31,15 @@ int main(){
 	*/
 	int exitCode;
 	ServiceRequest testRequest;
+	/*while (exitCode != 'q') {
+
+	}*/
+	cout << "THIS IS AS USER\nuser calls createServiceRequest by pressing a button in the ui\n"; // description of what aim to do with WT widgets
 	testRequest.createServiceRequest();
+	cout << "NOW AS SPECIALIST\n";
+	Specialist andrew;
+	andrew.viewRequests();
+	cout << "q to quit: ";
 	cin >> exitCode;
 	return 0;
 }

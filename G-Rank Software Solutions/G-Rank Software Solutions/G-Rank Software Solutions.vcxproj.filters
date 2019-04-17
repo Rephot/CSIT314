@@ -39,6 +39,9 @@
     <ClInclude Include="Reviews.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="UserSession.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Administrator.cpp">
@@ -66,6 +69,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Reviews.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UserSession.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

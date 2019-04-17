@@ -1,8 +1,3 @@
-#include<iostream>
-#include<sstream>
-#include<string>
-#include<ctime>
-#include<chrono>
 #include"ServiceRequest.h"
 #include"Specialist.h"
 
@@ -32,6 +27,8 @@ sends affirmative to professional
 //	// will add more if necessary, if you happen to think of any, please add them
 //};
 
+int ServiceRequest::numCurrentRequests = 0;
+ServiceRequest ServiceRequest::currentRequests[50];
 int ServiceRequest::numRequests = 0;
 
 ServiceRequest::ServiceRequest() {
@@ -39,6 +36,7 @@ ServiceRequest::ServiceRequest() {
 	incidentLocation = "";
 	sType = "";
 	serviceRequestedAt = "";
+	requestNumber = ++numRequests;
 }
 
 void ServiceRequest::broadcastServiceRequest(ServiceRequest newRequest) {
@@ -46,9 +44,8 @@ void ServiceRequest::broadcastServiceRequest(ServiceRequest newRequest) {
 	// will be called from the constructor
 	// add service request to static member of specialist class
 	cout << "This is where the request would be broadcast from!\n" << endl;
-	currentRequests[numRequests++];
-	string output = newRequest.toString();
-	cout << output;
+	currentRequests[numCurrentRequests++] = newRequest;
+	cout << toString(currentRequests[0]);
 }
 
 void ServiceRequest::createServiceRequest(/*needs customer who called*/) {//(Customer currentCustomer)
@@ -113,3 +110,9 @@ string ServiceRequest::toString() {
 	return requested;
 }
 
+string ServiceRequest::toString(ServiceRequest requestString) {
+	stringstream request;
+	request << requestString.clientName << " has requested assistance for a " << requestString.sType << " service, at " << requestString.incidentLocation << ", at the time, " << requestString.serviceRequestedAt;
+	string requested = request.str();
+	return requested;
+}

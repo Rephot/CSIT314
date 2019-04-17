@@ -1,13 +1,15 @@
 #include<iostream>
 #include<ctime>
 #include<cstring>
+#include<sstream>
+#include<string>
+#include<chrono>
 
 using namespace std;
 
 class ServiceRequest {
 public:
 	ServiceRequest();
-	ServiceRequest(string, string, string, time_t);
 	void createServiceRequest();
 	void broadcastServiceRequest(ServiceRequest);
 	void displayProfessionalsWhoAccepted();
@@ -16,8 +18,11 @@ public:
 	void professionalAcknowledgment();
 	void clientChoosesProfessional();
 	string toString();
+	static string toString(ServiceRequest);
+	// this array will be replaced by either a vector/map or by a WT construct
 	static ServiceRequest currentRequests[50];
-	static int numRequests;
+	static int numCurrentRequests, numRequests;
 private:
 	string clientName, incidentLocation, sType, serviceRequestedAt;
+	int requestNumber;
 };
