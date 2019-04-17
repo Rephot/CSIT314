@@ -1,1 +1,7 @@
-﻿  G-Rank Software Solutions.vcxproj -> C:\Users\Joshua\Documents\GitHub\CSIT314\G-Rank Software Solutions\Debug\G-Rank Software Solutions.exe
+﻿  ServiceRequest.cpp
+  Specialist.cpp
+  UserSession.cpp
+  main.cpp
+  Generating Code...
+  LINK : C:\Users\Joshua\Documents\GitHub\CSIT314\G-Rank Software Solutions\Debug\G-Rank Software Solutions.exe not found or not built by the last incremental link; performing full link
+  G-Rank Software Solutions.vcxproj -> C:\Users\Joshua\Documents\GitHub\CSIT314\G-Rank Software Solutions\Debug\G-Rank Software Solutions.exe

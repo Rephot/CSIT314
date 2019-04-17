@@ -43,9 +43,8 @@ void ServiceRequest::broadcastServiceRequest(ServiceRequest newRequest) {
 	// place into an array for the specialists to view
 	// will be called from the constructor
 	// add service request to static member of specialist class
-	cout << "This is where the request would be broadcast from!\n" << endl;
+	cout << "This is where the request would be broadcast from!\n";
 	currentRequests[numCurrentRequests++] = newRequest;
-	cout << toString(currentRequests[0]);
 }
 
 void ServiceRequest::createServiceRequest(/*needs customer who called*/) {//(Customer currentCustomer)
