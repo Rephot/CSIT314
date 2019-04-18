@@ -15,6 +15,6 @@ void Specialist::viewRequests() {
 	}
 }
 
-void Specialist::sendAvailable() {
+void Specialist::selectRequest() {
 
 }

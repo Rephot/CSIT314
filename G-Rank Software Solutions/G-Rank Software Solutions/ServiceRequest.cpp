@@ -111,7 +111,7 @@ string ServiceRequest::toString() {
 
 string ServiceRequest::toString(ServiceRequest requestString) {
 	stringstream request;
-	request << requestString.clientName << " has requested assistance for a " << requestString.sType << " service, at " << requestString.incidentLocation << ", at the time, " << requestString.serviceRequestedAt;
+	request << requestString.requestNumber << " " << requestString.clientName << " has requested assistance for a " << requestString.sType << " service, at " << requestString.incidentLocation << ", at the time, " << requestString.serviceRequestedAt;
 	string requested = request.str();
 	return requested;
 }
