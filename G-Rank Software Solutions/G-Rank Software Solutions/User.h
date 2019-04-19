@@ -7,13 +7,19 @@ using namespace std;
 
 class User {
 public:
-	User(string, string);
+	User(string, string, string, string, time_t, string);
 	string username;
-	bool checkPassword(string);
-	void userDetails(string, string, string, Car);
+	bool setPassword(string);
 	void returnUser();
+	string getPassword();
+	string getFullName();
+	string getFirstName();
+	string getLastName();
+	time_t getDOB();
+	string getNumber();
+
 
 private:
-	string password, name, phNumber, location;
-	Car car;
+	string password, fName, lName, phNumber;
+	time_t DOB;
 };
