@@ -52,7 +52,7 @@ int main(){
 	//create test User
 	string username, password, fName, lName, phNumber, input;
 
-	cout << "To Create an account please enter a username: ";//later on i will handle inputing and outputing all user accounts to a csv
+	cout << "To Create an account please enter a username: ";//later on i will handle inputing and outputing all user accounts to a csv // JOSH: "this can be managed in the Wt::Auth module"
 	getline(cin, username);
 	cout << "Please enter a password: ";
 	getline(cin, password);
