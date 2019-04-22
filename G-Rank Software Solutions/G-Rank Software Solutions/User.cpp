@@ -41,6 +41,14 @@ bool User::setPassword(string pwd) {
 	return true;
 }
 
+User::User() {
+	username = "";
+	password = "";
+	fName = "";
+	lName = "";
+	DOB = 0;
+	phNumber = "";
+}
 
 void User::returnUser() {
 	cout << "Username: " << username << endl;

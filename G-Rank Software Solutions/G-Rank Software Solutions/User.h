@@ -17,6 +17,7 @@ public:
 	string getLastName();
 	time_t getDOB();
 	string getNumber();
+	User();
 
 
 private:
