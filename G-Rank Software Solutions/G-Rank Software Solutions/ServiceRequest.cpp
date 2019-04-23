@@ -36,7 +36,7 @@ ServiceRequest::ServiceRequest() {
 	incidentLocation = "";
 	sType = "";
 	serviceRequestedAt = "";
-	requestNumber = ++numRequests;
+	requestNumber = 0;
 }
 
 void ServiceRequest::broadcastServiceRequest(ServiceRequest newRequest) {
@@ -71,6 +71,7 @@ void ServiceRequest::createServiceRequest(/*needs customer who called*/) {//(Cus
 	newRequest.incidentLocation = location;
 	newRequest.sType = sType;
 	newRequest.serviceRequestedAt = dateTimeRequested;
+	newRequest.requestNumber = ++numRequests;
 	broadcastServiceRequest(newRequest);
 }
 
