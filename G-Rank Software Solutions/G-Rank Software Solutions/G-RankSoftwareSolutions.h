@@ -1,19 +1,38 @@
-#include <Wt/WApplication.h>
-#include <Wt/WBreak.h>
-#include <Wt/WContainerWidget.h>
-#include <Wt/WLineEdit.h>
-#include <Wt/WPushButton.h>
-#include <Wt/WTable.h>
-#include <Wt/WText.h>
-#include <Wt/WWidget.h>
+#include <Wt/WAnchor>
+#include <Wt/WApplication>
+#include <Wt/WContainerwidget>
+#include <Wt/WLink>
+#include <Wt/WText>
 
-class GRankApplication : public Wt::WApplication
-{
-public:
-	GRankApplication(const Wt::WEnvironment& env);
+using namespace Wt;
+using namespace std;
 
+class GRankSoftwareSolutions : public WApplication {
 private:
-	Wt::WLineEdit *nameEdit_;
-	Wt::WText *greeting_;
-	std::unique_ptr<Wt::WContainerWidget> container;
+	std::string appName;
+	WContainerWidget* _content;
+
+public:
+	GRankSoftwareSolutions(const WEnvironment &env) : WApplication(env) {
+		init();
+
+		appName = "Application Name";
+		setTitle(appName);
+		_content = 0;
+		internalPathChanged().connect(this, &GRankSoftwareSolutions::onInternalPathChange);
+
+		header();
+		home();
+		sidebar();
+		footer();
+	};
+
+	WContainerWidget* content();
+	void onInternalPathChange();
+	void header();
+	void sidebar();
+	void footer();
+	void home();
+	void page1();
+	void init();
 };

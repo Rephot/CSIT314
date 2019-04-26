@@ -7,12 +7,9 @@
 
 #include"G-RankSoftwareSolutions.h"
 
-using namespace std;
-
-int main(int argc, char **argv)
-{
-	return Wt::WRun(argc, argv, [](const Wt::WEnvironment& env) {
-		return std::make_unique<GRankApplication>(env);
+int main(int argc, char **argv){
+	return WRun(argc, argv, [](const WEnvironment& env) {
+		return make_unique<GRankSoftwareSolutions>(env);
 	});
 }
 
