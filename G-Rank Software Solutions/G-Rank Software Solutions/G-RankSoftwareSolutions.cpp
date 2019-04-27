@@ -9,6 +9,22 @@ serviceRequest creation
 
 #include"G-RankSoftwareSolutions.h"
 
+//namespace {
+//
+//	void handlePathChange(Wt::WText *out)
+//	{
+//		Wt::WApplication *app = Wt::WApplication::instance();
+//
+//		if (app->internalPath() == "/navigation/shop")
+//			out->setText("<p>Currently shopping.</p>");
+//		else if (app->internalPath() == "/navigation/eat")
+//			out->setText("<p>Needed some food, eating now!</p>");
+//		else
+//			out->setText("<p><i>Idle.</i></p>");
+//	}
+//
+//}
+
 GRankSoftwareSolutions::GRankSoftwareSolutions(const Wt::WEnvironment &env) : Wt::WApplication(env) {
 	app = Wt::WApplication::instance();
 	initCSS();
@@ -27,7 +43,7 @@ void GRankSoftwareSolutions::initCSS() {
 	app->styleSheet().addRule("body", "background-color: #abcdef;");
 	app->styleSheet().addRule("#buttons", "background-color: #fedcba;");
 	app->styleSheet().addRule("#header", "background-color: #262626; color: #fff; padding: 0.1em 0.5em;");
-	app->styleSheet().addRule("signUpButton", "background-color: #01d; color: #eee;"); // currently not working
+	app->styleSheet().addRule("#signUpButton", "background-color: #01d; color: #eee;"); // currently not working
 	/*app->styleSheet().addRule("#sidebar", "display: inline-block; padding: 0.5em; color: #f00");
 	app->styleSheet().addRule("#footer", "background-color: #262626; color: #fff; padding: 0.5em;");*/
 }
@@ -51,7 +67,6 @@ void GRankSoftwareSolutions::title() {
 
 void GRankSoftwareSolutions::homePage() {
 	//create username text and input
-	_pageContent->clear();
 	_pageContent = _contentLayout->addWidget(make_unique<Wt::WContainerWidget>(), 0, Wt::AlignmentFlag::Center);
 	_pageLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
 	_pageContent->setId("pageContent");
@@ -71,19 +86,11 @@ void GRankSoftwareSolutions::homePage() {
 	
 	_signIn = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Sign In"));
 	_signIn->setLink(Wt::WLink(Wt::LinkType::InternalPath, "/service"));
+
+	app->internalPathChanged().connect([=] { handlePathChange(); });
 }
 
 void GRankSoftwareSolutions::servicePage() {
 	// map, combobox, description (textEdit), confirm and cancel
 	_pageContent->clear();
-}
-
-void GRankSoftwareSolutions::handlePathChange() {
-	//manage internal path changes
-	Wt::WApplication* appPath = Wt::WApplication::instance();
-	if (appPath->internalPath() == "/home"/*path of home*/) {
-		homePage();
-	} else if (appPath->internalPath() == "/service" /*path of service request*/) {
-		servicePage();
-	}
 }
