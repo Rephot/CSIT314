@@ -3,6 +3,7 @@
 #include <Wt/WVBoxLayout>
 #include <Wt/WHBoxLayout>
 #include <Wt/WContainerwidget>
+#include <Wt/WLength>
 #include <Wt/WLineEdit>
 #include <Wt/WLink>
 #include <Wt/WPushButton>
@@ -13,9 +14,11 @@ using namespace std;
 class GRankSoftwareSolutions : public Wt::WApplication {
 private:
 	std::string appName;
+	Wt::WApplication* app;
 	Wt::WContainerWidget* _content;
 	Wt::WVBoxLayout* _contentLayout;
 	Wt::WContainerWidget* _header;
+	Wt::WVBoxLayout* _headerLayout;
 	Wt::WText* _headerText;
 	Wt::WText* _username;
 	Wt::WLineEdit* _usernameInput;
@@ -35,4 +38,5 @@ public:
 	void homePage();
 	void servicePage();
 	void title();
+	void handlePathChange();
 };

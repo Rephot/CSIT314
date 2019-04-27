@@ -10,6 +10,7 @@ serviceRequest creation
 #include"G-RankSoftwareSolutions.h"
 
 GRankSoftwareSolutions::GRankSoftwareSolutions(const Wt::WEnvironment &env) : Wt::WApplication(env) {
+	app = Wt::WApplication::instance();
 	initCSS();
 
 	appName = "UberServices by GRankSoftwareSolutions";
@@ -21,8 +22,8 @@ GRankSoftwareSolutions::GRankSoftwareSolutions(const Wt::WEnvironment &env) : Wt
 }
 
 void GRankSoftwareSolutions::initCSS() {
-	Wt::WApplication* app = Wt::WApplication::instance();
 	app->styleSheet().addRule("#content", "display: block; margin-left: auto; margin-right: auto; margin-top: 15%;");
+	app->styleSheet().addRule("#pageContent", "display: block; margin-left: auto; margin-right: auto;");
 	app->styleSheet().addRule("body", "background-color: #abcdef;");
 	app->styleSheet().addRule("#buttons", "background-color: #fedcba;");
 	app->styleSheet().addRule("#header", "background-color: #262626; color: #fff; padding: 0.1em 0.5em;");
@@ -34,7 +35,7 @@ void GRankSoftwareSolutions::initCSS() {
 void GRankSoftwareSolutions::initContentLayout() {
 	_content = root()->addWidget(make_unique<Wt::WContainerWidget>());
 	_content->setId("content");
-	_content->setWidth(500);
+	_content->setWidth(400);
 
 	//create vertical layout
 	_contentLayout = _content->setLayout(make_unique<Wt::WVBoxLayout>());
@@ -44,14 +45,17 @@ void GRankSoftwareSolutions::title() {
 	//create header title
 	_header = _contentLayout->addWidget(make_unique<Wt::WContainerWidget>());
 	_header->setId("header");
-	_headerText = _header->addWidget(make_unique<Wt::WText>("<h4>" + appName + "</h4>"));
+	_headerLayout = _header->setLayout(make_unique<Wt::WVBoxLayout>());
+	_headerText = _headerLayout->addWidget(make_unique<Wt::WText>("<h4>" + appName + "</h4>"), 0, Wt::AlignmentFlag::Center);
 }
 
 void GRankSoftwareSolutions::homePage() {
 	//create username text and input
-	_pageContent = _contentLayout->addWidget(make_unique<Wt::WContainerWidget>());
+	_pageContent->clear();
+	_pageContent = _contentLayout->addWidget(make_unique<Wt::WContainerWidget>(), 0, Wt::AlignmentFlag::Center);
 	_pageLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
 	_pageContent->setId("pageContent");
+	_pageContent->setWidth(400);
 	_username = _pageLayout->addWidget(make_unique<Wt::WText>("Username:"));
 	_usernameInput = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
 
@@ -66,9 +70,20 @@ void GRankSoftwareSolutions::homePage() {
 	_signUp = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Sign Up"));
 	
 	_signIn = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Sign In"));
+	_signIn->setLink(Wt::WLink(Wt::LinkType::InternalPath, "/service"));
 }
 
 void GRankSoftwareSolutions::servicePage() {
 	// map, combobox, description (textEdit), confirm and cancel
+	_pageContent->clear();
+}
 
+void GRankSoftwareSolutions::handlePathChange() {
+	//manage internal path changes
+	Wt::WApplication* appPath = Wt::WApplication::instance();
+	if (appPath->internalPath() == "/home"/*path of home*/) {
+		homePage();
+	} else if (appPath->internalPath() == "/service" /*path of service request*/) {
+		servicePage();
+	}
 }
