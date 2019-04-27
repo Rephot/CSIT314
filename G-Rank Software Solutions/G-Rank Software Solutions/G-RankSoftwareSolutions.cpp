@@ -1,4 +1,3 @@
-// currently this is code for a simple Hello World esque example, this class shall have different functions that will create pages related to each of the user stories and will interact with the other classes in the program
 /*
 nav page placeholder
 serviceRequest creation
@@ -10,58 +9,66 @@ serviceRequest creation
 
 #include"G-RankSoftwareSolutions.h"
 
-WContainerWidget* GRankSoftwareSolutions::content() {
-	if (_content == 0) {
-		_content = root()->addWidget(make_unique<WContainerWidget>());
-		_content->setId("content");
-	}
-	return _content;
+GRankSoftwareSolutions::GRankSoftwareSolutions(const Wt::WEnvironment &env) : Wt::WApplication(env) {
+	initCSS();
+
+	appName = "UberServices by GRankSoftwareSolutions";
+	setTitle(appName);
+
+	initContentLayout();
+	title();
+	homePage();
 }
 
-void GRankSoftwareSolutions::onInternalPathChange() {
-	content()->clear();
-	if (internalPath() == "/") {
-		home();
-	}
-	else if (internalPath() == "/page1") {
-		page1();
-	}
+void GRankSoftwareSolutions::initCSS() {
+	Wt::WApplication* app = Wt::WApplication::instance();
+	app->styleSheet().addRule("#content", "display: block; margin-left: auto; margin-right: auto; margin-top: 15%;");
+	app->styleSheet().addRule("body", "background-color: #abcdef;");
+	app->styleSheet().addRule("#buttons", "background-color: #fedcba;");
+	app->styleSheet().addRule("#header", "background-color: #262626; color: #fff; padding: 0.1em 0.5em;");
+	app->styleSheet().addRule("signUpButton", "background-color: #01d; color: #eee;"); // currently not working
+	/*app->styleSheet().addRule("#sidebar", "display: inline-block; padding: 0.5em; color: #f00");
+	app->styleSheet().addRule("#footer", "background-color: #262626; color: #fff; padding: 0.5em;");*/
 }
 
-void GRankSoftwareSolutions::header() {
-	WContainerWidget* header = root()->addWidget(make_unique<WContainerWidget>());
-	header->setId("header");
-	header->addWidget(make_unique<WText>("<h1>" + appName + "</h1>"));
+void GRankSoftwareSolutions::initContentLayout() {
+	_content = root()->addWidget(make_unique<Wt::WContainerWidget>());
+	_content->setId("content");
+	_content->setWidth(500);
+
+	//create vertical layout
+	_contentLayout = _content->setLayout(make_unique<Wt::WVBoxLayout>());
 }
 
-void GRankSoftwareSolutions::sidebar() {
-	WContainerWidget* sidebar = root()->addWidget(make_unique<WContainerWidget>());
-	sidebar->setId("sidebar");
-	sidebar->addWidget(make_unique<WText>("Sidebar Information"));
+void GRankSoftwareSolutions::title() {
+	//create header title
+	_header = _contentLayout->addWidget(make_unique<Wt::WContainerWidget>());
+	_header->setId("header");
+	_headerText = _header->addWidget(make_unique<Wt::WText>("<h4>" + appName + "</h4>"));
 }
 
-void GRankSoftwareSolutions::footer() {
-	WContainerWidget* footer = root()->addWidget(make_unique<WContainerWidget>());
-	footer->setId("footer");
-	footer->addWidget(make_unique<WText>("Developed using C++/Wt"));
+void GRankSoftwareSolutions::homePage() {
+	//create username text and input
+	_pageContent = _contentLayout->addWidget(make_unique<Wt::WContainerWidget>());
+	_pageLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
+	_pageContent->setId("pageContent");
+	_username = _pageLayout->addWidget(make_unique<Wt::WText>("Username:"));
+	_usernameInput = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
+
+	//create password text and input
+	_password = _pageLayout->addWidget(make_unique<Wt::WText>("Password:"));
+	_passwordInput = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
+
+	//create pushButtons for sign in and sign up
+	_buttons = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
+	_buttons->setId("buttons");
+	_buttonsLayout = _buttons->setLayout(make_unique<Wt::WHBoxLayout>());
+	_signUp = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Sign Up"));
+	
+	_signIn = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Sign In"));
 }
 
-void GRankSoftwareSolutions::home() {
-	WText *t = new WText("<strong>Home</strong> content and a link to <a href='#/page1'>page1</a>");
-	t->setInternalPathEncoding(true);
-	content()->addWidget(make_unique<WText>("<strong>Home</strong> content and a link to <a href='#/page1'>page1</a>"));
+void GRankSoftwareSolutions::servicePage() {
+	// map, combobox, description (textEdit), confirm and cancel
 
-}
-
-void GRankSoftwareSolutions::page1() {
-	content()->addWidget(make_unique<WText>("<strong>Home</strong> content and a link to "));
-	WAnchor* a = new WAnchor(WLink("/"), "home");
-}
-
-void GRankSoftwareSolutions::init() {
-	instance()->styleSheet().addRule("#header", "background-color: #262626; color: #fff; padding: 0.1em 0.5em; ");
-	instance()->styleSheet().addRule("#content", "display: inline-block; width: 65 % ; padding: 0.5em; ");
-	instance()->styleSheet().addRule("#sidebar", "display: inline-block; width: 30 % ; padding: 0.5em; ");
-	instance()->styleSheet().addRule("#footer", "background-color: #262626; color: #fff; padding: 0.5em; ");
-	instance()->styleSheet().addRule("body", "background-color: #F0F8FF; ");
 }

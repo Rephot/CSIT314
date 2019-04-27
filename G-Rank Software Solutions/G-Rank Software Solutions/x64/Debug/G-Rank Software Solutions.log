@@ -685,11 +685,103 @@ c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wapplication.h(2305): warning 
   c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wwebwidget.h(460): note: see declaration of 'Wt::JSignal<>'
 c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wapplication.h(2306): warning C4251: 'Wt::WApplication::idleTimeout_': class 'Wt::JSignal<>' needs to have dll-interface to be used by clients of class 'Wt::WApplication'
   c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wwebwidget.h(460): note: see declaration of 'Wt::JSignal<>'
+  The use of header files without .h is deprecated since Wt 4.0.0, please use WVBoxLayout.h instead
+c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wlayout.h(217): warning C4251: 'Wt::WLayout::impl_': class 'std::unique_ptr<Wt::WLayoutImpl,std::default_delete<_Ty>>' needs to have dll-interface to be used by clients of class 'Wt::WLayout'
+          with
+          [
+              _Ty=Wt::WLayoutImpl
+          ]
+  c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wlayout.h(207): note: see declaration of 'std::unique_ptr<Wt::WLayoutImpl,std::default_delete<_Ty>>'
+          with
+          [
+              _Ty=Wt::WLayoutImpl
+          ]
+c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wgridlayout.h(460): warning C4251: 'Wt::WGridLayout::grid_': struct 'Wt::Impl::Grid' needs to have dll-interface to be used by clients of class 'Wt::WGridLayout'
+  c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wgridlayout.h(19): note: see declaration of 'Wt::Impl::Grid'
+c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wboxlayout.h(388): warning C4251: 'Wt::WBoxLayout::grid_': struct 'Wt::Impl::Grid' needs to have dll-interface to be used by clients of class 'Wt::WBoxLayout'
+  c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wgridlayout.h(19): note: see declaration of 'Wt::Impl::Grid'
+  The use of header files without .h is deprecated since Wt 4.0.0, please use WHBoxLayout.h instead
   The use of header files without .h is deprecated since Wt 4.0.0, please use WContainerWidget.h instead
+  The use of header files without .h is deprecated since Wt 4.0.0, please use WLineEdit.h instead
+c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wvalidator.h(197): warning C4251: 'Wt::WValidator::formWidgets_': class 'std::vector<Wt::WFormWidget *,std::allocator<_Ty>>' needs to have dll-interface to be used by clients of class 'Wt::WValidator'
+          with
+          [
+              _Ty=Wt::WFormWidget *
+          ]
+  c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wvalidator.h(197): note: see declaration of 'std::vector<Wt::WFormWidget *,std::allocator<_Ty>>'
+          with
+          [
+              _Ty=Wt::WFormWidget *
+          ]
+c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wformwidget.h(156): warning C4251: 'Wt::WFormWidget::validator_': class 'std::shared_ptr<Wt::WValidator>' needs to have dll-interface to be used by clients of class 'Wt::WFormWidget'
+  c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wformwidget.h(82): note: see declaration of 'std::shared_ptr<Wt::WValidator>'
+c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wformwidget.h(157): warning C4251: 'Wt::WFormWidget::validateJs_': class 'std::unique_ptr<Wt::JSlot,std::default_delete<_Ty>>' needs to have dll-interface to be used by clients of class 'Wt::WFormWidget'
+          with
+          [
+              _Ty=Wt::JSlot
+          ]
+  c:\program files\wt 4.0.5 msvs2017 x64\include\wt\winteractwidget.h(359): note: see declaration of 'std::unique_ptr<Wt::JSlot,std::default_delete<_Ty>>'
+          with
+          [
+              _Ty=Wt::JSlot
+          ]
+c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wformwidget.h(157): warning C4251: 'Wt::WFormWidget::filterInput_': class 'std::unique_ptr<Wt::JSlot,std::default_delete<_Ty>>' needs to have dll-interface to be used by clients of class 'Wt::WFormWidget'
+          with
+          [
+              _Ty=Wt::JSlot
+          ]
+  c:\program files\wt 4.0.5 msvs2017 x64\include\wt\winteractwidget.h(359): note: see declaration of 'std::unique_ptr<Wt::JSlot,std::default_delete<_Ty>>'
+          with
+          [
+              _Ty=Wt::JSlot
+          ]
+c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wformwidget.h(157): warning C4251: 'Wt::WFormWidget::removeEmptyText_': class 'std::unique_ptr<Wt::JSlot,std::default_delete<_Ty>>' needs to have dll-interface to be used by clients of class 'Wt::WFormWidget'
+          with
+          [
+              _Ty=Wt::JSlot
+          ]
+  c:\program files\wt 4.0.5 msvs2017 x64\include\wt\winteractwidget.h(359): note: see declaration of 'std::unique_ptr<Wt::JSlot,std::default_delete<_Ty>>'
+          with
+          [
+              _Ty=Wt::JSlot
+          ]
+c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wformwidget.h(175): warning C4251: 'Wt::WFormWidget::flags_': class 'std::bitset<6>' needs to have dll-interface to be used by clients of class 'Wt::WFormWidget'
+  c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wformwidget.h(175): note: see declaration of 'std::bitset<6>'
+c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wformwidget.h(176): warning C4251: 'Wt::WFormWidget::validated_': class 'Wt::Signal<Wt::WValidator::Result>' needs to have dll-interface to be used by clients of class 'Wt::WFormWidget'
+  c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wformwidget.h(143): note: see declaration of 'Wt::Signal<Wt::WValidator::Result>'
+c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wlineedit.h(329): warning C4251: 'Wt::WLineEdit::flags_': class 'std::bitset<5>' needs to have dll-interface to be used by clients of class 'Wt::WLineEdit'
+  c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wlineedit.h(329): note: see declaration of 'std::bitset<5>'
+c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wlineedit.h(331): warning C4251: 'Wt::WLineEdit::SKIPPABLE_MASK_CHARS': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'Wt::WLineEdit'
+  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\xstring(4373): note: see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wlineedit.h(334): warning C4251: 'Wt::WLineEdit::mask_': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'Wt::WLineEdit'
+  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\xstring(4373): note: see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wlineedit.h(336): warning C4251: 'Wt::WLineEdit::inputMask_': class 'std::basic_string<char32_t,std::char_traits<char32_t>,std::allocator<char32_t>>' needs to have dll-interface to be used by clients of class 'Wt::WLineEdit'
+  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\xstring(4376): note: see declaration of 'std::basic_string<char32_t,std::char_traits<char32_t>,std::allocator<char32_t>>'
+c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wlineedit.h(337): warning C4251: 'Wt::WLineEdit::raw_': class 'std::basic_string<char32_t,std::char_traits<char32_t>,std::allocator<char32_t>>' needs to have dll-interface to be used by clients of class 'Wt::WLineEdit'
+  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\xstring(4376): note: see declaration of 'std::basic_string<char32_t,std::char_traits<char32_t>,std::allocator<char32_t>>'
+c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wlineedit.h(344): warning C4251: 'Wt::WLineEdit::inputMaskFlags_': class 'Wt::WFlags<Wt::InputMaskFlag>' needs to have dll-interface to be used by clients of class 'Wt::WLineEdit'
+  c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wlineedit.h(297): note: see declaration of 'Wt::WFlags<Wt::InputMaskFlag>'
+c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wlineedit.h(345): warning C4251: 'Wt::WLineEdit::case_': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'Wt::WLineEdit'
+  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\xstring(4373): note: see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
   The use of header files without .h is deprecated since Wt 4.0.0, please use WLink.h instead
-  The use of header files without .h is deprecated since Wt 4.0.0, please use WText.h instead
+  The use of header files without .h is deprecated since Wt 4.0.0, please use WPushButton.h instead
 c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wtext.h(278): warning C4251: 'Wt::WText::text_': struct 'Wt::WText::RichText' needs to have dll-interface to be used by clients of class 'Wt::WText'
   c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wtext.h(266): note: see declaration of 'Wt::WText::RichText'
 c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wtext.h(290): warning C4251: 'Wt::WText::flags_': class 'std::bitset<9>' needs to have dll-interface to be used by clients of class 'Wt::WText'
   c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wtext.h(290): note: see declaration of 'std::bitset<9>'
+c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wpushbutton.h(273): warning C4251: 'Wt::WPushButton::text_': struct 'Wt::WText::RichText' needs to have dll-interface to be used by clients of class 'Wt::WPushButton'
+  c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wtext.h(266): note: see declaration of 'Wt::WText::RichText'
+c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wpushbutton.h(276): warning C4251: 'Wt::WPushButton::flags_': class 'std::bitset<8>' needs to have dll-interface to be used by clients of class 'Wt::WPushButton'
+  c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wcontainerwidget.h(492): note: see declaration of 'std::bitset<8>'
+c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wpushbutton.h(277): warning C4251: 'Wt::WPushButton::popupMenu_': class 'std::unique_ptr<Wt::WPopupMenu,std::default_delete<_Ty>>' needs to have dll-interface to be used by clients of class 'Wt::WPushButton'
+          with
+          [
+              _Ty=Wt::WPopupMenu
+          ]
+  c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wpushbutton.h(225): note: see declaration of 'std::unique_ptr<Wt::WPopupMenu,std::default_delete<_Ty>>'
+          with
+          [
+              _Ty=Wt::WPopupMenu
+          ]
+  The use of header files without .h is deprecated since Wt 4.0.0, please use WText.h instead
   G-Rank Software Solutions.vcxproj -> C:\Users\Joshua\Documents\GitHub\CSIT314\G-Rank Software Solutions\x64\Debug\G-Rank Software Solutions.exe
