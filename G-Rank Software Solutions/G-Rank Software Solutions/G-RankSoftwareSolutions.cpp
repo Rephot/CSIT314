@@ -11,16 +11,16 @@ serviceRequest creation
 
 //namespace {
 //
-//	void handlePathChange(Wt::WText *out)
+//	void handlePathChange()
 //	{
 //		Wt::WApplication *app = Wt::WApplication::instance();
 //
-//		if (app->internalPath() == "/navigation/shop")
-//			out->setText("<p>Currently shopping.</p>");
-//		else if (app->internalPath() == "/navigation/eat")
-//			out->setText("<p>Needed some food, eating now!</p>");
+//		if (app->internalPath() == "/login")
+//			loginPage();
+//		else if (app->internalPath() == "/service")
+//			servicePage();
 //		else
-//			out->setText("<p><i>Idle.</i></p>");
+//			howDidYouGetHere();
 //	}
 //
 //}
@@ -34,7 +34,7 @@ GRankSoftwareSolutions::GRankSoftwareSolutions(const Wt::WEnvironment &env) : Wt
 
 	initContentLayout();
 	title();
-	homePage();
+	loginPage();
 }
 
 void GRankSoftwareSolutions::initCSS() {
@@ -62,10 +62,10 @@ void GRankSoftwareSolutions::title() {
 	_header = _contentLayout->addWidget(make_unique<Wt::WContainerWidget>());
 	_header->setId("header");
 	_headerLayout = _header->setLayout(make_unique<Wt::WVBoxLayout>());
-	_headerText = _headerLayout->addWidget(make_unique<Wt::WText>("<h4>" + appName + "</h4>"), 0, Wt::AlignmentFlag::Center);
+	_headerText = _headerLayout->addWidget(make_unique<Wt::WText>("<h3>" + appName + "</h3>"), 0, Wt::AlignmentFlag::Center);
 }
 
-void GRankSoftwareSolutions::homePage() {
+void GRankSoftwareSolutions::loginPage() {
 	//create username text and input
 	_pageContent = _contentLayout->addWidget(make_unique<Wt::WContainerWidget>(), 0, Wt::AlignmentFlag::Center);
 	_pageLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
@@ -83,14 +83,12 @@ void GRankSoftwareSolutions::homePage() {
 	_buttons->setId("buttons");
 	_buttonsLayout = _buttons->setLayout(make_unique<Wt::WHBoxLayout>());
 	_signUp = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Sign Up"));
+	_signUp->setLink(Wt::WLink(Wt::LinkType::InternalPath, "/register"));
 	
 	_signIn = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Sign In"));
 	_signIn->setLink(Wt::WLink(Wt::LinkType::InternalPath, "/service"));
-
-	app->internalPathChanged().connect([=] { handlePathChange(); });
 }
 
 void GRankSoftwareSolutions::servicePage() {
 	// map, combobox, description (textEdit), confirm and cancel
-	_pageContent->clear();
 }

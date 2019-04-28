@@ -35,8 +35,7 @@ public:
 	GRankSoftwareSolutions(const Wt::WEnvironment &env);
 	void initCSS();
 	void initContentLayout();
-	void homePage();
+	void loginPage();
 	void servicePage();
 	void title();
-	void handlePathChange();
 };

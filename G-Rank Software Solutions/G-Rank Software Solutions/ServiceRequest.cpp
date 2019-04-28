@@ -47,20 +47,14 @@ void ServiceRequest::broadcastServiceRequest(ServiceRequest newRequest) {
 	currentRequests[numCurrentRequests++] = newRequest;
 }
 
-void ServiceRequest::createServiceRequest(/*needs customer who called*/) {//(Customer currentCustomer)
-	/*
-	some way of acquiring location info
-	*/
-	/* Test
-
-	*/
+void ServiceRequest::createServiceRequest() {
 	ServiceRequest newRequest;
 	// identifying number
 	string sType, location, client;
 	// shall be replaced by WT form code
 	cout << "This is a Test:\nPlease Enter the details of the incident.\nIs it a breakdown or something like a flat tyre? ";
 	getline(cin, sType);
-	cout << "Where did the incident happen? ";
+	cout << "Where are you in need of assistance? ";
 	getline(cin, location);
 	client = "Joshua Groucutt";
 	time_t timeCreated = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
@@ -83,7 +77,6 @@ void ServiceRequest::displayProfessionalsWhoAccepted(){
 
 void ServiceRequest::sendAffirmitiveToProfessional(){
 	// when client accepts a professional, they get alerted that they were picked
-	
 }
 
 // these may be better placed in Specialist 
