@@ -13,6 +13,30 @@
 //	});
 //}
 
+char firstMenu(char choice) {
+	while (choice != 'l' && choice != 'L' && choice != 'q' && choice != 'Q' && choice != 'r' && choice != 'R') {
+		cout << "L for Login\nR for Register\nQ for quit\nWhat would you like to do? ";
+		cin >> choice;
+		if (choice != 'l' && choice != 'L' && choice != 'q' && choice != 'Q' && choice != 'r' && choice != 'R') cout << "Please enter a letter corresponding to a menu item. ";
+	}
+	return choice;
+}
+
+char loginMenu(char choice) {
+	// enter login details, then validate, then show options once logged in.
+	return 'p';
+}
+
+char registerMenu(char choice) {
+	// enter new user details as necessary, then proceed to profile options
+	return 'p';
+}
+
+char profileMenu(char choice) {
+	// enter new user details as necessary, then proceed to profile options
+	return 'p';
+}
+
 int main(int argc, char **argv){
 	/*
 	1. loads in necessary info from file when we have
@@ -34,7 +58,19 @@ int main(int argc, char **argv){
 	6. client chooses a specialist
 	7. specialist receives a go ahead notification
 	*/
-	int exitCode;
+	char choice = 'a';
+
+	//first menu
+	firstMenu(choice);
+
+	while (choice != 'q' && choice != 'Q') {
+		if (choice == 'l' || choice == 'L') choice = loginMenu(choice);
+		if (choice == 'r' || choice == 'R') choice = registerMenu(choice);
+		if (choice == 'p' || choice == 'P') choice = profileMenu(choice);
+		cout << endl << choice << endl;
+	}
+	
+
 	ServiceRequest testrequest;
 	cout << "this is as user\nuser calls createservicerequest by pressing a button in the ui\n"; // description of what aim to do with wt widgets
 	testrequest.createServiceRequest();
@@ -42,7 +78,6 @@ int main(int argc, char **argv){
 	Specialist andrew;
 	andrew.viewRequests();
 	cout << "which request would you like to respond to? ";
-
-	cout << "q to quit: ";
-	cin >> exitCode;
 }
+
+// choices from menu
