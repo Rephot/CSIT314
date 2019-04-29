@@ -58,7 +58,7 @@ int main(int argc, char **argv){
 	6. client chooses a specialist
 	7. specialist receives a go ahead notification
 	*/
-	char choice = 'a';
+	char choice = '\0';
 
 	//first menu
 	firstMenu(choice);
