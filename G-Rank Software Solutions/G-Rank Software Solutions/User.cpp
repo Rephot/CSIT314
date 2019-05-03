@@ -10,6 +10,7 @@ User::User(string uname, string pwd, string fname, string lname, time_t dob, str
 	lName = lname;
 	DOB = dob;
 	phNumber = number;
+	// subscriber = true/false;
 }
 
 string User::getPassword() {

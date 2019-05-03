@@ -52,7 +52,7 @@ void ServiceRequest::createServiceRequest() {
 	// identifying number
 	string sType, location, client;
 	// shall be replaced by WT form code
-	cout << "This is a Test:\nPlease Enter the details of the incident.\nIs it a breakdown or something like a flat tyre? ";
+	cout << "This is a Test:\nPlease Enter the details of the incident.\nIs it a breakdown or something like a flat tyre ? ";
 	getline(cin, sType);
 	cout << "Where are you in need of assistance? ";
 	getline(cin, location);
