@@ -54,7 +54,7 @@ void ServiceRequest::createServiceRequest() {
 	// shall be replaced by WT form code
 	cout << "This is a Test:\nPlease Enter the details of the incident.\nIs it a breakdown or something like a flat tyre ? ";
 	getline(cin, sType);
-	cout << "Where are you in need of assistance? ";
+	cout << "Where is the incident? ";
 	getline(cin, location);
 	client = "Joshua Groucutt";
 	time_t timeCreated = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());

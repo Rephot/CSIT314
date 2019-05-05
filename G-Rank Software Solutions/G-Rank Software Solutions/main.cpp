@@ -115,6 +115,7 @@ void loginMenu(char choice) {
 		cin >> userName;
 		cout << "Enter your password: ";
 		cin >> passWord;
+		// this will be authentication
 		cout << "TEST!\n";
 		valid = true;
 	}
@@ -203,7 +204,7 @@ int main(int argc, char **argv){
 	}
 
 	//user1.returnUser();//displays user credentials
-	Sleep(5000);//pauses for 5 seconds
+	Sleep(2500);//pauses for 2.5 seconds
 	system("CLS");//clears console
 
 	// main menu
