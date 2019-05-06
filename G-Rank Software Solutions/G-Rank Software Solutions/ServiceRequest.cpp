@@ -1,5 +1,6 @@
 #include"ServiceRequest.h"
 #include"Specialist.h"
+#include"User.h"
 
 using namespace std;
 
@@ -47,16 +48,16 @@ void ServiceRequest::broadcastServiceRequest(ServiceRequest newRequest) {
 	currentRequests[numCurrentRequests++] = newRequest;
 }
 
-void ServiceRequest::createServiceRequest() {
+void ServiceRequest::createServiceRequest(User user) {
 	ServiceRequest newRequest;
 	// identifying number
 	string sType, location, client;
 	// shall be replaced by WT form code
 	cout << "This is a Test:\nPlease Enter the details of the incident.\nIs it a breakdown or something like a flat tyre ? ";
 	getline(cin, sType);
-	cout << "Where is the incident? ";
+	cout << "Where is the incident? ";//add location selection from file database to be implemented
 	getline(cin, location);
-	client = "Joshua Groucutt";
+	client = user.getFullName();//get users name from user object
 	time_t timeCreated = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
 	char timeCreatedTime[26];
 	ctime_s(timeCreatedTime, 26, &timeCreated);
