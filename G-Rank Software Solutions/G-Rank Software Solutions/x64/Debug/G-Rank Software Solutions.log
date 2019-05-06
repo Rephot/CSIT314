@@ -785,8 +785,4 @@ c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wpushbutton.h(277): warning C4
               _Ty=Wt::WPopupMenu
           ]
   The use of header files without .h is deprecated since Wt 4.0.0, please use WText.h instead
-  ServiceRequest.cpp
-  Specialist.cpp
-  Generating Code...
-  LINK : C:\Users\Joshua\Documents\GitHub\CSIT314\G-Rank Software Solutions\x64\Debug\G-Rank Software Solutions.exe not found or not built by the last incremental link; performing full link
-  G-Rank Software Solutions.vcxproj -> C:\Users\Joshua\Documents\GitHub\CSIT314\G-Rank Software Solutions\x64\Debug\G-Rank Software Solutions.exe
+  G-Rank Software Solutions.vcxproj -> C:\Users\Chris\Google Drive\19 Session 1\CSIT314\GitHub\CSIT314\G-Rank Software Solutions\x64\Debug\G-Rank Software Solutions.exe

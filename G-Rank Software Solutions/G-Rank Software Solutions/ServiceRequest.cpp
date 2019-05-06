@@ -1,5 +1,6 @@
 #include"ServiceRequest.h"
 #include"Specialist.h"
+#include"User.h"
 
 using namespace std;
 
@@ -47,7 +48,7 @@ void ServiceRequest::broadcastServiceRequest(ServiceRequest newRequest) {
 	currentRequests[numCurrentRequests++] = newRequest;
 }
 
-void ServiceRequest::createServiceRequest() {
+void ServiceRequest::createServiceRequest(User user) {
 	ServiceRequest newRequest;
 	// identifying number
 	string sType, location, client;
@@ -56,7 +57,7 @@ void ServiceRequest::createServiceRequest() {
 	getline(cin, sType);
 	cout << "Where is the incident? ";
 	getline(cin, location);
-	client = "Joshua Groucutt";
+	client = user.getFullName();
 	time_t timeCreated = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
 	char timeCreatedTime[26];
 	ctime_s(timeCreatedTime, 26, &timeCreated);

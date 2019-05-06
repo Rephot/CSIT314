@@ -4,13 +4,14 @@
 #include<sstream>
 #include<string>
 #include<chrono>
+class User;
 
 using namespace std;
 
 class ServiceRequest {
 public:
 	ServiceRequest();
-	void createServiceRequest();
+	void createServiceRequest(User);
 	void broadcastServiceRequest(ServiceRequest);
 	void displayProfessionalsWhoAccepted();
 	void sendAffirmitiveToProfessional();
