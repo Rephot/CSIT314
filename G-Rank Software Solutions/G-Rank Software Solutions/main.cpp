@@ -16,8 +16,19 @@ using namespace std;
 login and user creation is one funcitonality should focus on customer creation
 service request creation relates to managing roadside assistance service requests
 create review for roadside assistance professional related to a request
-create a roadside assistance professional account
-create a way to pay professionals for a service completion
+create a roadside assistance professional account{
+	
+}
+create a way to pay professionals for a service completion{
+	has bank details
+	uses bank details to 'pay' specialist
+	creates receipt for the transaction noting
+		- time
+		- amount
+		- specialist identifier
+		- customer identifier
+		- callout fee depending on subscription status
+}
 */
 
 //int main(int argc, char **argv){
