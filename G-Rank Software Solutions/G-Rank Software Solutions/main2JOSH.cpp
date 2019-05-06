@@ -13,6 +13,7 @@
 using namespace std;
 
 /*
+<<<<<<< HEAD:G-Rank Software Solutions/G-Rank Software Solutions/main2.cpp
 login and user creation is one funcitonality should focus on customer creation
 service request creation relates to managing roadside assistance service requests
 create review for roadside assistance professional related to a request
@@ -28,6 +29,44 @@ create a way to pay professionals for a service completion{
 		- specialist identifier
 		- customer identifier
 		- callout fee depending on subscription status
+=======
+login and user creation is one funcitonality should focus on customer creation{
+	username
+	password
+	email
+	DoB
+	real name
+}
+service request creation relates to managing roadside assistance service requests{ (this functionality has been completed, work is to continue on the rest of the class functions)
+	description of incident
+	location of incident
+	time created
+	customer who created
+	?
+}
+create review for roadside assistance professional related to a request{
+	rating out of 10?
+	reveiw description (max char length?)
+	customer username/name
+	pulls request identifier
+	pulls customer identifier
+	pulls specialist identifier
+}
+create a roadside assistance professional account(Will update user account handling to allow for both customer and professional account types){
+	bank account details
+	preferred area of operation
+	generated identifier
+	based on user creation for login account
+}
+create a way to pay professionals for a service completion(can we just use a flag ifPaid or something for now and say its handled by paypal or something?){
+	transaction ID
+	amount
+	subscribed or not - include callout fee in this transaction
+	time
+	customer identifier
+	specialist identifier
+	?vehicle identification? if specialists are fleet
+>>>>>>> f0afb061fe6677fb763f08b91e2229717a261ff9:G-Rank Software Solutions/G-Rank Software Solutions/main.cpp
 }
 */
 
@@ -43,18 +82,19 @@ void receiptsMenu(char choice) {
 	// view ?
 }
 
-void manageDetailsMenu(char choice) {
+void manageDetailsMenu(char choice, User logged_in_user) {
 	// view user details
 	// edit user details
+	logged_in_user.returnUser();
 }
 
-void createRequestMenu(char choice) {
+void createRequestMenu(char choice, User logged_in_user) {
 	// run createServiceRequest();
 	ServiceRequest create;
-	create.createServiceRequest();
+	create.createServiceRequest(logged_in_user);
 }
 
-void profileMenu(char choice) {
+void profileMenu(char choice, User logged_in_user) {
 	/* user can choose between
 	looking at receipt
 	managing their details
@@ -78,14 +118,73 @@ void profileMenu(char choice) {
 				cout << "Please enter a letter corresponding to a menu item. ";
 	}
 	cin.ignore();
+	system("CLS");//clears console
 	if (choice == 'r' || choice == 'R') receiptsMenu(choice);
-	else if (choice == 'm' || choice == 'M') manageDetailsMenu(choice);
-	else if (choice == 'c' || choice == 'C') createRequestMenu(choice);
+	else if (choice == 'm' || choice == 'M') manageDetailsMenu(choice, logged_in_user);
+	else if (choice == 'c' || choice == 'C') createRequestMenu(choice, logged_in_user);
 	else return;
+}
+
+void loginMenu(char choice) {
+	User* users;
+	string userName, passWord;
+	bool valid = false;
+	User logged_in_user;
+	// enter login details, then validate, then show options once logged in.
+
+	int count = 0;
+	string line, username, password, fName, lName, phNumber;
+	string userFile = "Users.csv";
+
+	/* Creating input filestream */
+	ifstream file("Users.csv");
+	while (getline(file, line)) count++;
+	users = new User[count + 1];
+
+	// get existing users from file
+	ifstream inFile;
+	inFile.open(userFile);
+	int i = 0;
+	if (inFile.is_open())
+	{
+		while (getline(inFile, username, ','))
+		{
+			getline(inFile, password, ',');
+			getline(inFile, fName, ',');
+			getline(inFile, lName, ',');
+			getline(inFile, phNumber);
+
+			users[i] = User(username, password, fName, lName, 0, phNumber);
+			i++;
+		}
+		inFile.close();
+	}
+
+	while (!valid) {
+		cout << "Enter your username: ";
+		cin >> userName;
+		cout << "Enter your password: ";
+		cin >> passWord;
+			// this will be authentication
+		userName = users[1].username;
+		passWord = users[1].getPassword();
+		for (int i = 0; i < count; i++) {
+			if (users[i].username == userName && users[i].getPassword() == passWord) {
+				logged_in_user = users[i];
+			}
+		}
+
+		system("CLS");//clears console
+		cout << "Logging in as: " << logged_in_user.username << endl;
+		valid = true;
+	}
+	cin.ignore();
+	profileMenu(choice, logged_in_user);
 }
 
 void signUpMenu(char choice) {
 	string username, password, fName, lName, phNumber, input;
+	User created_user;
 
 	// enter new user details as necessary, then proceed to profile options
 	ofstream outFile;
@@ -112,26 +211,10 @@ void signUpMenu(char choice) {
 	//write variables for new user to file
 	outFile << username << "," << password << "," << fName << "," << lName << "," << phNumber << "\n";
 	outFile.close();
+	system("CLS");//clears console
 	cin.ignore();
-	profileMenu(choice);
-}
-
-void loginMenu(char choice) {
-	string userName, passWord;
-	bool valid = false;
-	// enter login details, then validate, then show options once logged in.
-	cout << valid << endl;
-	while (!valid) {
-		cout << "Enter your username: ";
-		cin >> userName;
-		cout << "Enter your password: ";
-		cin >> passWord;
-		// this will be authentication
-		cout << "TEST!\n";
-		valid = true;
-	}
-	cin.ignore();
-	profileMenu(choice);
+	cout << "User Created Succesfully";
+	loginMenu('L');
 }
 
 void firstMenu(char choice) {
@@ -141,14 +224,15 @@ void firstMenu(char choice) {
 		cout << "L for Login\nS for Sign Up\nQ for quit\nWhat would you like to do? ";
 		cin >> choice;
 		if (std::find(std::begin(choices), std::end(choices), choice) != std::end(choices))
-			cout << "Please enter a letter corresponding to a menu item.\n";
-		else
 			isChoice = true;
+		else
+			cout << "Please enter a letter corresponding to a menu item.\n";
 	}
 	cin.ignore();
+	system("CLS");//clears console
 	if (choice == 'l' || choice == 'L') loginMenu(choice);
 	else if (choice == 's' || choice == 'S') signUpMenu(choice);
-	else if (choice == 'p' || choice == 'P') profileMenu(choice);
+	//else if (choice == 'p' || choice == 'P') profileMenu(choice);
 	else return;
 }
 
@@ -225,14 +309,14 @@ int main(int argc, char **argv){
 	//first menu
 	firstMenu(choice);
 	
-	cin.ignore();
+	//cin.ignore();
 	
 	// test creation of serviceRequest
 	ServiceRequest testrequest;
 	// description of what aim to do with wt widgets
-	cout << "this is as user\n";
+	/*cout << "this is as user\n";
 	cout << "user calls createservicerequest by pressing a button in the ui\n";
-	testrequest.createServiceRequest();
+	testrequest.createServiceRequest();*/
 	cout << "now as specialist\n";
 	Specialist andrew;
 	andrew.viewRequests();

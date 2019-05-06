@@ -1,6 +1,34 @@
-using namespace std;
+/*
+
+job gets done
+create invoice
+create and send receipt
+create and update system with reviews and info about customer if needed
+
+*/
+
+//create a way to pay professionals for a service completion{
+//	transaction ID
+//	amount
+//	subscribed or not - include callout fee in this transaction
+//	time
+//	customer identifier
+//	specialist identifier
+//	?vehicle identification? if specialists are fleet
+//}
+
+#include<ctime>
 
 class Receipts {
 public:
 	Receipts();
+	//generateReceipt();
+private:
+	int receiptID;
+	float amount;
+	bool subscribed;
+	time_t timeOf;
+	int custID; // acquired from the customer involved in the transaction
+	int specialistID; // acquired from the specialist involved in the transaction
+	int requestID; // acquired from the request that has been fulfilled
 };

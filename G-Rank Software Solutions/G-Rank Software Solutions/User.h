@@ -1,7 +1,7 @@
 #include<iostream>
 #include<ctime>
 #include<cstring>
-#include "car.h"
+#include "Car.h"
 
 using namespace std;
 
