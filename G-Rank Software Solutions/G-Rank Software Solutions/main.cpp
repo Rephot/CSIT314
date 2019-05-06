@@ -13,11 +13,43 @@
 using namespace std;
 
 /*
-login and user creation is one funcitonality should focus on customer creation
-service request creation relates to managing roadside assistance service requests
-create review for roadside assistance professional related to a request
-create a roadside assistance professional account
-create a way to pay professionals for a service completion
+login and user creation is one funcitonality should focus on customer creation{
+	username
+	password
+	email
+	DoB
+	real name
+}
+service request creation relates to managing roadside assistance service requests{ (this functionality has been completed, work is to continue on the rest of the class functions)
+	description of incident
+	location of incident
+	time created
+	customer who created
+	?
+}
+create review for roadside assistance professional related to a request{
+	rating out of 10?
+	reveiw description (max char length?)
+	customer username/name
+	pulls request identifier
+	pulls customer identifier
+	pulls specialist identifier
+}
+create a roadside assistance professional account{
+	bank account details
+	preferred area of operation
+	generated identifier
+	based on user creation for login account
+}
+create a way to pay professionals for a service completion{
+	transaction ID
+	amount
+	subscribed or not - include callout fee in this transaction
+	time
+	customer identifier
+	specialist identifier
+	?vehicle identification? if specialists are fleet
+}
 */
 
 //int main(int argc, char **argv){
