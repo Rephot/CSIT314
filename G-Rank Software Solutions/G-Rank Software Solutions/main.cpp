@@ -82,17 +82,18 @@ TEST see if this push goes through){
 }
 */
 int total_customers;
+int total_specialists;
 
 Specialist* loadSpecialists() {
 	Specialist* users;
-	int count = 0;
+	total_specialists = 0;
 	string line, username, password, fName, lName, phNumber, operationalArea, specialistID;
 	string userFile = "Specialists.csv";
 
 	// Creating input filestream
 	ifstream file(userFile);
-	while (getline(file, line)) count++;
-	users = new Specialist[count + 1];
+	while (getline(file, line)) total_specialists++;
+	users = new Specialist[total_specialists + 1];
 
 	// get existing users from file
 	ifstream inFile;
@@ -248,17 +249,17 @@ void specialist_loginMenu(char choice) {
 		cout << "Enter your password: ";
 		cin >> passWord;
 		// this will be authentication
-		userName = users[1].username;
-		passWord = users[1].getPassword();
-		for (int i = 0; i < total_customers; i++) {
+		
+		for (int i = 0; i < total_specialists; i++) {
 			if (users[i].username == userName && users[i].getPassword() == passWord) {
+				cout << users[i].username << users[i].getPassword();
 				logged_in_user = users[i];
+				system("CLS");//clears console
+				cout << "Logging in as specialist: " << logged_in_user.username << endl;
+				valid = true;
+				break;
 			}
 		}
-
-		system("CLS");//clears console
-		cout << "Logging in as: " << logged_in_user.username << endl;
-		valid = true;
 	}
 	cin.ignore();
 	specialist_profileMenu(choice, logged_in_user);
@@ -273,7 +274,7 @@ void customer_loginMenu(char choice) {
 
 	users = loadCustomers();
 
-	do {
+	while (valid) {
 		cout << "Enter your username: ";
 		cin >> userName;
 		cout << "Enter your password: ";
@@ -283,16 +284,55 @@ void customer_loginMenu(char choice) {
 		passWord = users[1].getPassword();
 		for (int i = 0; i < total_customers; i++) {
 			if (users[i].username == userName && users[i].getPassword() == passWord) {
+				cout << users[i].username << users[i].getPassword();
 				logged_in_user = users[i];
+				system("CLS");//clears console
+				cout << "Logging in as customer: " << logged_in_user.username << endl;
 				valid = true;
+				break;
 			}
-		}
-
-		system("CLS");//clears console
-		cout << "Logging in as: " << logged_in_user.username << endl;
-	} while (!valid);
+		}		
+	}
 	cin.ignore();
 	profileMenu(choice, logged_in_user);
+}
+
+void specialist_signUpMenu(char choice) {
+	string username, password, fName, lName, phNumber, input, opArea, id;
+	Specialist created_user;
+
+	// enter new user details as necessary, then proceed to profile options
+	ofstream outFile;
+	outFile.open("Specialists.csv", ios_base::app);
+
+	//create test User
+	//later on i will handle inputing and outputing all user accounts to a csv
+	// JOSH: "this can be managed in the Wt::Auth module"
+	cout << "To Create an account please enter a username: ";
+	getline(cin, username);
+	cout << "Please enter a password: ";
+	getline(cin, password);
+	cout << "Please enter your operation postcode: ";
+	getline(cin, opArea);
+	//use a space between fname, lname and phone number then enter
+	cout << "Now please enter your first name, last name and phone number: ";
+	getline(cin, input);
+	
+
+	/*istring stream allows for multiple variables to be input on one line of console
+	(if needed elsewhere but was just testing here)*/
+	std::istringstream iss(input);
+	iss >> fName;
+	iss >> lName;
+	iss >> phNumber;
+
+	//write variables for new user to file
+	outFile << username << "," << password << "," << fName << "," << lName << "," << phNumber << "," << opArea << "," << "0" << "\n";
+	outFile.close();
+	system("CLS");//clears console
+	//cin.ignore();
+	cout << "Specialist Account Created Succesfully";
+	specialist_loginMenu('L');
 }
 
 void signUpMenu(char choice) {
@@ -327,26 +367,27 @@ void signUpMenu(char choice) {
 	outFile.close();
 	system("CLS");//clears console
 	cin.ignore();
-	cout << "User Created Succesfully";
+	cout << "Customer Account Created Succesfully";
 	customer_loginMenu('L');
 }
 
 void firstMenu(char choice) {
 	bool isChoice = false;
-	char choices[6] = {'l', 'L', 's', 'S', 'p', 'P'};
+	char choices[8] = {'l', 'L', 's', 'S', 'p', 'P', 'C', 'c'};
 	while (!isChoice) {
-		cout << "L for Login\nS for Sign Up\nQ for quit\nWhat would you like to do? ";
+		cout << "L for Customer Login\nS for Customer Sign Up\nP for Specialist Login\nC for Specialist Sign up\nQ for quit\nWhat would you like to do? ";
 		cin >> choice;
 		if (std::find(std::begin(choices), std::end(choices), choice) != std::end(choices))
 			isChoice = true;
 		else
 			cout << "Please enter a letter corresponding to a menu item.\n";
 	}
-	cin.ignore();
+	//cin.ignore();
 	system("CLS");//clears console
 	if (choice == 'l' || choice == 'L') customer_loginMenu(choice);
 	else if (choice == 's' || choice == 'S') signUpMenu(choice);
-	//else if (choice == 'p' || choice == 'P') profileMenu(choice);
+	else if (choice == 'c' || choice == 'C') specialist_signUpMenu(choice);
+	else if (choice == 'p' || choice == 'P') specialist_loginMenu(choice);
 	else return;
 }
 
@@ -422,7 +463,12 @@ int main(int argc, char **argv){
 
 	//first menu
 	firstMenu(choice);
-	return 0;
+
+	cout << "q to quit: ";
+	cin >> exitCode;
+	//cout << exitCode;
+
+	return exitCode;
 	//	return Wt::WRun(argc, argv, [](const Wt::WEnvironment& env) {
 	//		return make_unique<GRankSoftwareSolutions>(env);
 	//	});

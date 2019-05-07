@@ -29,3 +29,9 @@ void Specialist::viewRequests() {
 void Specialist::selectRequest() {
 
 }
+
+void Specialist::returnUser() {
+	User::returnUser();
+	cout << "Operation Area" << operationalArea << endl;
+
+}

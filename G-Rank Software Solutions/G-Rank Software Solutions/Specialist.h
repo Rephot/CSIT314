@@ -31,6 +31,7 @@ public:
 	Specialist(string, string, string, string, time_t, string, string, int);
 	void viewRequests();
 	void selectRequest();
+	void returnUser();
 private:
 	// bankAccountClass details;
 	string operationalArea;
