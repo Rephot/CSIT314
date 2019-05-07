@@ -4,7 +4,6 @@
 #include<sstream>
 #include<string>
 #include<chrono>
-class User;
 
 using namespace std;
 

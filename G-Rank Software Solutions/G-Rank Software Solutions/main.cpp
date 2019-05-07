@@ -13,12 +13,28 @@
 using namespace std;
 
 /*
-<<<<<<< HEAD:G-Rank Software Solutions/G-Rank Software Solutions/main2.cpp
-login and user creation is one funcitonality should focus on customer creation
-service request creation relates to managing roadside assistance service requests
+login and user creation is one funcitonality should focus on customer creation{
+	username
+	password
+	email
+	DoB
+	real name
+}
+service request creation relates to managing roadside assistance service requests{ (this functionality has been completed, work is to continue on the rest of the class functions)
+	description of incident
+	location of incident
+	time created
+	customer who created
+	?
+}
 create review for roadside assistance professional related to a request
 create a roadside assistance professional account{
-	
+	rating out of 10?
+	reveiw description (max char length?)
+	customer username/name
+	pulls request identifier
+	pulls customer identifier
+	pulls specialist identifier
 }
 create a way to pay professionals for a service completion{
 	has bank details
@@ -29,7 +45,15 @@ create a way to pay professionals for a service completion{
 		- specialist identifier
 		- customer identifier
 		- callout fee depending on subscription status
-=======
+} or {
+	transaction ID
+	amount
+	subscribed or not - include callout fee in this transaction
+	time
+	customer identifier
+	specialist identifier
+	?vehicle identification? if specialists are fleet
+}
 login and user creation is one funcitonality should focus on customer creation{
 	username
 	password
@@ -66,7 +90,6 @@ create a way to pay professionals for a service completion(can we just use a fla
 	customer identifier
 	specialist identifier
 	?vehicle identification? if specialists are fleet
->>>>>>> f0afb061fe6677fb763f08b91e2229717a261ff9:G-Rank Software Solutions/G-Rank Software Solutions/main.cpp
 }
 */
 

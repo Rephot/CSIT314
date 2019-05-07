@@ -1,6 +1,5 @@
 #include"ServiceRequest.h"
 #include"Specialist.h"
-#include"User.h"
 
 using namespace std;
 
