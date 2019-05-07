@@ -13,7 +13,16 @@ using namespace std;
 
 class Reviews {
 public:
+	Reviews(float, string, string, int, int, int);
 	Reviews();
+	float getRating();
+	string getDesc();
+	string custName();
+	int getRel_Req();
+	int getRel_Cust();
+	int getRel_Spec();
+	void saveReview(Reviews);
+	Reviews* loadReviews();
 private:
 	float rating;
 	string description;
