@@ -17,6 +17,15 @@ using namespace std;
 class Review {
 public:
 	Review();
+	Review(float, string, string, int, int, int);
+	float getRating();
+	string getDesc();
+	string custName();
+	int getRel_Req();
+	int getRel_Cust();
+	int getRel_Spec();
+	void saveReview(Reviews);
+	Reviews* loadReviews();
 	void createReview(); // types are temporary will replace with more suitable
 private:
 	float rating;

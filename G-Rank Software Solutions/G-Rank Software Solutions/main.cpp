@@ -28,6 +28,7 @@ COMPLETED(for purpose of functionality check up, work is to continue on the rest
 	customer who created
 	?
 }
+C: For below I see some of the class is done. I will work on loading them in and out of a file
 create review for roadside assistance professional related to a request{
 	review description max characters ??
 	customer who created
@@ -35,10 +36,10 @@ create review for roadside assistance professional related to a request{
 	review specific rating
 	?? average rating for the specialist ??
 }
+C: for below, basics is working but the following needs to be added
 create a roadside assistance professional account{
 	rating out of 10
 	reveiw description (max char length?)
-	customer username/name
 	pulls request identifier
 	pulls customer identifier
 	pulls specialist identifier
@@ -68,28 +69,22 @@ create a roadside assistance professional account(Will update user account handl
 	generated identifier
 	based on user creation for login account
 }
-create a way to pay professionals for a service completion{
-	transaction ID
-	amount
-	subscribed or not - include callout fee in this transaction
-	time
-	customer identifier
-	specialist identifier
-	?vehicle identification? if specialists are fleet
-}
 */
-int total_customers;
 
+int total_customers;
+int total_specialists;
+
+/*C: Returns array of specialist users from file Specialists.csv*/
 Specialist* loadSpecialists() {
 	Specialist* users;
-	int count = 0;
+	total_specialists = 0;
 	string line, username, password, fName, lName, phNumber, operationalArea, specialistID;
 	string userFile = "Specialists.csv";
 
 	// Creating input filestream
 	ifstream file(userFile);
-	while (getline(file, line)) count++;
-	users = new Specialist[count + 1];
+	while (getline(file, line)) total_specialists++;
+	users = new Specialist[total_specialists + 1];
 
 	// get existing users from file
 	ifstream inFile;
@@ -115,6 +110,7 @@ Specialist* loadSpecialists() {
 	return users;
 }
 
+/*C: Returns array of customer users from file CUstomers.csv*/
 Customer* loadCustomers() {
 	Customer* users;
 	total_customers = 0;
@@ -154,12 +150,14 @@ void receiptsMenu(char choice) {
 	// view ?
 }
 
+/*C: Currently only displays specialist account details but will extend to edit*/
 void specialist_manageDetailsMenu(char choice, Specialist logged_in_user) {
 	// view user details
 	// edit user details
 	logged_in_user.returnUser();
 }
 
+/*C: Currently only displays customer account details but will extend to edit*/
 void manageDetailsMenu(char choice, Customer logged_in_user) {
 	// view user details
 	// edit user details
@@ -172,6 +170,8 @@ void createRequestMenu(char choice, Customer logged_in_user) {
 	create.createServiceRequest(logged_in_user);
 }
 
+
+/*C: Specialist menu deisplayed when logged in*/
 void specialist_profileMenu(char choice, Specialist logged_in_user) {
 	/* user can choose between
 	looking at receipt
@@ -199,6 +199,7 @@ void specialist_profileMenu(char choice, Specialist logged_in_user) {
 	else return;
 }
 
+/*C: Customer menu displayed when logged in*/
 void profileMenu(char choice, Customer logged_in_user) {
 	/* user can choose between
 		looking at receipt
@@ -230,6 +231,7 @@ void profileMenu(char choice, Customer logged_in_user) {
 	else return;
 }
 
+/*C: Login menu for specialists*/
 void specialist_loginMenu(char choice) {
 	Specialist* users;
 	string userName, passWord;
@@ -245,22 +247,23 @@ void specialist_loginMenu(char choice) {
 		cout << "Enter your password: ";
 		cin >> passWord;
 		// this will be authentication
-		userName = users[1].username;
-		passWord = users[1].getPassword();
-		for (int i = 0; i < total_customers; i++) {
+		
+		for (int i = 0; i < total_specialists; i++) {
 			if (users[i].username == userName && users[i].getPassword() == passWord) {
+				cout << users[i].username << users[i].getPassword();
 				logged_in_user = users[i];
+				system("CLS");//clears console
+				cout << "Logging in as specialist: " << logged_in_user.username << endl;
+				valid = true;
+				break;
 			}
 		}
-
-		system("CLS");//clears console
-		cout << "Logging in as: " << logged_in_user.username << endl;
-		valid = true;
 	}
 	cin.ignore();
 	specialist_profileMenu(choice, logged_in_user);
 }
 
+/*C: Login menu for customers*/
 void customer_loginMenu(char choice) {
 	Customer* users;
 	string userName, passWord;
@@ -270,7 +273,7 @@ void customer_loginMenu(char choice) {
 
 	users = loadCustomers();
 
-	do {
+	while (!valid) {
 		cout << "Enter your username: ";
 		cin >> userName;
 		cout << "Enter your password: ";
@@ -280,18 +283,59 @@ void customer_loginMenu(char choice) {
 		passWord = users[1].getPassword();
 		for (int i = 0; i < total_customers; i++) {
 			if (users[i].username == userName && users[i].getPassword() == passWord) {
+				cout << users[i].username << users[i].getPassword();
 				logged_in_user = users[i];
+				system("CLS");//clears console
+				cout << "Logging in as customer: " << logged_in_user.username << endl;
 				valid = true;
+				break;
 			}
-		}
-
-		system("CLS");//clears console
-		cout << "Logging in as: " << logged_in_user.username << endl;
-	} while (!valid);
+		}		
+	}
 	cin.ignore();
 	profileMenu(choice, logged_in_user);
 }
 
+/*C: Signup menu for specialists*/
+void specialist_signUpMenu(char choice) {
+	string username, password, fName, lName, phNumber, input, opArea, id;
+	Specialist created_user;
+
+	// enter new user details as necessary, then proceed to profile options
+	ofstream outFile;
+	outFile.open("Specialists.csv", ios_base::app);
+
+	//create test User
+	//later on i will handle inputing and outputing all user accounts to a csv
+	// JOSH: "this can be managed in the Wt::Auth module"
+	cout << "To Create an account please enter a username: ";
+	getline(cin, username);
+	cout << "Please enter a password: ";
+	getline(cin, password);
+	cout << "Please enter your operation postcode: ";
+	getline(cin, opArea);
+	//use a space between fname, lname and phone number then enter
+	cout << "Now please enter your first name, last name and phone number: ";
+	getline(cin, input);
+	
+
+	/*istring stream allows for multiple variables to be input on one line of console
+	(if needed elsewhere but was just testing here)*/
+	std::istringstream iss(input);
+	iss >> fName;
+	iss >> lName;
+	iss >> phNumber;
+
+	//write variables for new user to file
+	outFile << username << "," << password << "," << fName << "," << lName << "," << phNumber << "," << opArea << "," << "0" << "\n";
+	outFile.close();
+	system("CLS");//clears console
+	//cin.ignore();
+	cout << "Specialist Account Created Succesfully";
+	specialist_loginMenu('L');
+}
+
+/*C: Signup menu for Customers*/
 void signUpMenu(char choice) {
 	string username, password, fName, lName, phNumber, input;
 	User created_user;
@@ -324,26 +368,28 @@ void signUpMenu(char choice) {
 	outFile.close();
 	system("CLS");//clears console
 	cin.ignore();
-	cout << "User Created Succesfully";
+	cout << "Customer Account Created Succesfully";
 	customer_loginMenu('L');
 }
 
+/*Opening console menu for program*/
 void firstMenu(char choice) {
 	bool isChoice = false;
-	char choices[6] = {'l', 'L', 's', 'S', 'p', 'P'};
+	char choices[8] = {'l', 'L', 's', 'S', 'p', 'P', 'C', 'c'};
 	while (!isChoice) {
-		cout << "L for Login\nS for Sign Up\nQ for quit\nWhat would you like to do? ";
+		cout << "L for Customer Login\nS for Customer Sign Up\nP for Specialist Login\nC for Specialist Sign up\nQ for quit\nWhat would you like to do? ";
 		cin >> choice;
 		if (std::find(std::begin(choices), std::end(choices), choice) != std::end(choices))
 			isChoice = true;
 		else
 			cout << "Please enter a letter corresponding to a menu item.\n";
 	}
-	cin.ignore();
+	//cin.ignore();
 	system("CLS");//clears console
 	if (choice == 'l' || choice == 'L') customer_loginMenu(choice);
 	else if (choice == 's' || choice == 'S') signUpMenu(choice);
-	//else if (choice == 'p' || choice == 'P') profileMenu(choice);
+	else if (choice == 'c' || choice == 'C') specialist_signUpMenu(choice);
+	else if (choice == 'p' || choice == 'P') specialist_loginMenu(choice);
 	else return;
 }
 
@@ -369,13 +415,13 @@ int main(int argc, char **argv){
 	7. specialist receives a go ahead notification
 	*/
 	
-	//initiation
+	/*initiation
 	User* users;
 	int count = 0;
 	string line, username, password, fName, lName, phNumber;
 	string userFile = "Users.csv";
 
-	/* Creating input filestream */
+	// Creating input filestream
 	ifstream file("Users.csv");
 	while (getline(file, line)) count++;
 	users = new User[count + 1];
@@ -397,21 +443,21 @@ int main(int argc, char **argv){
 			i++;
 		}
 		inFile.close();
-	}
+	}*/
 
 	// test user file contents
 	//User user1(username, password, fName, lName, 0, phNumber);// creates user
-	system("CLS");//clears console
+	//system("CLS");//clears console
 
-	//print all user details
+	/*print all user details
 	for (int i = 0; i < count + 1; i++) {
 		users[i].returnUser();
 		cout << endl;
-	}
+	}*/
 
 	//user1.returnUser();//displays user credentials
-	Sleep(2500);//pauses for 2.5 seconds
-	system("CLS");//clears console
+	//Sleep(2500);//pauses for 2.5 seconds
+	//system("CLS");//clears console
 
 	// main menu
 	char choice = '\0', exitCode;
@@ -419,7 +465,12 @@ int main(int argc, char **argv){
 
 	//first menu
 	firstMenu(choice);
-	return 0;
+
+	cout << "q to quit: ";
+	cin >> exitCode;
+	//cout << exitCode;
+
+	return exitCode;
 	//	return Wt::WRun(argc, argv, [](const Wt::WEnvironment& env) {
 	//		return make_unique<GRankSoftwareSolutions>(env);
 	//	});
