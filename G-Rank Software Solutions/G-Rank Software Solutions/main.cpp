@@ -28,6 +28,7 @@ COMPLETED(for purpose of functionality check up, work is to continue on the rest
 	customer who created
 	?
 }
+C: For below I see some of the class is done. I will work on loading them in and out of a file
 create review for roadside assistance professional related to a request{
 	review description max characters ??
 	customer who created
@@ -35,42 +36,18 @@ create review for roadside assistance professional related to a request{
 	review specific rating
 	?? average rating for the specialist ??
 }
+C: for below, basics is working but the following needs to be added
 create a roadside assistance professional account{
 	rating out of 10
 	reveiw description (max char length?)
-	customer username/name
 	pulls request identifier
 	pulls customer identifier
 	pulls specialist identifier
-}
-create a way to pay professionals for a service completion{
-	access bank details of specialist for payment
-	receipt has:
-		transaction ID
-		amount
-		subscribed or not - include callout fee in this transaction
-		time
-		customer identifier
-		specialist identifier
-		?vehicle identification? if specialists are fleet
-}
-create review for roadside assistance professional related to a request{
-	rating out of 10?
-	reveiw description (max char length?)
-	customer username/name
-	pulls request identifier
-	pulls customer identifier
-	pulls specialist identifier
-}
-create a roadside assistance professional account(Will update user account handling to allow for both customer and professional account types){
-	bank account details
-	preferred area of operation
-	generated identifier
-	based on user creation for login account
 }
 create a way to pay professionals for a service completion
 (can we just use a flag ifPaid or something for now and say its handled by paypal or something?
-J: maybe, do you want to ask one of the tutors or Hoa? and also just so we can easily see questions from the other within comments, seperate the line and tag it "C:" or "J:", 
+J: maybe, do you want to ask one of the tutors or Hoa? and also just so we can easily see questions from the other within comments, seperate the line and tag it "C:" or "J:"
+, 
 TEST see if this push goes through){
 	transaction ID
 	amount
@@ -84,6 +61,7 @@ TEST see if this push goes through){
 int total_customers;
 int total_specialists;
 
+/*C: Returns array of specialist users from file Specialists.csv*/
 Specialist* loadSpecialists() {
 	Specialist* users;
 	total_specialists = 0;
@@ -119,6 +97,7 @@ Specialist* loadSpecialists() {
 	return users;
 }
 
+/*C: Returns array of customer users from file CUstomers.csv*/
 Customer* loadCustomers() {
 	Customer* users;
 	total_customers = 0;
@@ -158,12 +137,14 @@ void receiptsMenu(char choice) {
 	// view ?
 }
 
+/*C: Currently only displays specialist account details but will extend to edit*/
 void specialist_manageDetailsMenu(char choice, Specialist logged_in_user) {
 	// view user details
 	// edit user details
 	logged_in_user.returnUser();
 }
 
+/*C: Currently only displays customer account details but will extend to edit*/
 void manageDetailsMenu(char choice, Customer logged_in_user) {
 	// view user details
 	// edit user details
@@ -176,6 +157,8 @@ void createRequestMenu(char choice, Customer logged_in_user) {
 	create.createServiceRequest(logged_in_user);
 }
 
+
+/*C: Specialist menu deisplayed when logged in*/
 void specialist_profileMenu(char choice, Specialist logged_in_user) {
 	/* user can choose between
 	looking at receipt
@@ -203,6 +186,7 @@ void specialist_profileMenu(char choice, Specialist logged_in_user) {
 	else return;
 }
 
+/*C: Customer menu displayed when logged in*/
 void profileMenu(char choice, Customer logged_in_user) {
 	/* user can choose between
 	looking at receipt
@@ -234,6 +218,7 @@ void profileMenu(char choice, Customer logged_in_user) {
 	else return;
 }
 
+/*C: Login menu for specialists*/
 void specialist_loginMenu(char choice) {
 	Specialist* users;
 	string userName, passWord;
@@ -265,6 +250,7 @@ void specialist_loginMenu(char choice) {
 	specialist_profileMenu(choice, logged_in_user);
 }
 
+/*C: Login menu for customers*/
 void customer_loginMenu(char choice) {
 	Customer* users;
 	string userName, passWord;
@@ -297,6 +283,7 @@ void customer_loginMenu(char choice) {
 	profileMenu(choice, logged_in_user);
 }
 
+/*C: Signup menu for specialists*/
 void specialist_signUpMenu(char choice) {
 	string username, password, fName, lName, phNumber, input, opArea, id;
 	Specialist created_user;
@@ -335,6 +322,7 @@ void specialist_signUpMenu(char choice) {
 	specialist_loginMenu('L');
 }
 
+/*C: Signup menu for Customers*/
 void signUpMenu(char choice) {
 	string username, password, fName, lName, phNumber, input;
 	User created_user;
@@ -371,6 +359,7 @@ void signUpMenu(char choice) {
 	customer_loginMenu('L');
 }
 
+/*Opening console menu for program*/
 void firstMenu(char choice) {
 	bool isChoice = false;
 	char choices[8] = {'l', 'L', 's', 'S', 'p', 'P', 'C', 'c'};
@@ -413,13 +402,13 @@ int main(int argc, char **argv){
 	7. specialist receives a go ahead notification
 	*/
 	
-	//initiation
+	/*initiation
 	User* users;
 	int count = 0;
 	string line, username, password, fName, lName, phNumber;
 	string userFile = "Users.csv";
 
-	/* Creating input filestream */
+	// Creating input filestream
 	ifstream file("Users.csv");
 	while (getline(file, line)) count++;
 	users = new User[count + 1];
@@ -441,21 +430,21 @@ int main(int argc, char **argv){
 			i++;
 		}
 		inFile.close();
-	}
+	}*/
 
 	// test user file contents
 	//User user1(username, password, fName, lName, 0, phNumber);// creates user
-	system("CLS");//clears console
+	//system("CLS");//clears console
 
-	//print all user details
+	/*print all user details
 	for (int i = 0; i < count + 1; i++) {
 		users[i].returnUser();
 		cout << endl;
-	}
+	}*/
 
 	//user1.returnUser();//displays user credentials
-	Sleep(2500);//pauses for 2.5 seconds
-	system("CLS");//clears console
+	//Sleep(2500);//pauses for 2.5 seconds
+	//system("CLS");//clears console
 
 	// main menu
 	char choice = '\0', exitCode;

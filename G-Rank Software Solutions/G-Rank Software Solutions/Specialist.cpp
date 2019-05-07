@@ -32,6 +32,6 @@ void Specialist::selectRequest() {
 
 void Specialist::returnUser() {
 	User::returnUser();
-	cout << "Operation Area" << operationalArea << endl;
+	cout << "Operation Area: " << operationalArea << endl;
 
 }
