@@ -1,7 +1,10 @@
+#ifndef USER_H
+#define USER_H
+
 #include<iostream>
 #include<ctime>
 #include<cstring>
-#include "Car.h"
+#include"Car.h"
 
 using namespace std;
 
@@ -20,7 +23,8 @@ public:
 	User();
 
 
-private:
+protected:
 	string password, fName, lName, phNumber;
 	time_t DOB;
 };
+#endif

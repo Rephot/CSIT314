@@ -1,7 +1,7 @@
 #include<iostream>
 #include<ctime>
 #include<string>
-#include "User.h"
+#include"User.h"
 
 User::User(string uname, string pwd, string fname, string lname, time_t dob, string number) {
 	username = uname;

@@ -7,6 +7,7 @@
 
 #include "ServiceRequest.h"
 #include "Specialist.h"
+#include"Customer.h"
 #include "User.h"
 #include "G-RankSoftwareSolutions.h"
 
@@ -99,25 +100,132 @@ create a way to pay professionals for a service completion(can we just use a fla
 //	});
 //}
 
+int total_customers;
+
+Specialist* loadSpecialists() {
+	Specialist* users;
+	int count = 0;
+	string line, username, password, fName, lName, phNumber, operationalArea, specialistID;
+	string userFile = "Specialists.csv";
+
+	/* Creating input filestream */
+	ifstream file(userFile);
+	while (getline(file, line)) count++;
+	users = new Specialist[count + 1];
+
+	// get existing users from file
+	ifstream inFile;
+	inFile.open(userFile);
+	int i = 0;
+	if (inFile.is_open())
+	{
+		while (getline(inFile, username, ','))
+		{
+			getline(inFile, password, ',');
+			getline(inFile, fName, ',');
+			getline(inFile, lName, ',');
+			getline(inFile, phNumber, ',');
+			getline(inFile, operationalArea, ',');
+			getline(inFile, specialistID);
+
+			users[i] = Specialist(username, password, fName, lName, 0, phNumber, operationalArea, stoi(specialistID));
+			i++;
+		}
+		inFile.close();
+	}
+
+	return users;
+}
+
+Customer* loadCustomers() {
+	Customer* users;
+	total_customers = 0;
+	string line, username, password, fName, lName, phNumber, operationalArea, specialistID;
+	string userFile = "Users.csv";
+
+	/* Creating input filestream */
+	ifstream file(userFile);
+	while (getline(file, line)) total_customers++;
+	users = new Customer[total_customers + 1];
+
+	// get existing users from file
+	ifstream inFile;
+	inFile.open(userFile);
+	int i = 0;
+	if (inFile.is_open())
+	{
+		while (getline(inFile, username, ','))
+		{
+			getline(inFile, password, ',');
+			getline(inFile, fName, ',');
+			getline(inFile, lName, ',');
+			getline(inFile, phNumber);
+
+			users[i] = Customer(username, password, fName, lName, 0, phNumber);
+			i++;
+		}
+		inFile.close();
+	}
+
+	return users;
+}
+
 void receiptsMenu(char choice) {
 	// view payment history
 	// view request history
 	// view ?
 }
 
-void manageDetailsMenu(char choice, User logged_in_user) {
+void specialist_manageDetailsMenu(char choice, Specialist logged_in_user) {
 	// view user details
 	// edit user details
 	logged_in_user.returnUser();
 }
 
-void createRequestMenu(char choice, User logged_in_user) {
+void manageDetailsMenu(char choice, Customer logged_in_user) {
+	// view user details
+	// edit user details
+	logged_in_user.returnUser();
+}
+
+void createRequestMenu(char choice, Customer logged_in_user) {
 	// run createServiceRequest();
 	ServiceRequest create;
 	create.createServiceRequest(logged_in_user);
 }
 
-void profileMenu(char choice, User logged_in_user) {
+void specialist_profileMenu(char choice, Specialist logged_in_user) {
+	/* user can choose between
+	looking at receipt
+	managing their details
+	creating request
+	?viewing their current request progress?
+	or quitting */
+	while (choice != 'r' && choice != 'R'
+		&& choice != 'm' && choice != 'M'
+		&& choice != 'c' && choice != 'C'
+		&& choice != 'q' && choice != 'Q') {
+		cout << "R for Receipts ETC\n";
+		cout << "M for Manage User Details\n";
+		cout << "C for Respond to Requests\n";
+		cout << "Q for Logout and Quit\n";
+		cout << "What would you like to do ? ";
+		cin >> choice;
+		if (choice != 'r' && choice != 'R'
+			&& choice != 'm' && choice != 'M'
+			&& choice != 'c' && choice != 'C'
+			&& choice != 'q' && choice != 'Q')
+			cout << "Please enter a letter corresponding to a menu item. ";
+	}
+	cin.ignore();
+	system("CLS");//clears console
+	if (choice == 'r' || choice == 'R') receiptsMenu(choice);
+	else if (choice == 'm' || choice == 'M') specialist_manageDetailsMenu(choice, logged_in_user);
+	//else if (choice == 'c' || choice == 'C') createRequestMenu(choice, logged_in_user);
+	else return;
+}
+
+void profileMenu(char choice, Customer logged_in_user) {
 	/* user can choose between
 	looking at receipt
 	managing their details
@@ -148,40 +256,45 @@ void profileMenu(char choice, User logged_in_user) {
 	else return;
 }
 
-void loginMenu(char choice) {
-	User* users;
+void specialist_loginMenu(char choice) {
+	Specialist* users;
 	string userName, passWord;
 	bool valid = false;
-	User logged_in_user;
+	Specialist logged_in_user;
 	// enter login details, then validate, then show options once logged in.
 
-	int count = 0;
-	string line, username, password, fName, lName, phNumber;
-	string userFile = "Users.csv";
+	users = loadSpecialists();
 
-	/* Creating input filestream */
-	ifstream file("Users.csv");
-	while (getline(file, line)) count++;
-	users = new User[count + 1];
-
-	// get existing users from file
-	ifstream inFile;
-	inFile.open(userFile);
-	int i = 0;
-	if (inFile.is_open())
-	{
-		while (getline(inFile, username, ','))
-		{
-			getline(inFile, password, ',');
-			getline(inFile, fName, ',');
-			getline(inFile, lName, ',');
-			getline(inFile, phNumber);
-
-			users[i] = User(username, password, fName, lName, 0, phNumber);
-			i++;
+	while (!valid) {
+		cout << "Enter your username: ";
+		cin >> userName;
+		cout << "Enter your password: ";
+		cin >> passWord;
+		// this will be authentication
+		userName = users[1].username;
+		passWord = users[1].getPassword();
+		for (int i = 0; i < total_customers; i++) {
+			if (users[i].username == userName && users[i].getPassword() == passWord) {
+				logged_in_user = users[i];
+			}
 		}
-		inFile.close();
+
+		system("CLS");//clears console
+		cout << "Logging in as: " << logged_in_user.username << endl;
+		valid = true;
 	}
+	cin.ignore();
+	specialist_profileMenu(choice, logged_in_user);
+}
+
+void loginMenu(char choice) {
+	Customer* users;
+	string userName, passWord;
+	bool valid = false;
+	Customer logged_in_user;
+	// enter login details, then validate, then show options once logged in.
+
+	users = loadCustomers();
 
 	while (!valid) {
 		cout << "Enter your username: ";
@@ -191,7 +304,7 @@ void loginMenu(char choice) {
 			// this will be authentication
 		userName = users[1].username;
 		passWord = users[1].getPassword();
-		for (int i = 0; i < count; i++) {
+		for (int i = 0; i < total_customers; i++) {
 			if (users[i].username == userName && users[i].getPassword() == passWord) {
 				logged_in_user = users[i];
 			}

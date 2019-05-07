@@ -1,16 +1,20 @@
+#ifndef SERVICEREQUEST_H
+#define SERVICEREQUEST_H
+
 #include<iostream>
 #include<ctime>
 #include<cstring>
 #include<sstream>
 #include<string>
 #include<chrono>
+#include"Customer.h"
 
 using namespace std;
 
 class ServiceRequest {
 public:
 	ServiceRequest();
-	void createServiceRequest(User);
+	void createServiceRequest(Customer);
 	void broadcastServiceRequest(ServiceRequest);
 	void displayProfessionalsWhoAccepted();
 	void sendAffirmitiveToProfessional();
@@ -26,3 +30,4 @@ private:
 	string clientName, incidentLocation, sType, serviceRequestedAt;
 	int requestNumber;
 };
+#endif

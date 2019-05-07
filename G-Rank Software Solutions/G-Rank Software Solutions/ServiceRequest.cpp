@@ -1,5 +1,7 @@
+//#include"Customer.h"
+//#include"Specialist.h"
 #include"ServiceRequest.h"
-#include"Specialist.h"
+
 
 using namespace std;
 
@@ -47,7 +49,7 @@ void ServiceRequest::broadcastServiceRequest(ServiceRequest newRequest) {
 	currentRequests[numCurrentRequests++] = newRequest;
 }
 
-void ServiceRequest::createServiceRequest(User user) {
+void ServiceRequest::createServiceRequest(Customer user) {
 	ServiceRequest newRequest;
 	// identifying number
 	string sType, location, client;

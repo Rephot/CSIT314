@@ -1,3 +1,6 @@
+#ifndef SPECIALIST_H
+#define SPECIALIST_H
+
 // inherits user
 
 //create a roadside assistance professional account{
@@ -8,12 +11,16 @@
 //}
 
 #include<string>
+#include"User.h"
 
 using namespace std;
 
-class Specialist{
+//class User;
+
+class Specialist : public User{
 public:
 	Specialist();
+	Specialist(string, string, string, string, time_t, string, string, int);
 	void viewRequests();
 	void selectRequest();
 private:
@@ -22,3 +29,4 @@ private:
 	int specialistID;
 	// User loginAccount;
 };
+#endif
