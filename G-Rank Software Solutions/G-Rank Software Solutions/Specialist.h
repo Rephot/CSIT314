@@ -9,6 +9,14 @@
 //	generated identifier
 //	based on user creation for login account
 //}
+//create a roadside assistance professional account{
+//rating out of 10 ?
+//reveiw description(max char length ? )
+//customer username / name
+//pulls request identifier
+//pulls customer identifier
+//pulls specialist identifier
+//}
 
 #include<string>
 #include"User.h"

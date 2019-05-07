@@ -14,23 +14,29 @@
 using namespace std;
 
 /*
-login and user creation is one funcitonality should focus on customer creation{
+COMPLETED(for purpose of functionality check up) -- login and user creation is one funcitonality should focus on customer creation{ 
 	username
 	password
 	email
 	DoB
 	real name
 }
-service request creation relates to managing roadside assistance service requests{ (this functionality has been completed, work is to continue on the rest of the class functions)
+COMPLETED(for purpose of functionality check up, work is to continue on the rest of the class functions) -- service request creation relates to managing roadside assistance service requests{
 	description of incident
 	location of incident
 	time created
 	customer who created
 	?
 }
-create review for roadside assistance professional related to a request
+create review for roadside assistance professional related to a request{
+	review description max characters ??
+	customer who created
+	specialist review is about
+	review specific rating
+	?? average rating for the specialist ??
+}
 create a roadside assistance professional account{
-	rating out of 10?
+	rating out of 10
 	reveiw description (max char length?)
 	customer username/name
 	pulls request identifier
@@ -38,36 +44,15 @@ create a roadside assistance professional account{
 	pulls specialist identifier
 }
 create a way to pay professionals for a service completion{
-	has bank details
-	uses bank details to 'pay' specialist
-	creates receipt for the transaction noting
-		- time
-		- amount
-		- specialist identifier
-		- customer identifier
-		- callout fee depending on subscription status
-} or {
-	transaction ID
-	amount
-	subscribed or not - include callout fee in this transaction
-	time
-	customer identifier
-	specialist identifier
-	?vehicle identification? if specialists are fleet
-}
-login and user creation is one funcitonality should focus on customer creation{
-	username
-	password
-	email
-	DoB
-	real name
-}
-service request creation relates to managing roadside assistance service requests{ (this functionality has been completed, work is to continue on the rest of the class functions)
-	description of incident
-	location of incident
-	time created
-	customer who created
-	?
+	access bank details of specialist for payment
+	receipt has:
+		transaction ID
+		amount
+		subscribed or not - include callout fee in this transaction
+		time
+		customer identifier
+		specialist identifier
+		?vehicle identification? if specialists are fleet
 }
 create review for roadside assistance professional related to a request{
 	rating out of 10?
@@ -83,7 +68,10 @@ create a roadside assistance professional account(Will update user account handl
 	generated identifier
 	based on user creation for login account
 }
-create a way to pay professionals for a service completion(can we just use a flag ifPaid or something for now and say its handled by paypal or something?){
+create a way to pay professionals for a service completion
+(can we just use a flag ifPaid or something for now and say its handled by paypal or something?
+J: maybe, do you want to ask one of the tutors or Hoa? and also just so we can easily see questions from the other within comments, seperate the line and tag it "C:" or "J:", 
+TEST see if this push goes through){
 	transaction ID
 	amount
 	subscribed or not - include callout fee in this transaction
@@ -93,13 +81,6 @@ create a way to pay professionals for a service completion(can we just use a fla
 	?vehicle identification? if specialists are fleet
 }
 */
-
-//int main(int argc, char **argv){
-//	return Wt::WRun(argc, argv, [](const Wt::WEnvironment& env) {
-//		return make_unique<GRankSoftwareSolutions>(env);
-//	});
-//}
-
 int total_customers;
 
 Specialist* loadSpecialists() {
@@ -108,7 +89,7 @@ Specialist* loadSpecialists() {
 	string line, username, password, fName, lName, phNumber, operationalArea, specialistID;
 	string userFile = "Specialists.csv";
 
-	/* Creating input filestream */
+	// Creating input filestream
 	ifstream file(userFile);
 	while (getline(file, line)) count++;
 	users = new Specialist[count + 1];
@@ -203,17 +184,14 @@ void specialist_profileMenu(char choice, Specialist logged_in_user) {
 	or quitting */
 	while (choice != 'r' && choice != 'R'
 		&& choice != 'm' && choice != 'M'
-		&& choice != 'c' && choice != 'C'
 		&& choice != 'q' && choice != 'Q') {
 		cout << "R for Receipts ETC\n";
 		cout << "M for Manage User Details\n";
-		cout << "C for Respond to Requests\n";
 		cout << "Q for Logout and Quit\n";
 		cout << "What would you like to do ? ";
 		cin >> choice;
 		if (choice != 'r' && choice != 'R'
 			&& choice != 'm' && choice != 'M'
-			&& choice != 'c' && choice != 'C'
 			&& choice != 'q' && choice != 'Q')
 			cout << "Please enter a letter corresponding to a menu item. ";
 	}
@@ -221,7 +199,6 @@ void specialist_profileMenu(char choice, Specialist logged_in_user) {
 	system("CLS");//clears console
 	if (choice == 'r' || choice == 'R') receiptsMenu(choice);
 	else if (choice == 'm' || choice == 'M') specialist_manageDetailsMenu(choice, logged_in_user);
-	//else if (choice == 'c' || choice == 'C') createRequestMenu(choice, logged_in_user);
 	else return;
 }
 
@@ -287,7 +264,7 @@ void specialist_loginMenu(char choice) {
 	specialist_profileMenu(choice, logged_in_user);
 }
 
-void loginMenu(char choice) {
+void customer_loginMenu(char choice) {
 	Customer* users;
 	string userName, passWord;
 	bool valid = false;
@@ -296,24 +273,24 @@ void loginMenu(char choice) {
 
 	users = loadCustomers();
 
-	while (!valid) {
+	do {
 		cout << "Enter your username: ";
 		cin >> userName;
 		cout << "Enter your password: ";
 		cin >> passWord;
-			// this will be authentication
+		// this will be authentication
 		userName = users[1].username;
 		passWord = users[1].getPassword();
 		for (int i = 0; i < total_customers; i++) {
 			if (users[i].username == userName && users[i].getPassword() == passWord) {
 				logged_in_user = users[i];
+				valid = true;
 			}
 		}
 
 		system("CLS");//clears console
 		cout << "Logging in as: " << logged_in_user.username << endl;
-		valid = true;
-	}
+	} while (!valid);
 	cin.ignore();
 	profileMenu(choice, logged_in_user);
 }
@@ -328,7 +305,6 @@ void signUpMenu(char choice) {
 
 	//create test User
 	//later on i will handle inputing and outputing all user accounts to a csv
-	// JOSH: "this can be managed in the Wt::Auth module"
 	cout << "To Create an account please enter a username: ";
 	getline(cin, username);
 	cout << "Please enter a password: ";
@@ -337,7 +313,9 @@ void signUpMenu(char choice) {
 	cout << "Now please enter your first name, last name and phone number: ";
 	getline(cin, input);
 
-	/*istring stream allows for multiple variables to be input on one line of console
+	/*istringstream allows for multiple variables to be input on one line of console
+	it also allows you to build a string much more easily
+	e.g stringstream hello << "This is an example: " << string value << " says hello!";
 	(if needed elsewhere but was just testing here)*/
 	std::istringstream iss(input);
 	iss >> fName;
@@ -350,7 +328,7 @@ void signUpMenu(char choice) {
 	system("CLS");//clears console
 	cin.ignore();
 	cout << "User Created Succesfully";
-	loginMenu('L');
+	customer_loginMenu('L');
 }
 
 void firstMenu(char choice) {
@@ -366,7 +344,7 @@ void firstMenu(char choice) {
 	}
 	cin.ignore();
 	system("CLS");//clears console
-	if (choice == 'l' || choice == 'L') loginMenu(choice);
+	if (choice == 'l' || choice == 'L') customer_loginMenu(choice);
 	else if (choice == 's' || choice == 'S') signUpMenu(choice);
 	//else if (choice == 'p' || choice == 'P') profileMenu(choice);
 	else return;
@@ -444,22 +422,8 @@ int main(int argc, char **argv){
 
 	//first menu
 	firstMenu(choice);
-	
-	//cin.ignore();
-	
-	// test creation of serviceRequest
-	ServiceRequest testrequest;
-	// description of what aim to do with wt widgets
-	/*cout << "this is as user\n";
-	cout << "user calls createservicerequest by pressing a button in the ui\n";
-	testrequest.createServiceRequest();*/
-	cout << "now as specialist\n";
-	Specialist andrew;
-	andrew.viewRequests();
-	cout << "which request would you like to respond to? ";
-	cin >> respondTo;
-	cout << "q to quit: ";
-	cin >> exitCode;
-	cout << exitCode;
 	return 0;
+	//	return Wt::WRun(argc, argv, [](const Wt::WEnvironment& env) {
+	//		return make_unique<GRankSoftwareSolutions>(env);
+	//	});
 }
