@@ -68,10 +68,7 @@ create a roadside assistance professional account(Will update user account handl
 	generated identifier
 	based on user creation for login account
 }
-create a way to pay professionals for a service completion
-(can we just use a flag ifPaid or something for now and say its handled by paypal or something?
-J: maybe, do you want to ask one of the tutors or Hoa? and also just so we can easily see questions from the other within comments, seperate the line and tag it "C:" or "J:", 
-TEST see if this push goes through){
+create a way to pay professionals for a service completion{
 	transaction ID
 	amount
 	subscribed or not - include callout fee in this transaction
@@ -188,12 +185,12 @@ void specialist_profileMenu(char choice, Specialist logged_in_user) {
 		cout << "R for Receipts ETC\n";
 		cout << "M for Manage User Details\n";
 		cout << "Q for Logout and Quit\n";
-		cout << "What would you like to do ? ";
+		cout << "What would you like to do? ";
 		cin >> choice;
 		if (choice != 'r' && choice != 'R'
 			&& choice != 'm' && choice != 'M'
 			&& choice != 'q' && choice != 'Q')
-			cout << "Please enter a letter corresponding to a menu item. ";
+			cout << "Please enter a letter corresponding to a menu item.";
 	}
 	cin.ignore();
 	system("CLS");//clears console
@@ -204,11 +201,11 @@ void specialist_profileMenu(char choice, Specialist logged_in_user) {
 
 void profileMenu(char choice, Customer logged_in_user) {
 	/* user can choose between
-	looking at receipt
-	managing their details
-	creating request
-	?viewing their current request progress?
-	or quitting */
+		looking at receipt
+		managing their details
+		creating request
+		?viewing their current request progress?
+		or quitting */
 	while (choice != 'r' && choice != 'R'
 		&& choice != 'm' && choice != 'M'
 		&& choice != 'c' && choice != 'C'

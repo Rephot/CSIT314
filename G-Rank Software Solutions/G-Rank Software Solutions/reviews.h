@@ -1,4 +1,7 @@
 #include<string>
+#include<sstream>
+#include<iostream>
+#include<ctime>
 
 using namespace std;
 
@@ -11,14 +14,12 @@ using namespace std;
 //	pulls specialist identifier
 //}
 
-class Reviews {
+class Review {
 public:
-	Reviews();
+	Review();
+	void createReview(); // types are temporary will replace with more suitable
 private:
 	float rating;
-	string description;
-	string customerName;
-	int relatedRequest;
-	int relatedCustomer;
-	int relatedSpecialist;
+	string description, customerName, relatedCustomer;
+	int relatedRequest, relatedSpecialist;
 };

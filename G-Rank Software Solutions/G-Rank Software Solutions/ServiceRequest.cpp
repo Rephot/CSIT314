@@ -1,4 +1,3 @@
-//#include"Customer.h"
 //#include"Specialist.h"
 #include"ServiceRequest.h"
 
@@ -45,7 +44,6 @@ void ServiceRequest::broadcastServiceRequest(ServiceRequest newRequest) {
 	// place into an array for the specialists to view
 	// will be called from the constructor
 	// add service request to static member of specialist class
-	cout << "This is where the request would be broadcast from!\n";
 	currentRequests[numCurrentRequests++] = newRequest;
 }
 
