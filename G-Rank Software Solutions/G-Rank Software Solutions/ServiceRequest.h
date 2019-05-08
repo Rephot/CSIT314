@@ -14,6 +14,7 @@ using namespace std;
 class ServiceRequest {
 public:
 	ServiceRequest();
+	void saveRequests();
 	void createServiceRequest(Customer);
 	void broadcastServiceRequest(ServiceRequest);
 	void displayProfessionalsWhoAccepted();

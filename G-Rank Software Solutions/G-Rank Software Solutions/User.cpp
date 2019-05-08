@@ -57,5 +57,4 @@ void User::returnUser() {
 	cout << "Full Name: " << fName << " " << lName << endl;
 	cout << "Date of Birth: " << DOB << endl;
 	cout << "Phone Number: " << phNumber << endl;
-
 }
