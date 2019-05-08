@@ -785,6 +785,5 @@ c:\program files\wt 4.0.5 msvs2017 x64\include\wt\wpushbutton.h(277): warning C4
               _Ty=Wt::WPopupMenu
           ]
   The use of header files without .h is deprecated since Wt 4.0.0, please use WText.h instead
-c:\users\joshua\documents\github\csit314\g-rank software solutions\g-rank software solutions\main.cpp(434): warning C4101: 'respondTo': unreferenced local variable
-c:\users\joshua\documents\github\csit314\g-rank software solutions\g-rank software solutions\main.cpp(433): warning C4101: 'exitCode': unreferenced local variable
+c:\users\joshua\documents\github\csit314\g-rank software solutions\g-rank software solutions\main.cpp(466): warning C4101: 'respondTo': unreferenced local variable
   G-Rank Software Solutions.vcxproj -> C:\Users\Joshua\Documents\GitHub\CSIT314\G-Rank Software Solutions\x64\Debug\G-Rank Software Solutions.exe

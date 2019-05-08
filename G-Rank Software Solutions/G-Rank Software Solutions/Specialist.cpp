@@ -31,7 +31,13 @@ void Specialist::selectRequest() {
 }
 
 void Specialist::returnUser() {
-	User::returnUser();
+	cout << "Username: " << username << endl;
+	cout << "Password: " << password << endl;
+	cout << "Full Name: " << fName << " " << lName << endl;
+	cout << "Date of Birth: " << DOB << endl;
+	cout << "Phone Number: " << phNumber << endl;
+	//User::returnUser(); J: This should have a user object that returnUser() can be called with
+	// for example 
+	// User specialistUserInfo;
 	cout << "Operation Area: " << operationalArea << endl;
-
 }

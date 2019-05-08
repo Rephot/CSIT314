@@ -10,16 +10,26 @@
 #include"Customer.h"
 #include "User.h"
 #include "G-RankSoftwareSolutions.h"
+#include "Reviews.h"
 
 using namespace std;
 
 /*
+J: For future testing have changed menu items from char selection to int selection, easier to manage
+J: also changed the menus to be do whiles, as they happen at least once, and before, the menu wasn't showing sometimes
+
 COMPLETED(for purpose of functionality check up) -- login and user creation is one funcitonality should focus on customer creation{ 
 	username
 	password
 	email
 	DoB
 	real name
+}
+create a roadside assistance professional account(Will update user account handling to allow for both customer and professional account types){
+	bank account details
+	preferred area of operation
+	generated identifier
+	based on user creation for login account
 }
 COMPLETED(for purpose of functionality check up, work is to continue on the rest of the class functions) -- service request creation relates to managing roadside assistance service requests{
 	description of incident
@@ -34,40 +44,33 @@ create review for roadside assistance professional related to a request{
 	customer who created
 	specialist review is about
 	review specific rating
-	?? average rating for the specialist ??
 }
 C: for below, basics is working but the following needs to be added
 create a roadside assistance professional account{
-	rating out of 10
-	reveiw description (max char length?)
-	pulls request identifier
-	pulls customer identifier
-	pulls specialist identifier
+	average rating out of 10
 }
-create a way to pay professionals for a service completion{
+create a way to pay professionals on service completion, this could also be considered receipt generation for purposes of the information that we generate{
 	access bank details of specialist for payment
 	receipt has:
-		transaction ID
-		amount
-		subscribed or not - include callout fee in this transaction
-		time
-		customer identifier
-		specialist identifier
-		?vehicle identification? if specialists are fleet
+		transaction ID (should be generated from a static variable that increases after each transaction is processed)
+		amount (the amount charged for the particular service type)
+		subscribed or not - include callout fee in this transaction (this will only appear on PoD user receipts)
+		time (consider whether it should include both time request, time of payment or both)
+		customer identifier (auto filled from ServiceRequest info, ie ServiceRequest should have Customer that is related to it)
+		specialist identifier (auto filled from ServiceRequest info, ie ServiceRequest should have Specialist that is related to it, but only after the Specialist has confirmed to take on the job)
+		?vehicle identification? if specialists are fleet - this is more required from the company's point of view, as a mini insurance thing, so they know which vehicle was where, and with who
+			shall ask whether this information is required, if so there will be a fleet truck class, wtih:
+			- truck rego
+			- truck ID
+			- truck status: {available, assigned, maintainanceRequired)
 }
-create review for roadside assistance professional related to a request{
+J: COMPLETE(this has been mostly completed, the only thing that needs to be finished off is the acquistion of the customers name or identifier) create review for roadside assistance professional related to a request{
 	rating out of 10?
 	reveiw description (max char length?)
 	customer username/name
 	pulls request identifier
 	pulls customer identifier
 	pulls specialist identifier
-}
-create a roadside assistance professional account(Will update user account handling to allow for both customer and professional account types){
-	bank account details
-	preferred area of operation
-	generated identifier
-	based on user creation for login account
 }
 */
 
@@ -144,27 +147,34 @@ Customer* loadCustomers() {
 	return users;
 }
 
-void receiptsMenu(char choice) {
+void receiptsMenu(int choice) {
 	// view payment history
 	// view request history
 	// view ?
 }
 
+// should be a menu item in customer menu
+void reviewMenu(int choice, Customer logged_in_user) {
+	// create review after job completion (stretch, servicerequests will have flag for completion to check against, also extended time to write one up)
+	Review averageRev;
+	averageRev.createReview();
+}
+
 /*C: Currently only displays specialist account details but will extend to edit*/
-void specialist_manageDetailsMenu(char choice, Specialist logged_in_user) {
+void specialist_manageDetailsMenu(int choice, Specialist logged_in_user) {
 	// view user details
 	// edit user details
 	logged_in_user.returnUser();
 }
 
 /*C: Currently only displays customer account details but will extend to edit*/
-void manageDetailsMenu(char choice, Customer logged_in_user) {
+void manageDetailsMenu(int choice, Customer logged_in_user) {
 	// view user details
 	// edit user details
 	logged_in_user.returnUser();
 }
 
-void createRequestMenu(char choice, Customer logged_in_user) {
+void createRequestMenu(int choice, Customer logged_in_user) {
 	// run createServiceRequest();
 	ServiceRequest create;
 	create.createServiceRequest(logged_in_user);
@@ -172,67 +182,60 @@ void createRequestMenu(char choice, Customer logged_in_user) {
 
 
 /*C: Specialist menu deisplayed when logged in*/
-void specialist_profileMenu(char choice, Specialist logged_in_user) {
+void specialist_profileMenu(int choice, Specialist logged_in_user) {
 	/* user can choose between
 	looking at receipt
 	managing their details
 	creating request
 	?viewing their current request progress?
 	or quitting */
-	while (choice != 'r' && choice != 'R'
-		&& choice != 'm' && choice != 'M'
-		&& choice != 'q' && choice != 'Q') {
-		cout << "R for Receipts ETC\n";
-		cout << "M for Manage User Details\n";
-		cout << "Q for Logout and Quit\n";
+	do {
+		cout << "1. Receipts ETC\n";
+		cout << "2. Manage User Details\n";
+		cout << "0. Logout and Quit\n";
 		cout << "What would you like to do? ";
 		cin >> choice;
-		if (choice != 'r' && choice != 'R'
-			&& choice != 'm' && choice != 'M'
-			&& choice != 'q' && choice != 'Q')
+		if (choice < 0 && choice > 2)
 			cout << "Please enter a letter corresponding to a menu item.";
-	}
+	} while (choice < 0 && choice > 2);
 	cin.ignore();
 	system("CLS");//clears console
-	if (choice == 'r' || choice == 'R') receiptsMenu(choice);
-	else if (choice == 'm' || choice == 'M') specialist_manageDetailsMenu(choice, logged_in_user);
+	if (choice == 1) receiptsMenu(99);
+	else if (choice == 2) specialist_manageDetailsMenu(99, logged_in_user);
 	else return;
 }
 
 /*C: Customer menu displayed when logged in*/
-void profileMenu(char choice, Customer logged_in_user) {
+void customer_profileMenu(int choice, Customer logged_in_user) {
 	/* user can choose between
 		looking at receipt
 		managing their details
 		creating request
+		create review
 		?viewing their current request progress?
 		or quitting */
-	while (choice != 'r' && choice != 'R'
-		&& choice != 'm' && choice != 'M'
-		&& choice != 'c' && choice != 'C'
-		&& choice != 'q' && choice != 'Q') {
-			cout << "R for Receipts ETC\n";
-			cout << "M for Manage User Details\n";
-			cout << "C for Create Request\n";
-			cout << "Q for Logout and Quit\n";
+	do {
+			cout << "1. View Receipts ETC\n";
+			cout << "2. Manage User Details\n";
+			cout << "3. Create Request\n";
+			cout << "4. Create Review\n";
+			cout << "0. Logout and Quit\n";
 			cout << "What would you like to do ? ";
 			cin >> choice;
-			if (choice != 'r' && choice != 'R'
-			 && choice != 'm' && choice != 'M'
-			 && choice != 'c' && choice != 'C'
-			 && choice != 'q' && choice != 'Q')
-				cout << "Please enter a letter corresponding to a menu item. ";
-	}
+			if (choice < 0 && choice > 4)
+				cout << "Please enter a number corresponding to a menu item. ";
+	} while (choice < 0 && choice > 4);
 	cin.ignore();
 	system("CLS");//clears console
-	if (choice == 'r' || choice == 'R') receiptsMenu(choice);
-	else if (choice == 'm' || choice == 'M') manageDetailsMenu(choice, logged_in_user);
-	else if (choice == 'c' || choice == 'C') createRequestMenu(choice, logged_in_user);
+	if (choice == 1) receiptsMenu(99);
+	else if (choice == 2) manageDetailsMenu(99, logged_in_user);
+	else if (choice == 3) createRequestMenu(99, logged_in_user);
+	else if (choice == 4) reviewMenu(99, logged_in_user);
 	else return;
 }
 
 /*C: Login menu for specialists*/
-void specialist_loginMenu(char choice) {
+void specialist_loginMenu(int choice) {
 	Specialist* users;
 	string userName, passWord;
 	bool valid = false;
@@ -260,11 +263,11 @@ void specialist_loginMenu(char choice) {
 		}
 	}
 	cin.ignore();
-	specialist_profileMenu(choice, logged_in_user);
+	specialist_profileMenu(99, logged_in_user);
 }
 
 /*C: Login menu for customers*/
-void customer_loginMenu(char choice) {
+void customer_loginMenu(int choice) {
 	Customer* users;
 	string userName, passWord;
 	bool valid = false;
@@ -293,11 +296,11 @@ void customer_loginMenu(char choice) {
 		}		
 	}
 	cin.ignore();
-	profileMenu(choice, logged_in_user);
+	customer_profileMenu(99, logged_in_user);
 }
 
 /*C: Signup menu for specialists*/
-void specialist_signUpMenu(char choice) {
+void specialist_signUpMenu(int choice) {
 	string username, password, fName, lName, phNumber, input, opArea, id;
 	Specialist created_user;
 
@@ -307,7 +310,6 @@ void specialist_signUpMenu(char choice) {
 
 	//create test User
 	//later on i will handle inputing and outputing all user accounts to a csv
-	// JOSH: "this can be managed in the Wt::Auth module"
 	cout << "To Create an account please enter a username: ";
 	getline(cin, username);
 	cout << "Please enter a password: ";
@@ -332,11 +334,11 @@ void specialist_signUpMenu(char choice) {
 	system("CLS");//clears console
 	//cin.ignore();
 	cout << "Specialist Account Created Succesfully";
-	specialist_loginMenu('L');
+	specialist_loginMenu(99);
 }
 
 /*C: Signup menu for Customers*/
-void signUpMenu(char choice) {
+void signUpMenu(int choice) {
 	string username, password, fName, lName, phNumber, input;
 	User created_user;
 
@@ -369,27 +371,27 @@ void signUpMenu(char choice) {
 	system("CLS");//clears console
 	cin.ignore();
 	cout << "Customer Account Created Succesfully";
-	customer_loginMenu('L');
+	customer_loginMenu(99);
 }
 
 /*Opening console menu for program*/
-void firstMenu(char choice) {
-	bool isChoice = false;
-	char choices[8] = {'l', 'L', 's', 'S', 'p', 'P', 'C', 'c'};
-	while (!isChoice) {
-		cout << "L for Customer Login\nS for Customer Sign Up\nP for Specialist Login\nC for Specialist Sign up\nQ for quit\nWhat would you like to do? ";
+void firstMenu(int choice) {
+	do {
+		cout << "1. Customer Login\n";
+		cout << "2. Customer Sign Up\n";
+		cout << "3. Specialist Login\n";
+		cout << "4. Specialist Sign up\n";
+		cout << "0. quit\n";
+		cout << "What would you like to do ? ";
 		cin >> choice;
-		if (std::find(std::begin(choices), std::end(choices), choice) != std::end(choices))
-			isChoice = true;
-		else
-			cout << "Please enter a letter corresponding to a menu item.\n";
-	}
+		if (choice < 0 && choice > 4) cout << "Please enter a number corresponding to a menu item.\n";
+	} while (choice < 0 && choice > 4);
 	//cin.ignore();
 	system("CLS");//clears console
-	if (choice == 'l' || choice == 'L') customer_loginMenu(choice);
-	else if (choice == 's' || choice == 'S') signUpMenu(choice);
-	else if (choice == 'c' || choice == 'C') specialist_signUpMenu(choice);
-	else if (choice == 'p' || choice == 'P') specialist_loginMenu(choice);
+	if (choice == 1) customer_loginMenu(99);
+	else if (choice == 2) signUpMenu(99);
+	else if (choice == 3) specialist_signUpMenu(99);
+	else if (choice == 4) specialist_loginMenu(99);
 	else return;
 }
 
@@ -460,17 +462,14 @@ int main(int argc, char **argv){
 	//system("CLS");//clears console
 
 	// main menu
-	char choice = '\0', exitCode;
+	int choice = 99;
 	int respondTo;
 
 	//first menu
 	firstMenu(choice);
-
-	cout << "q to quit: ";
-	cin >> exitCode;
 	//cout << exitCode;
 
-	return exitCode;
+	return 0;
 	//	return Wt::WRun(argc, argv, [](const Wt::WEnvironment& env) {
 	//		return make_unique<GRankSoftwareSolutions>(env);
 	//	});

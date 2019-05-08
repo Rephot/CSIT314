@@ -2,6 +2,7 @@
 #include<sstream>
 #include<iostream>
 #include<ctime>
+#include<Windows.h>
 
 using namespace std;
 
@@ -22,10 +23,10 @@ public:
 	string getDesc();
 	string custName();
 	int getRel_Req();
-	int getRel_Cust();
+	string getRel_Cust();
 	int getRel_Spec();
-	void saveReview(Reviews);
-	Reviews* loadReviews();
+	void saveReview(Review);
+	Review* loadReviews();
 	void createReview(); // types are temporary will replace with more suitable
 private:
 	float rating;

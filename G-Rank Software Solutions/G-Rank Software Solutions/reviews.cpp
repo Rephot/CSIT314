@@ -33,7 +33,7 @@ int Review::getRel_Req() {
 	return relatedRequest;
 }
 
-int Review::getRel_Cust() {
+string Review::getRel_Cust() {
 	return relatedCustomer;
 }
 
@@ -59,7 +59,7 @@ Review* Review::loadReviews() {
 	// Creating input filestream
 	ifstream file(userFile);
 	while (getline(file, line)) total_reviews++;
-	reviews = new Reviews[total_reviews + 1];
+	reviews = new Review[total_reviews + 1];
 
 	// get existing users from file
 	ifstream inFile;
@@ -75,7 +75,7 @@ Review* Review::loadReviews() {
 			getline(inFile, relatedCustomer, ',');
 			getline(inFile, relatedSpecialist);
 
-			reviews[i] = Reviews(stof(rating), description, customerName, stoi(relatedRequest), stoi(relatedCustomer), stoi(relatedSpecialist));
+			reviews[i] = Review(stof(rating), description, customerName, stoi(relatedRequest), stoi(relatedCustomer), stoi(relatedSpecialist));
 			i++;
 		}
 		inFile.close();
@@ -85,7 +85,7 @@ Review* Review::loadReviews() {
 }
 
 void Review::createReview() {
-	stringstream reviewOut;
+	stringstream reviewIn;
 	Review rev;
 	float rating;
 	int specialistID, requestID;
@@ -99,10 +99,14 @@ void Review::createReview() {
 	// check if float
 	cin >> rating;
 	cout << "Would you like to add a review description (optional): ";
-	getline(cin, reviewDescription);
+	cin.ignore();
+	getline(cin, reviewDescription, '\n');
+	cout << reviewDescription;
+	Sleep(5000);
 	rev.rating = rating;
 	rev.description = reviewDescription;
 	rev.relatedRequest = requestID;
 	rev.relatedSpecialist = specialistID;
-	rev.relatedCustomer = ""; // customer.name or ID number;
+	rev.relatedCustomer = ""; // customer.name auto fill
+	// saveReview(rev);
 }
