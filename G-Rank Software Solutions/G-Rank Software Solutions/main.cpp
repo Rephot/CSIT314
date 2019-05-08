@@ -384,6 +384,7 @@ void firstMenu(int choice) {
 		cout << "0. quit\n";
 		cout << "What would you like to do ? ";
 		cin >> choice;
+		cin.ignore();
 		if (choice < 0 && choice > 4) cout << "Please enter a number corresponding to a menu item.\n";
 	} while (choice < 0 && choice > 4);
 	//cin.ignore();
