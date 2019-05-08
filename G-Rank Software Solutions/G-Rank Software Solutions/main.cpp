@@ -157,7 +157,7 @@ void receiptsMenu(int choice) {
 void reviewMenu(int choice, Customer logged_in_user) {
 	// create review after job completion (stretch, servicerequests will have flag for completion to check against, also extended time to write one up)
 	Review averageRev;
-	averageRev.createReview();
+	averageRev.createReview(logged_in_user);
 }
 
 /*C: Currently only displays specialist account details but will extend to edit*/
@@ -390,8 +390,8 @@ void firstMenu(int choice) {
 	system("CLS");//clears console
 	if (choice == 1) customer_loginMenu(99);
 	else if (choice == 2) signUpMenu(99);
-	else if (choice == 3) specialist_signUpMenu(99);
-	else if (choice == 4) specialist_loginMenu(99);
+	else if (choice == 3) specialist_loginMenu(99);
+	else if (choice == 4) specialist_signUpMenu(99);
 	else return;
 }
 
@@ -468,6 +468,7 @@ int main(int argc, char **argv){
 	//first menu
 	firstMenu(choice);
 	//cout << exitCode;
+	Sleep(10000);//pauses for 5 seconds
 
 	return 0;
 	//	return Wt::WRun(argc, argv, [](const Wt::WEnvironment& env) {

@@ -31,12 +31,8 @@ void Specialist::selectRequest() {
 }
 
 void Specialist::returnUser() {
-	cout << "Username: " << username << endl;
-	cout << "Password: " << password << endl;
-	cout << "Full Name: " << fName << " " << lName << endl;
-	cout << "Date of Birth: " << DOB << endl;
-	cout << "Phone Number: " << phNumber << endl;
-	//User::returnUser(); J: This should have a user object that returnUser() can be called with
+	User::returnUser();//C: User::returnUser() just calls the parent function on the same object that calls this function (inheritance)
+	// J: This should have a user object that returnUser() can be called with
 	// for example 
 	// User specialistUserInfo;
 	cout << "Operation Area: " << operationalArea << endl;

@@ -8,7 +8,7 @@ Review::Review(){
 
 }
 
-Review::Review(float rating, string description, string customerName, int relatedRequest, int relatedCustomer, int relatedSpecialist) {
+Review::Review(float rating, string description, string customerName, int relatedRequest, string relatedCustomer, int relatedSpecialist) {
 	this->rating = rating;
 	this->description = description;
 	this->customerName = customerName;
@@ -75,7 +75,7 @@ Review* Review::loadReviews() {
 			getline(inFile, relatedCustomer, ',');
 			getline(inFile, relatedSpecialist);
 
-			reviews[i] = Review(stof(rating), description, customerName, stoi(relatedRequest), stoi(relatedCustomer), stoi(relatedSpecialist));
+			reviews[i] = Review(stof(rating), description, customerName, stoi(relatedRequest), relatedCustomer, stoi(relatedSpecialist));
 			i++;
 		}
 		inFile.close();
@@ -84,7 +84,7 @@ Review* Review::loadReviews() {
 	return reviews;
 }
 
-void Review::createReview() {
+void Review::createReview(Customer logged_in_user) {
 	stringstream reviewIn;
 	Review rev;
 	float rating;
@@ -103,10 +103,6 @@ void Review::createReview() {
 	getline(cin, reviewDescription, '\n');
 	cout << reviewDescription;
 	Sleep(5000);
-	rev.rating = rating;
-	rev.description = reviewDescription;
-	rev.relatedRequest = requestID;
-	rev.relatedSpecialist = specialistID;
-	rev.relatedCustomer = ""; // customer.name auto fill
-	// saveReview(rev);
+	rev = Review(rating, reviewDescription, logged_in_user.getFullName(), requestID, logged_in_user.username, specialistID);
+	saveReview(rev);
 }

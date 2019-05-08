@@ -3,6 +3,7 @@
 #include<iostream>
 #include<ctime>
 #include<Windows.h>
+#include "Customer.h"
 
 using namespace std;
 
@@ -18,7 +19,7 @@ using namespace std;
 class Review {
 public:
 	Review();
-	Review(float, string, string, int, int, int);
+	Review(float, string, string, int, string, int);
 	float getRating();
 	string getDesc();
 	string custName();
@@ -27,7 +28,7 @@ public:
 	int getRel_Spec();
 	void saveReview(Review);
 	Review* loadReviews();
-	void createReview(); // types are temporary will replace with more suitable
+	void createReview(Customer); // types are temporary will replace with more suitable
 private:
 	float rating;
 	string description, customerName, relatedCustomer;
