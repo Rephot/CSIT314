@@ -1,5 +1,6 @@
 //#include"Specialist.h"
 #include"ServiceRequest.h"
+#include<fstream>
 
 
 using namespace std;
@@ -32,6 +33,15 @@ int ServiceRequest::numCurrentRequests = 0;
 ServiceRequest ServiceRequest::currentRequests[50];
 int ServiceRequest::numRequests = 0;
 
+void ServiceRequest::saveRequests() {
+	ofstream outFile;
+	outFile.open("Requests.csv", ios_base::app);
+
+	outFile << clientName << "," << requestNumber << "," << incidentLocation << "," << sType << "," << "0" << "," << to_string(requestNumber) << "\n";
+	//C: serviceRequestedAt has a /n at the end of it for some reason and that causes saving it to use 2 lines so ive substitued 0 in its place for now
+	outFile.close();
+}
+
 ServiceRequest::ServiceRequest() {
 	clientName = "";
 	incidentLocation = "";
@@ -45,6 +55,7 @@ void ServiceRequest::broadcastServiceRequest(ServiceRequest newRequest) {
 	// will be called from the constructor
 	// add service request to static member of specialist class
 	currentRequests[numCurrentRequests++] = newRequest;
+	newRequest.saveRequests();
 }
 
 void ServiceRequest::createServiceRequest(Customer user) {

@@ -25,8 +25,8 @@ COMPLETED(for purpose of functionality check up) -- login and user creation is o
 	DoB
 	real name
 }
-create a roadside assistance professional account(Will update user account handling to allow for both customer and professional account types){
-	bank account details
+COMPLETED(for purpose of functionality check up) -- still need bank details{
+	bank account details - not yet implemented
 	preferred area of operation
 	generated identifier
 	based on user creation for login account
@@ -76,6 +76,10 @@ J: COMPLETE(for the purpose of functionality progress review) create review for 
 
 int total_customers;
 int total_specialists;
+Specialist* specialists;
+Customer* customers;
+void firstMenu(int);
+
 
 /*C: Returns array of specialist users from file Specialists.csv*/
 Specialist* loadSpecialists() {
@@ -113,12 +117,12 @@ Specialist* loadSpecialists() {
 	return users;
 }
 
-/*C: Returns array of customer users from file CUstomers.csv*/
+/*C: Returns array of customer users from file Customers.csv*/
 Customer* loadCustomers() {
 	Customer* users;
 	total_customers = 0;
-	string line, username, password, fName, lName, phNumber, operationalArea, specialistID;
-	string userFile = "Users.csv";
+	string line, username, password, fName, lName, phNumber, custID, DOB;
+	string userFile = "Customers.csv";
 
 	/* Creating input filestream */
 	ifstream file(userFile);
@@ -131,14 +135,16 @@ Customer* loadCustomers() {
 	int i = 0;
 	if (inFile.is_open())
 	{
-		while (getline(inFile, username, ','))
+		while (getline(inFile, custID, ','))
 		{
+			getline(inFile, username, ',');
 			getline(inFile, password, ',');
 			getline(inFile, fName, ',');
 			getline(inFile, lName, ',');
+			getline(inFile, DOB, ',');
 			getline(inFile, phNumber);
 
-			users[i] = Customer(username, password, fName, lName, 0, phNumber);
+			users[i] = Customer(stoi(custID), username, password, fName, lName, stoi(DOB), phNumber);
 			i++;
 		}
 		inFile.close();
@@ -282,8 +288,6 @@ void customer_loginMenu(int choice) {
 		cout << "Enter your password: ";
 		cin >> passWord;
 		// this will be authentication
-		userName = users[1].username;
-		passWord = users[1].getPassword();
 		for (int i = 0; i < total_customers; i++) {
 			if (users[i].username == userName && users[i].getPassword() == passWord) {
 				cout << users[i].username << users[i].getPassword();
@@ -329,22 +333,22 @@ void specialist_signUpMenu(int choice) {
 	iss >> phNumber;
 
 	//write variables for new user to file
-	outFile << username << "," << password << "," << fName << "," << lName << "," << phNumber << "," << opArea << "," << "0" << "\n";
+	outFile << username << "," << password << "," << fName << "," << lName << "," << phNumber << "," << opArea << "," << to_string(total_specialists+1) << "\n";
 	outFile.close();
 	system("CLS");//clears console
 	//cin.ignore();
-	cout << "Specialist Account Created Succesfully";
-	specialist_loginMenu(99);
+	cout << "Specialist Account Created Succesfully" << endl;
+	firstMenu(99);
 }
 
 /*C: Signup menu for Customers*/
 void signUpMenu(int choice) {
 	string username, password, fName, lName, phNumber, input;
-	User created_user;
+	Customer created_user;
 
 	// enter new user details as necessary, then proceed to profile options
-	ofstream outFile;
-	outFile.open("Users.csv", ios_base::app);
+	//ofstream outFile;
+	//outFile.open("Users.csv", ios_base::app);
 
 	//create test User
 	//later on i will handle inputing and outputing all user accounts to a csv
@@ -366,12 +370,13 @@ void signUpMenu(int choice) {
 	iss >> phNumber;
 
 	//write variables for new user to file
-	outFile << username << "," << password << "," << fName << "," << lName << "," << phNumber << "\n";
-	outFile.close();
+	created_user = Customer(total_customers+1, username, password, fName, lName, 0, phNumber);
+	created_user.saveCustomer();
+
 	system("CLS");//clears console
-	cin.ignore();
-	cout << "Customer Account Created Succesfully";
-	customer_loginMenu(99);
+	
+	cout << "Customer Account Created Succesfully" << endl;
+	firstMenu(99);
 }
 
 /*Opening console menu for program*/
@@ -465,6 +470,9 @@ int main(int argc, char **argv){
 	// main menu
 	int choice = 99;
 	int respondTo;
+
+	specialists = loadSpecialists();
+	customers = loadCustomers();
 
 	//first menu
 	firstMenu(choice);

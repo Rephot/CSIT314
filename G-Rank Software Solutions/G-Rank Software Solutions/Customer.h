@@ -6,10 +6,15 @@
 #include"User.h"
 using namespace std;
 
+
+
 class Customer : public User{
 public:
 	Customer();
-	Customer(string, string, string, string, time_t, string);
+	Customer(int, string, string, string, string, time_t, string);
+	void returnUser();
+	void saveCustomer();
+	int custID;//C: type can be changed later
 private:
 	// BankCard cardDetails;
 };

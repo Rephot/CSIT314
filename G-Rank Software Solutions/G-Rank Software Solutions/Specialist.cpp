@@ -5,11 +5,12 @@
 
 using namespace std;
 
+
 Specialist::Specialist() {
 
 }
 
-Specialist::Specialist(string uname, string pwd, string fname, string lname, time_t dob, string number, string area, int id) {
+Specialist::Specialist(string uname, string pwd, string fname, string lname, time_t dob, string number, string area, int specialistID) {
 	username = uname;
 	password = pwd;
 	fName = fname;
@@ -17,7 +18,7 @@ Specialist::Specialist(string uname, string pwd, string fname, string lname, tim
 	DOB = dob;
 	phNumber = number;
 	operationalArea = area;
-	specialistID = id;
+	specialistID = specialistID;
 }
 
 void Specialist::viewRequests() {
