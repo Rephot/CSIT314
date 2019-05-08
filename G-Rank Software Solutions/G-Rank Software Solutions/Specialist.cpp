@@ -18,12 +18,14 @@ Specialist::Specialist(string uname, string pwd, string fname, string lname, tim
 	DOB = dob;
 	phNumber = number;
 	operationalArea = area;
-	specialistID = specialistID;
+	this->specialistID = specialistID;
 }
 
 void Specialist::viewRequests() {
 	for (int i = 0; i < ServiceRequest::numCurrentRequests; i++) {
-		cout << ServiceRequest::toString(ServiceRequest::currentRequests[i]) << endl;
+		if (ServiceRequest::currentRequests[i].incidentLocation == operationalArea) {
+			cout << ServiceRequest::toString(ServiceRequest::currentRequests[i]) << endl;
+		}
 	}
 }
 

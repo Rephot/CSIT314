@@ -22,13 +22,14 @@ public:
 	void specialisAcceptServiceRequest();
 	void professionalAcknowledgment();
 	void clientChoosesProfessional();
-	string toString();
+	void loadRequests();
+	string toString(), incidentLocation;
 	static string toString(ServiceRequest);
 	// this array will be replaced by either a vector/map or by a WT construct
 	static ServiceRequest currentRequests[50];
 	static int numCurrentRequests, numRequests;
 private:
-	string clientName, incidentLocation, sType, serviceRequestedAt;
+	string clientName, sType, serviceRequestedAt;
 	int requestID;
 };
 #endif

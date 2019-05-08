@@ -35,9 +35,11 @@ int ServiceRequest::numRequests = 0;
 
 void ServiceRequest::saveRequests() {
 	ofstream outFile;
-	outFile.open("Requests.csv", ios_base::app);
+	outFile.open("Requests.csv");
 
-	outFile << clientName << "," << requestNumber << "," << incidentLocation << "," << sType << "," << "0" << "," << to_string(requestNumber) << "\n";
+	for (int i = 0; i < numCurrentRequests; i++) {
+		outFile << currentRequests[i].clientName << "," << to_string(currentRequests[i].requestID) << "," << currentRequests[i].incidentLocation << "," << currentRequests[i].sType << "," << "0" << "\n";
+	}
 	//C: serviceRequestedAt has a /n at the end of it for some reason and that causes saving it to use 2 lines so ive substitued 0 in its place for now
 	outFile.close();
 }
@@ -48,6 +50,40 @@ ServiceRequest::ServiceRequest() {
 	sType = "";
 	serviceRequestedAt = "";
 	requestID = 0;
+}
+
+void ServiceRequest::loadRequests() {
+	ServiceRequest serviceReq;
+	string line, clientName, requestID, incidentLocation, sType, serviceRequestedAt;
+	string userFile = "Requests.csv";
+
+	// get existing users from file
+	ifstream inFile;
+	inFile.open(userFile);
+	int i = 0;
+	if (inFile.is_open())
+	{
+		while (getline(inFile, clientName, ','))
+		{
+			getline(inFile, requestID, ',');
+			getline(inFile, incidentLocation, ',');
+			getline(inFile, sType, ',');
+			getline(inFile, serviceRequestedAt);
+
+			serviceReq.clientName = clientName;
+			serviceReq.incidentLocation = incidentLocation;
+			serviceReq.sType = sType;
+			serviceReq.serviceRequestedAt = serviceRequestedAt;
+			serviceReq.requestID = stoi(requestID);
+
+			++numRequests;
+
+			broadcastServiceRequest(serviceReq);
+
+			i++;
+		}
+		inFile.close();
+	}
 }
 
 void ServiceRequest::broadcastServiceRequest(ServiceRequest newRequest) {

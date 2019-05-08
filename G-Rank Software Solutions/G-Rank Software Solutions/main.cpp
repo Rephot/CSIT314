@@ -178,6 +178,11 @@ void createRequestMenu(int choice, Customer logged_in_user) {
 	create.createServiceRequest(logged_in_user);
 }
 
+void viewRequestMenu(int choice, Specialist logged_in_user) {
+	// run createServiceRequest();
+	logged_in_user.viewRequests();
+}
+
 
 /*C: Specialist menu deisplayed when logged in*/
 void specialist_profileMenu(int choice, Specialist logged_in_user) {
@@ -190,16 +195,18 @@ void specialist_profileMenu(int choice, Specialist logged_in_user) {
 	do {
 		cout << "1. Receipts ETC\n";
 		cout << "2. Manage User Details\n";
+		cout << "3. View Requests\n";
 		cout << "0. Logout and Quit\n";
 		cout << "What would you like to do? ";
 		cin >> choice;
-		if (choice < 0 && choice > 2)
+		if (choice < 0 && choice > 3)
 			cout << "Please enter a letter corresponding to a menu item.";
-	} while (choice < 0 && choice > 2);
+	} while (choice < 0 && choice > 3);
 	cin.ignore();
 	system("CLS");//clears console
 	if (choice == 1) receiptsMenu(99);
 	else if (choice == 2) specialist_manageDetailsMenu(99, logged_in_user);
+	else if (choice == 3) viewRequestMenu(99, logged_in_user);
 	else return;
 }
 
@@ -465,6 +472,9 @@ int main(int argc, char **argv){
 
 	specialists = loadSpecialists();
 	customers = loadCustomers();
+
+	ServiceRequest req;
+	req.loadRequests();
 
 	//first menu
 	firstMenu(choice);
