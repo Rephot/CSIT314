@@ -25,7 +25,9 @@ COMPLETED(for purpose of functionality check up) -- login and user creation is o
 	DoB
 	real name
 }
-COMPLETED(for purpose of functionality check up) -- still need bank details{
+C: for below, basics is working but the following needs to be added
+COMPLETED(for purpose of functionality check up) create a roadside assistance professional account -- still need bank details{
+	average rating out of 10
 	bank account details - not yet implemented
 	preferred area of operation
 	generated identifier
@@ -39,17 +41,15 @@ COMPLETED(for purpose of functionality check up, work is to continue on the rest
 	?
 }
 C: For below I see some of the class is done. I will work on loading them in and out of a file
-create review for roadside assistance professional related to a request{
-	review description max characters ??
-	customer who created
-	specialist review is about
-	review specific rating
+J: COMPLETE(for the purpose of functionality progress review) create review for roadside assistance professional related to a request{
+	rating out of 10?
+	reveiw description (max char length?)
+	customer username/name
+	pulls request identifier
+	pulls customer identifier
+	pulls specialist identifier
 }
-C: for below, basics is working but the following needs to be added
-create a roadside assistance professional account{
-	average rating out of 10
-}
-create a way to pay professionals on service completion, this could also be considered receipt generation considering the information that we generate{
+J: MOSTLY COMPLETED(receipt generation mostly complete, still needs to access the customer, specialist and request identifiers)create a way to pay professionals on service completion, this could also be considered receipt generation considering the information that we generate{
 	access bank details of specialist for payment
 	receipt has:
 		transaction ID (should be generated from a static variable that increases after each transaction is processed)
@@ -63,14 +63,6 @@ create a way to pay professionals on service completion, this could also be cons
 			- truck rego
 			- truck ID
 			- truck status: {available, assigned, maintainanceRequired)
-}
-J: COMPLETE(for the purpose of functionality progress review) create review for roadside assistance professional related to a request{
-	rating out of 10?
-	reveiw description (max char length?)
-	customer username/name
-	pulls request identifier
-	pulls customer identifier
-	pulls specialist identifier
 }
 */
 
