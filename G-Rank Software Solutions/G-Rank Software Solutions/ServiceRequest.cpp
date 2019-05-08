@@ -37,7 +37,7 @@ ServiceRequest::ServiceRequest() {
 	incidentLocation = "";
 	sType = "";
 	serviceRequestedAt = "";
-	requestNumber = 0;
+	requestID = 0;
 }
 
 void ServiceRequest::broadcastServiceRequest(ServiceRequest newRequest) {
@@ -52,7 +52,7 @@ void ServiceRequest::createServiceRequest(Customer user) {
 	// identifying number
 	string sType, location, client;
 	// shall be replaced by WT form code
-	cout << "This is a Test:\nPlease Enter the details of the incident.\nIs it a breakdown or something like a flat tyre ? ";
+	cout << "Please Enter the details of the incident.\nIs it a breakdown or something like a flat tyre ? ";
 	getline(cin, sType);
 	cout << "Where is the incident? ";
 	getline(cin, location);
@@ -65,7 +65,7 @@ void ServiceRequest::createServiceRequest(Customer user) {
 	newRequest.incidentLocation = location;
 	newRequest.sType = sType;
 	newRequest.serviceRequestedAt = dateTimeRequested;
-	newRequest.requestNumber = ++numRequests;
+	newRequest.requestID = ++numRequests;
 	broadcastServiceRequest(newRequest);
 }
 
@@ -105,7 +105,7 @@ string ServiceRequest::toString() {
 
 string ServiceRequest::toString(ServiceRequest requestString) {
 	stringstream request;
-	request << requestString.requestNumber << " " << requestString.clientName << " has requested assistance for a " << requestString.sType << " service, at " << requestString.incidentLocation << ", at the time, " << requestString.serviceRequestedAt;
+	request << requestString.requestID << " " << requestString.clientName << " has requested assistance for a " << requestString.sType << " service, at " << requestString.incidentLocation << ", at the time, " << requestString.serviceRequestedAt;
 	string requested = request.str();
 	return requested;
 }

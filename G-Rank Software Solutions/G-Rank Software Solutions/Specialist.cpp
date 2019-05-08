@@ -32,8 +32,5 @@ void Specialist::selectRequest() {
 
 void Specialist::returnUser() {
 	User::returnUser();//C: User::returnUser() just calls the parent function on the same object that calls this function (inheritance)
-	// J: This should have a user object that returnUser() can be called with
-	// for example 
-	// User specialistUserInfo;
 	cout << "Operation Area: " << operationalArea << endl;
 }

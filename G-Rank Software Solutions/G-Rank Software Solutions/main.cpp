@@ -7,7 +7,7 @@
 
 #include "ServiceRequest.h"
 #include "Specialist.h"
-#include"Customer.h"
+#include "Customer.h"
 #include "User.h"
 #include "G-RankSoftwareSolutions.h"
 #include "Reviews.h"
@@ -49,7 +49,7 @@ C: for below, basics is working but the following needs to be added
 create a roadside assistance professional account{
 	average rating out of 10
 }
-create a way to pay professionals on service completion, this could also be considered receipt generation for purposes of the information that we generate{
+create a way to pay professionals on service completion, this could also be considered receipt generation considering the information that we generate{
 	access bank details of specialist for payment
 	receipt has:
 		transaction ID (should be generated from a static variable that increases after each transaction is processed)
@@ -64,7 +64,7 @@ create a way to pay professionals on service completion, this could also be cons
 			- truck ID
 			- truck status: {available, assigned, maintainanceRequired)
 }
-J: COMPLETE(this has been mostly completed, the only thing that needs to be finished off is the acquistion of the customers name or identifier) create review for roadside assistance professional related to a request{
+J: COMPLETE(for the purpose of functionality progress review) create review for roadside assistance professional related to a request{
 	rating out of 10?
 	reveiw description (max char length?)
 	customer username/name

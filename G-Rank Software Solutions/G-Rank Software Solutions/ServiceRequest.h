@@ -28,6 +28,6 @@ public:
 	static int numCurrentRequests, numRequests;
 private:
 	string clientName, incidentLocation, sType, serviceRequestedAt;
-	int requestNumber;
+	int requestID;
 };
 #endif

@@ -18,11 +18,18 @@ create and update system with reviews and info about customer if needed
 //}
 
 #include<ctime>
+#include<chrono>
+#include<string>
+#include<cstring>
 
-class Receipts {
+using namespace std;
+
+class Receipt {
 public:
-	Receipts();
-	//generateReceipt();
+	Receipt();
+	Receipt(int, float, bool, time_t, int, int, int);
+	void generateReceipt();
+	static int numReceipts;
 private:
 	int receiptID;
 	float amount;
