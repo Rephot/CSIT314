@@ -482,7 +482,7 @@ int main(int argc, char **argv){
 	Sleep(10000);//pauses for 5 seconds
 
 	return 0;
-	//	return Wt::WRun(argc, argv, [](const Wt::WEnvironment& env) {
-	//		return make_unique<GRankSoftwareSolutions>(env);
-	//	});
+	/*return Wt::WRun(argc, argv, [](const Wt::WEnvironment& env) {
+		return make_unique<GRankSoftwareSolutions>(env);
+	});*/
 }

@@ -6,6 +6,7 @@
 #include <Wt/WLength>
 #include <Wt/WLineEdit>
 #include <Wt/WLink>
+#include <Wt/WEvent.h>
 #include <Wt/WPushButton>
 #include <Wt/WText>
 
@@ -20,16 +21,9 @@ private:
 	Wt::WContainerWidget* _header;
 	Wt::WVBoxLayout* _headerLayout;
 	Wt::WText* _headerText;
-	Wt::WText* _username;
-	Wt::WLineEdit* _usernameInput;
-	Wt::WText* _password;
-	Wt::WLineEdit* _passwordInput;
-	Wt::WContainerWidget* _buttons;
-	Wt::WHBoxLayout* _buttonsLayout;
-	Wt::WPushButton* _signUp;
-	Wt::WPushButton* _signIn;
 	Wt::WContainerWidget* _pageContent;
 	Wt::WVBoxLayout* _pageLayout;
+	void handlePathChange(); // J: will be trying to add URL path management, STRETCH goal
 
 public:
 	GRankSoftwareSolutions(const Wt::WEnvironment &env);
@@ -37,5 +31,6 @@ public:
 	void initContentLayout();
 	void loginPage();
 	void servicePage();
+	void registerPage();
 	void title();
 };
