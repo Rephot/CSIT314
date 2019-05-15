@@ -24,6 +24,7 @@ private:
 	Wt::WContainerWidget* _pageContent;
 	Wt::WVBoxLayout* _pageLayout;
 	void handlePathChange(); // J: will be trying to add URL path management, STRETCH goal
+	bool validateUser();
 
 public:
 	GRankSoftwareSolutions(const Wt::WEnvironment &env);
@@ -32,5 +33,7 @@ public:
 	void loginPage();
 	void servicePage();
 	void registerPage();
+	void registerPage2();
+	void registerPage3();
 	void title();
 };

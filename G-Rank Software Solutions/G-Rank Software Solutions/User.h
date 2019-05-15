@@ -10,6 +10,7 @@ using namespace std;
 
 class User {
 public:
+	User();
 	User(string, string, string, string, time_t, string);
 	string username;
 	bool setPassword(string);
@@ -20,7 +21,6 @@ public:
 	string getLastName();
 	time_t getDOB();
 	string getNumber();
-	User();
 
 
 protected:
