@@ -20,8 +20,8 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{50D6D8F3-E98A-4406-8236-10EBD179704D}</ProjectGuid>
-    <RootNamespace>GRankSoftwareSolutions</RootNamespace>
+    <ProjectGuid>{38319D82-8C28-412F-9BD2-1D4B951DAB89}</ProjectGuid>
+    <RootNamespace>FUCKTHISSHIT</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -77,11 +77,10 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Program Files\Wt 4.0.5 msvs2017 x64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;HPDF_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>wthttpd.lib;wtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Program Files\Wt 4.0.5 msvs2017 x64\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>wthttpd.lib;wtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -91,7 +90,6 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Program Files\Wt 4.0.5 msvs2017 x64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;HPDF_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>C:\Program Files\Wt 4.0.5 msvs2017 x64\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -128,11 +126,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Administrator.h" />
-    <ClInclude Include="Car.h" />
+    <ClInclude Include="car.h" />
     <ClInclude Include="Customer.h" />
     <ClInclude Include="G-RankSoftwareSolutions.h" />
-    <ClInclude Include="Receipts.h" />
-    <ClInclude Include="Reviews.h" />
+    <ClInclude Include="receipts.h" />
+    <ClInclude Include="reviews.h" />
     <ClInclude Include="ServiceRequest.h" />
     <ClInclude Include="Specialist.h" />
     <ClInclude Include="User.h" />
@@ -140,12 +138,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Administrator.cpp" />
-    <ClCompile Include="Car.cpp" />
+    <ClCompile Include="car.cpp" />
     <ClCompile Include="Customer.cpp" />
     <ClCompile Include="G-RankSoftwareSolutions.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Receipts.cpp" />
-    <ClCompile Include="Reviews.cpp" />
+    <ClCompile Include="receipts.cpp" />
+    <ClCompile Include="reviews.cpp" />
     <ClCompile Include="ServiceRequest.cpp" />
     <ClCompile Include="Specialist.cpp" />
     <ClCompile Include="User.cpp" />
