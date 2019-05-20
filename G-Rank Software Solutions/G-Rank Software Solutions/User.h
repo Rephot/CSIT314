@@ -4,7 +4,6 @@
 #include<iostream>
 #include<ctime>
 #include<cstring>
-#include"car.h"
 
 using namespace std;
 
