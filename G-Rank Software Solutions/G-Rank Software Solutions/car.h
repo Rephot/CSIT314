@@ -1,8 +1,11 @@
+#ifndef CAR_H
+#define CAR_H
+
 #include <string>
 #include "Customer.h"
 using namespace std;
 
-class Car {
+class Car{
 public:
 	Car();
 	Car(Customer, string, int, string, string, string, double, string);
@@ -22,3 +25,5 @@ private:
 	string make, model, licencePlate, colour, shape;
 	double engineSize;
 };
+
+#endif

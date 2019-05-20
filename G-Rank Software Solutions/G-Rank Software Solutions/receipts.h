@@ -17,6 +17,9 @@ create and update system with reviews and info about customer if needed
 //	?vehicle identification? if specialists are fleet
 //}
 
+#ifndef RECEIPTS_H
+#define RECEIPTS_H
+
 #include<ctime>
 #include<chrono>
 #include<string>
@@ -39,3 +42,5 @@ private:
 	int specialistID; // acquired from the specialist involved in the transaction
 	int requestID; // acquired from the request that has been fulfilled
 };
+
+#endif

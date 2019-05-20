@@ -4,11 +4,11 @@
 #include<iostream>
 #include<ctime>
 #include<cstring>
-#include"Car.h"
+#include"car.h"
 
 using namespace std;
 
-class User {
+class User{
 public:
 	User();
 	User(string, string, string, string, time_t, string);
@@ -21,10 +21,9 @@ public:
 	string getLastName();
 	time_t getDOB();
 	string getNumber();
-
-
 protected:
 	string password, fName, lName, phNumber;
 	time_t DOB;
 };
+
 #endif

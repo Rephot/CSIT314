@@ -1,7 +1,9 @@
 #include <string>
 #include <fstream>
-#include"Car.h"
+#include"car.h"
 using namespace std;
+
+Car::Car(){}
 
 Car::Car(Customer cust, string licencePlate, int modelYear, string make, string model, string shape, double engineSize, string colour) {
 	this->cust_id = cust.custID;
@@ -13,6 +15,7 @@ Car::Car(Customer cust, string licencePlate, int modelYear, string make, string 
 	this->engineSize = engineSize;
 	this->colour = colour;
 }
+
 Car::Car(int cust_id, string licencePlate, int modelYear, string make, string model, string shape, double engineSize, string colour) {
 	this->cust_id = cust_id;
 	this->licencePlate = licencePlate;
@@ -64,7 +67,7 @@ void Car::save() {
 	outFile.close();
 }
 
-Car* loadCars() {
+Car* Car::loadCars() {
 	Car* cars;
 	int total_cars = 0;
 	string line, cust_id, make, model, modelYear, licencePlate, shape, engineSize, colour;

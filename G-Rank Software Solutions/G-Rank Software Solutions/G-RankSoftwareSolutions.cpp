@@ -90,13 +90,13 @@ void GRankSoftwareSolutions::customerDashboard() {
 
 	//Wt::WStackedWidget *_menuStack = _headerLayout->addWidget(make_unique<Wt::WStackedWidget>());
 
-	Wt::WMenu *_leftMenu = _customerNavBar->addMenu(make_unique<Wt::WMenu>());
+	/*Wt::WMenu *_leftMenu = _customerNavBar->addMenu(make_unique<Wt::WMenu>());
 	Wt::WMenuItem *_createRequest = _leftMenu->addItem("Create Service Request");
 	Wt::WMenuItem *_profile = _leftMenu->addItem("View Profile Details");
-	Wt::WMenuItem *_receiptsReviews = _leftMenu->addItem("View Receipts/Reviews");
-	/*Wt::WPushButton *_createRequest = _customerMenu->addWidget(make_unique<Wt::WPushButton>("Create Service Request"));
-	Wt::WPushButton *_profile = _customerMenu->addWidget(make_unique<Wt::WPushButton>("View Profile Details"));
-	Wt::WPushButton *_receiptsReviews = _customerMenu->addWidget(make_unique<Wt::WPushButton>("View Receipts/Reviews"));*/
+	Wt::WMenuItem *_receiptsReviews = _leftMenu->addItem("View Receipts/Reviews");*/
+	Wt::WPushButton *_createRequest = _customerNavBar->addWidget(make_unique<Wt::WPushButton>("Create Service Request"));
+	Wt::WPushButton *_profile = _customerNavBar->addWidget(make_unique<Wt::WPushButton>("View Profile Details"));
+	Wt::WPushButton *_receiptsReviews = _customerNavBar->addWidget(make_unique<Wt::WPushButton>("View Receipts/Reviews"));
 }
 
 void GRankSoftwareSolutions::loginPage() {

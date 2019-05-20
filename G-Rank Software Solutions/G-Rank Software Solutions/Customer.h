@@ -4,9 +4,8 @@
 //credit card details for subsription payments and optionally service transaction
 
 #include"User.h"
+
 using namespace std;
-
-
 
 class Customer : public User{
 public:
@@ -18,4 +17,5 @@ public:
 private:
 	// BankCard cardDetails;
 };
+
 #endif

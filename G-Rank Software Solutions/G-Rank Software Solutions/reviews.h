@@ -1,3 +1,6 @@
+#ifndef REVIEWS_H
+#define REVIEWS_H
+
 #include<string>
 #include<sstream>
 #include<iostream>
@@ -34,3 +37,5 @@ private:
 	string description, customerName;
 	int relatedRequest, relatedSpecialist, relatedCustomer;
 };
+
+#endif

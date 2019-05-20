@@ -3,6 +3,8 @@
 #include<string>
 #include"User.h"
 
+User::User() {}
+
 User::User(string uname, string pwd, string fname, string lname, time_t dob, string number) {
 	username = uname;
 	password = pwd;
@@ -40,15 +42,6 @@ string User::getNumber() {
 bool User::setPassword(string pwd) {
 	this->password == pwd;
 	return true;
-}
-
-User::User() {
-	username = "";
-	password = "";
-	fName = "";
-	lName = "";
-	DOB = 0;
-	phNumber = "";
 }
 
 void User::returnUser() {
