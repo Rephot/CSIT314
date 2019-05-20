@@ -26,6 +26,11 @@ serviceRequest creation
 //}
 
 GRankSoftwareSolutions::GRankSoftwareSolutions(const Wt::WEnvironment &env) : Wt::WApplication(env) {
+	ofstream file;
+	file.open("testCSIT314.txt", ios_base::app);
+	file << "Test This\n";
+	file.close();
+
 	app = Wt::WApplication::instance();
 	initCSS();
 
@@ -38,13 +43,15 @@ GRankSoftwareSolutions::GRankSoftwareSolutions(const Wt::WEnvironment &env) : Wt
 }
 
 void GRankSoftwareSolutions::handlePathChange() {
-	if (Wt::WApplication::instance()->internalPath() == "/?_=/register") {
+	if (Wt::WApplication::instance()->internalPath() == "register") {
 		registerPage();
 	}
 }
 
 void GRankSoftwareSolutions::initCSS() {
 	app->styleSheet().addRule("#content", "display: block; margin: auto;");
+	app->styleSheet().addRule("#dashboard", "width: 100%; margin-left: 0%;");
+	app->styleSheet().addRule("#navbar", "background-color: #262626; color: #fff;");
 	//app->styleSheet().addRule("#pageContent", "display: block; margin-left: auto; margin-right: auto;");
 	app->styleSheet().addRule("body", "background-color: #abcdef;");
 	app->styleSheet().addRule("#buttons", "background-color: #fedcba;");
@@ -57,7 +64,7 @@ void GRankSoftwareSolutions::initCSS() {
 void GRankSoftwareSolutions::initContentLayout() {
 	_content = root()->addWidget(make_unique<Wt::WContainerWidget>());
 	_content->setId("content");
-	_content->setWidth(400);
+	_content->setMaximumSize(400, 1600);
 
 	//create vertical layout
 	_contentLayout = _content->setLayout(make_unique<Wt::WVBoxLayout>());
@@ -67,9 +74,34 @@ void GRankSoftwareSolutions::title() {
 	//create header title
 	_header = _contentLayout->addWidget(make_unique<Wt::WContainerWidget>());
 	_header->setId("header");
-	_headerLayout = _header->setLayout(make_unique<Wt::WVBoxLayout>());
+	Wt::WVBoxLayout *_headerLayout = _header->setLayout(make_unique<Wt::WVBoxLayout>());
 	_headerText = _headerLayout->addWidget(make_unique<Wt::WText>("<h3>" + appName + "</h3>"), 0, Wt::AlignmentFlag::Center);
 	_pageContent = _contentLayout->addWidget(make_unique<Wt::WContainerWidget>(), 0, Wt::AlignmentFlag::Center);
+}
+
+void GRankSoftwareSolutions::customerDashboard() {
+	_content->clear();
+	_content->removeStyleClass("content", true);
+	_content->setStyleClass("dashboard");
+	_content->setMaximumSize(2000, 1600);
+	_contentLayout = _content->setLayout(make_unique<Wt::WVBoxLayout>());
+	_header = _contentLayout->addWidget(make_unique<Wt::WContainerWidget>());
+	_header->setId("header");
+	Wt::WHBoxLayout *_headerLayout = _header->setLayout(make_unique<Wt::WHBoxLayout>());
+	Wt::WNavigationBar *_customerNavBar = _headerLayout->addWidget(make_unique<Wt::WNavigationBar>());
+	_customerNavBar->setStyleClass("navbar");
+	_customerNavBar->setTitle(appName);
+	_customerNavBar->setResponsive(true);
+
+	//Wt::WStackedWidget *_menuStack = _headerLayout->addWidget(make_unique<Wt::WStackedWidget>());
+
+	Wt::WMenu *_leftMenu = _customerNavBar->addMenu(make_unique<Wt::WMenu>());
+	Wt::WMenuItem *_createRequest = _leftMenu->addItem("Create Service Request");
+	Wt::WMenuItem *_profile = _leftMenu->addItem("View Profile Details");
+	Wt::WMenuItem *_receiptsReviews = _leftMenu->addItem("View Receipts/Reviews");
+	/*Wt::WPushButton *_createRequest = _customerMenu->addWidget(make_unique<Wt::WPushButton>("Create Service Request"));
+	Wt::WPushButton *_profile = _customerMenu->addWidget(make_unique<Wt::WPushButton>("View Profile Details"));
+	Wt::WPushButton *_receiptsReviews = _customerMenu->addWidget(make_unique<Wt::WPushButton>("View Receipts/Reviews"));*/
 }
 
 void GRankSoftwareSolutions::loginPage() {
@@ -80,12 +112,12 @@ void GRankSoftwareSolutions::loginPage() {
 	_pageContent->setWidth(400);
 	Wt::WText* _usernameText = _pageLayout->addWidget(make_unique<Wt::WText>("Username:"));
 	Wt::WLineEdit* _usernameField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
-	_usernameField->setPlaceholderText("user1234:");
+	_usernameField->setPlaceholderText("user1234");
 
 	//create password text and input
 	Wt::WText* _passwordText = _pageLayout->addWidget(make_unique<Wt::WText>("Password:"));
 	Wt::WLineEdit* _passwordField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
-	_passwordField->setPlaceholderText("Password:");
+	_passwordField->setPlaceholderText("Password");
 	_passwordField->setEchoMode(Wt::EchoMode::Password);
 
 	//create pushButtons for sign in and sign up
@@ -93,10 +125,10 @@ void GRankSoftwareSolutions::loginPage() {
 	_buttonsContainer->setId("buttons");
 	Wt::WHBoxLayout* _buttonsLayout = _buttonsContainer->setLayout(make_unique<Wt::WHBoxLayout>());
 	Wt::WPushButton* _signUpButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Sign Up"));
-	/*_signUpButton->setLink(Wt::WLink(Wt::LinkType::InternalPath, "/register"));
-	Wt::WApplication::instance()->internalPathChanged().connect([=] {
-		handlePathChange();
-	});*/
+	//_signUpButton->setLink(Wt::WLink(Wt::LinkType::InternalPath, "/register"));
+	//Wt::WApplication::instance()->internalPathChanged().connect([=] {
+	//	//handlePathChange();
+	//});
 	_signUpButton->clicked().connect([=](const Wt::WMouseEvent &e) {
 		GRankSoftwareSolutions::registerPage();
 	});
@@ -104,6 +136,7 @@ void GRankSoftwareSolutions::loginPage() {
 	Wt::WPushButton* _signInButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Sign In"));
 	//_signInButton->setLink(Wt::WLink(Wt::LinkType::InternalPath, "/service"));
 	_signInButton->clicked().connect([=](const Wt::WMouseEvent &e) {
+		customerDashboard();
 		/*(GRankSoftwareSolutions::validate()) ? {
 			GRankSoftwareSolutions::frontProfilePage();
 		}:{
@@ -144,7 +177,7 @@ void GRankSoftwareSolutions::registerPage() { // J: does not currently create us
 	});
 
 	// confirm will create user profile and log them in (this assumes they've confirmed their account via email...)
-	Wt::WPushButton *_confirmButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Confirm"));
+	Wt::WPushButton *_confirmButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Next"));
 	_confirmButton->setStyleClass("btn-primary");
 	_confirmButton->clicked().connect([=](const Wt::WMouseEvent &e) {
 		GRankSoftwareSolutions::registerPage2();
@@ -188,7 +221,7 @@ void GRankSoftwareSolutions::registerPage2() {
 	});
 
 	// confirm will create user profile and log them in (this assumes they've confirmed their account via email...)
-	Wt::WPushButton *_confirmButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Confirm"));
+	Wt::WPushButton *_confirmButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Next"));
 	_confirmButton->setStyleClass("btn-primary");
 	_confirmButton->clicked().connect([=](const Wt::WMouseEvent &e) {
 		GRankSoftwareSolutions::registerPage3();
@@ -234,7 +267,7 @@ void GRankSoftwareSolutions::servicePage() {
 	// map, combobox, description (textEdit), confirm and cancel
 }
 
-// use to log  in a valid user
+// use to log in a valid user
 bool GRankSoftwareSolutions::validateUser() {
 	return true;
 }
