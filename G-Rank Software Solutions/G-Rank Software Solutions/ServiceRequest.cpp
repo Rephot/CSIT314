@@ -135,6 +135,8 @@ void ServiceRequest::specialisAcceptServiceRequest(){
 void ServiceRequest::professionalAcknowledgment(){
 	// professional acknowledges
 	// and this should be called by the specialist which calls the 
+
+
 }
 
 // this may be better placed in Customer
