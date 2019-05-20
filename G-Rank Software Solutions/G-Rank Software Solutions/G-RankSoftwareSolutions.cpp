@@ -26,11 +26,6 @@ serviceRequest creation
 //}
 
 GRankSoftwareSolutions::GRankSoftwareSolutions(const Wt::WEnvironment &env) : Wt::WApplication(env) {
-	ofstream file;
-	file.open("testCSIT314.txt", ios_base::app);
-	file << "Test This\n";
-	file.close();
-
 	app = Wt::WApplication::instance();
 	initCSS();
 
