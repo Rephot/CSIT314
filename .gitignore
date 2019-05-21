@@ -347,3 +347,32 @@ healthchecksdb
 MigrationBackup/
 *.ipch
 *.ipch
+G-Rank Software Solutions/G-Rank Software Solutions/Debug/Administrator.obj
+G-Rank Software Solutions/G-Rank Software Solutions/Debug/Car.obj
+G-Rank Software Solutions/G-Rank Software Solutions/Debug/Customer.obj
+G-Rank Software Solutions/G-Rank Software Solutions/Debug/main.obj
+G-Rank Software Solutions/G-Rank Software Solutions/Debug/Receipts.obj
+G-Rank Software Solutions/G-Rank Software Solutions/Debug/reviews.obj
+G-Rank Software Solutions/G-Rank Software Solutions/Debug/ServiceRequest.obj
+G-Rank Software Solutions/G-Rank Software Solutions/Debug/Specialist.obj
+G-Rank Software Solutions/G-Rank Software Solutions/Debug/User.obj
+G-Rank Software Solutions/G-Rank Software Solutions/Debug/UserSession.obj
+G-Rank Software Solutions/G-Rank Software Solutions/Debug/vc141.idb
+G-Rank Software Solutions/G-Rank Software Solutions/Debug/vc141.pdb
+G-Rank Software Solutions/G-Rank Software Solutions/x64/Debug/Administrator.obj
+G-Rank Software Solutions/G-Rank Software Solutions/x64/Debug/Car.obj
+G-Rank Software Solutions/G-Rank Software Solutions/x64/Debug/Customer.obj
+G-Rank Software Solutions/G-Rank Software Solutions/x64/Debug/G-Rank Software Solutions.log
+G-Rank Software Solutions/G-Rank Software Solutions/x64/Debug/G-RankSoftwareSolutions.obj
+G-Rank Software Solutions/G-Rank Software Solutions/x64/Debug/main.obj
+G-Rank Software Solutions/G-Rank Software Solutions/x64/Debug/Receipts.obj
+G-Rank Software Solutions/G-Rank Software Solutions/x64/Debug/Reviews.obj
+G-Rank Software Solutions/G-Rank Software Solutions/x64/Debug/ServiceRequest.obj
+G-Rank Software Solutions/G-Rank Software Solutions/x64/Debug/Specialist.obj
+G-Rank Software Solutions/G-Rank Software Solutions/x64/Debug/User.obj
+G-Rank Software Solutions/G-Rank Software Solutions/x64/Debug/UserSession.obj
+G-Rank Software Solutions/G-Rank Software Solutions/x64/Debug/vc141.idb
+G-Rank Software Solutions/G-Rank Software Solutions/x64/Debug/vc141.pdb
+G-Rank Software Solutions/x64/Debug/G-Rank Software Solutions.exe
+G-Rank Software Solutions/x64/Debug/G-Rank Software Solutions.ilk
+G-Rank Software Solutions/x64/Debug/G-Rank Software Solutions.pdb
