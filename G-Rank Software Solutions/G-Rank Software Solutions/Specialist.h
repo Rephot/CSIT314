@@ -38,11 +38,11 @@ public:
 	void selectRequest(int);
 	void returnUser();
 	static vector<vector<ServiceRequest>> available;
+	int specialistID;
 
 private:
 	// bankAccountClass details;
 	string operationalArea;
-	int specialistID;
 	// User loginAccount;
 };
 #endif

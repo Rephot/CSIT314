@@ -76,6 +76,7 @@ Customer* customers;
 void firstMenu(int);
 vector <vector<Specialist>> specialistsAvailable;
 vector <Specialist> selectedSpecialist;
+vector <vector<ServiceRequest>> completedRequests;
 Car* cars;
 
 void showAvailable(int requestID) {
@@ -94,6 +95,14 @@ void acceptSpecialist(int requestID, int specialistIndex) {
 	selectedSpecialist[requestID] = specialistsAvailable[requestID][specialistIndex];
 }
 
+void completeRequest(int requestID, Specialist logged_in_user) {
+	completedRequests.resize(total_specialists);
+	for (int i = 0; i < ServiceRequest::numRequests; i++) {
+		if (ServiceRequest::currentRequests[i].requestID == requestID) {
+			completedRequests[logged_in_user.specialistID].push_back(ServiceRequest::currentRequests[i]);
+		}
+	}
+}
 
 
 
