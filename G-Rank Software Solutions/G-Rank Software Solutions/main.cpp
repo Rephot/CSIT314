@@ -95,6 +95,12 @@ void acceptSpecialist(int requestID, int specialistIndex) {
 	selectedSpecialist[requestID] = specialistsAvailable[requestID][specialistIndex];
 }
 
+void isSelected(int requestID, Specialist logged_in_user) {
+	if (selectedSpecialist[requestID].specialistID == logged_in_user.specialistID) {
+		cout << "Selected for Request: " << ServiceRequest::currentRequests[requestID].toString << endl;
+	}
+}
+
 void completeRequest(int requestID, Specialist logged_in_user) {
 	completedRequests.resize(total_specialists);
 	for (int i = 0; i < ServiceRequest::numRequests; i++) {
