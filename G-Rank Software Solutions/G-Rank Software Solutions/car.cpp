@@ -61,7 +61,7 @@ string Car::getColour() {
 
 void Car::save() {
 	ofstream outFile;
-	outFile.open("Customers.csv", ios_base::app);
+	outFile.open("Cars.csv", ios_base::app);
 
 	outFile << to_string(cust_id) << "," << make << "," << model << "," << modelYear << "," << licencePlate << "," << shape << "," << engineSize << "," << colour << "\n";
 	outFile.close();
@@ -71,7 +71,7 @@ Car* Car::loadCars() {
 	Car* cars;
 	int total_cars = 0;
 	string line, cust_id, make, model, modelYear, licencePlate, shape, engineSize, colour;
-	string userFile = "Specialists.csv";
+	string userFile = "Cars.csv";
 
 	// Creating input filestream
 	ifstream file(userFile);
@@ -94,7 +94,7 @@ Car* Car::loadCars() {
 			getline(inFile, engineSize, ',');
 			getline(inFile, colour);
 
-			cars[i] = Car(stoi(cust_id), make, stoi(model), modelYear, licencePlate, shape, stod(engineSize), colour);
+			cars[i] = Car(stoi(cust_id), licencePlate, stoi(modelYear), make, model, shape, stod(engineSize), colour);
 			i++;
 		}
 		inFile.close();

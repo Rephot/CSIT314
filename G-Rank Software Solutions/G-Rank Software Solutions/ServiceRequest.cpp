@@ -1,33 +1,10 @@
-//#include"Specialist.h"
+
 #include"ServiceRequest.h"
 #include<fstream>
 
 
 using namespace std;
 
-/*
-created
-broadcast
-accept request
-display accepted
-client chooses
-sends affirmative to professional
-// do we need a second level of confirmation?
-*/
-
-//struct location{
-//	int streetNo;
-//	string streetName;
-//	string suburb;
-//	string description;
-//	
-//};
-
-//struct customerInfo{
-//	string car; // will be a car object when that is made
-//	string name; // will be a first and last if necessary
-//	// will add more if necessary, if you happen to think of any, please add them
-//};
 
 int ServiceRequest::numCurrentRequests = 0;
 ServiceRequest ServiceRequest::currentRequests[50];
@@ -117,9 +94,11 @@ void ServiceRequest::createServiceRequest(Customer user) {
 }
 
 // a get function that returns the array of professionals that accepted
-void ServiceRequest::displayProfessionalsWhoAccepted(){
+int ServiceRequest::displayProfessionalsWhoAccepted(int requestID) {
 	// lets client see who is available to help
 	// displays formatted data from an array
+	
+	return 0;
 }
 
 void ServiceRequest::sendAffirmitiveToProfessional(){

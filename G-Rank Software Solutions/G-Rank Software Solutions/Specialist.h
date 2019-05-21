@@ -20,23 +20,29 @@
 
 #include<string>
 #include"User.h"
+#include <vector>
+#include"ServiceRequest.h"
+//#include"common.h"
 
 using namespace std;
 
 
 //class User;
 
+
 class Specialist : public User{
 public:
 	Specialist();
 	Specialist(string, string, string, string, time_t, string, string, int);
 	void viewRequests();
-	void selectRequest();
+	void selectRequest(int);
 	void returnUser();
+	static vector<vector<ServiceRequest>> available;
+	int specialistID;
+
 private:
 	// bankAccountClass details;
 	string operationalArea;
-	int specialistID;
 	// User loginAccount;
 };
 #endif
