@@ -467,22 +467,22 @@ int main(int argc, char **argv){
 	//system("CLS");//clears console
 
 	// main menu
-	int choice = 99;
-	int respondTo;
+	//int choice = 99;
+	//int respondTo;
 
-	specialists = loadSpecialists();
-	customers = loadCustomers();
+	//specialists = loadSpecialists();
+	//customers = loadCustomers();
 
-	ServiceRequest req;
-	req.loadRequests();
+	//ServiceRequest req;
+	//req.loadRequests();
 
-	//first menu
-	firstMenu(choice);
-	//cout << exitCode;
-	Sleep(10000);//pauses for 5 seconds
+	////first menu
+	//firstMenu(choice);
+	////cout << exitCode;
+	//Sleep(10000);//pauses for 5 seconds
 
-	return 0;
-	/*return Wt::WRun(argc, argv, [](const Wt::WEnvironment& env) {
+	//return 0;
+	return Wt::WRun(argc, argv, [](const Wt::WEnvironment& env) {
 		return make_unique<GRankSoftwareSolutions>(env);
-	});*/
+	});
 }

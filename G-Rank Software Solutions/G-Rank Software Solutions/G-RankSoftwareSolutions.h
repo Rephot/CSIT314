@@ -30,6 +30,7 @@ private:
 	Wt::WContainerWidget* _content;
 	Wt::WVBoxLayout* _contentLayout;
 	Wt::WContainerWidget* _header;
+	Wt::WVBoxLayout* _headerLayout;
 	Wt::WText* _headerText;
 	Wt::WContainerWidget* _pageContent;
 	Wt::WVBoxLayout* _pageLayout;
@@ -45,8 +46,9 @@ public:
 	void registerPage();
 	void registerPage2();
 	void registerPage3();
-	void customerDashboard();
+	void customerMenu();
 	void title();
+	void contentTitle();
 };
 
 #endif

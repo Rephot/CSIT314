@@ -1,16 +1,13 @@
-//specialist inherits user
-//#include"User.h"
 #include"Specialist.h"
 #include"ServiceRequest.h"
 
 using namespace std;
 
-
 Specialist::Specialist() {
 
 }
 
-Specialist::Specialist(string uname, string pwd, string fname, string lname, time_t dob, string number, string area, int specialistID) {
+Specialist::Specialist(string uname, string pwd, string fname, string lname, time_t dob, string number, string area, int specID) {
 	username = uname;
 	password = pwd;
 	fName = fname;
@@ -18,7 +15,7 @@ Specialist::Specialist(string uname, string pwd, string fname, string lname, tim
 	DOB = dob;
 	phNumber = number;
 	operationalArea = area;
-	this->specialistID = specialistID;
+	specialistID = specID;
 }
 
 void Specialist::viewRequests() {
