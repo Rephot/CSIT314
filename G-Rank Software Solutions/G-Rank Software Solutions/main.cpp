@@ -4,6 +4,8 @@
 #include <fstream>
 #include <iostream>
 #include <Windows.h>
+#include <vector>
+
 
 #include "ServiceRequest.h"
 #include "Specialist.h"
@@ -11,6 +13,7 @@
 #include "User.h"
 #include "G-RankSoftwareSolutions.h"
 #include "Reviews.h"
+#include "car.h"
 
 using namespace std;
 
@@ -71,6 +74,27 @@ int total_specialists;
 Specialist* specialists;
 Customer* customers;
 void firstMenu(int);
+vector <vector<Specialist>> specialistsAvailable;
+vector <Specialist> selectedSpecialist;
+Car* cars;
+
+void showAvailable(int requestID) {
+	for (int i = 0; i < specialistsAvailable[requestID].size(); i++) {
+		cout << i << " " << specialistsAvailable[requestID][i].getFullName() << " " << specialistsAvailable[requestID][i].getNumber() << endl;;
+	}
+}
+
+void selectRequest(int requestID, Specialist logged_in_user) {
+	specialistsAvailable.resize(50);
+	specialistsAvailable[requestID].push_back(logged_in_user);
+}
+
+void acceptSpecialist(int requestID, int specialistIndex) {
+	selectedSpecialist.resize(50);
+	selectedSpecialist[requestID] = specialistsAvailable[requestID][specialistIndex];
+}
+
+
 
 
 /*C: Returns array of specialist users from file Specialists.csv*/
@@ -475,6 +499,20 @@ int main(int argc, char **argv){
 
 	ServiceRequest req;
 	req.loadRequests();
+
+	Car car = Car(customers[0], "abc012", 2017, "Toyota", "Corolla", "Hatchback", 1.8, "White");
+	car.save();
+
+
+	cars = Car::loadCars();
+
+	selectRequest(1, specialists[0]);
+	selectRequest(1, specialists[1]);
+	selectRequest(1, specialists[0]);
+
+	showAvailable(1);
+
+	
 
 	//first menu
 	firstMenu(choice);

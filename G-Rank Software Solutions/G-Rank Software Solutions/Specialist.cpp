@@ -1,10 +1,11 @@
 //specialist inherits user
-//#include"User.h"
+
+
 #include"Specialist.h"
-#include"ServiceRequest.h"
 
 using namespace std;
 
+vector <vector<ServiceRequest>> Specialist::available;
 
 Specialist::Specialist() {
 
@@ -29,8 +30,7 @@ void Specialist::viewRequests() {
 	}
 }
 
-void Specialist::selectRequest() {
-
+void Specialist::selectRequest(int requestID) {
 }
 
 void Specialist::returnUser() {

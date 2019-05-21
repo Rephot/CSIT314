@@ -19,7 +19,7 @@ public:
 	double getEngineSize();
 	string getColour();
 	void save();
-	Car* loadCars();
+	static Car* loadCars();
 private:
 	int cust_id, modelYear;
 	string make, model, licencePlate, colour, shape;
