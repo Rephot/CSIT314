@@ -25,7 +25,8 @@ serviceRequest creation
 //
 //}
 
-GRankSoftwareSolutions::GRankSoftwareSolutions(const Wt::WEnvironment &env) : Wt::WApplication(env) {
+GRankSoftwareSolutions::GRankSoftwareSolutions(const Wt::WEnvironment &env) : Wt::WApplication(env)
+{
 	app = Wt::WApplication::instance();
 	initCSS();
 
@@ -37,13 +38,16 @@ GRankSoftwareSolutions::GRankSoftwareSolutions(const Wt::WEnvironment &env) : Wt
 	loginPage();
 }
 
-void GRankSoftwareSolutions::handlePathChange() {
-	if (Wt::WApplication::instance()->internalPath() == "register") {
+void GRankSoftwareSolutions::handlePathChange()
+{
+	if (Wt::WApplication::instance()->internalPath() == "register")
+	{
 		registerPage();
 	}
 }
 
-void GRankSoftwareSolutions::initCSS() {
+void GRankSoftwareSolutions::initCSS()
+{
 	app->styleSheet().addRule("#content", "display: block; margin: auto;");
 	app->styleSheet().addRule("#dashboard", "width: 100%; margin-left: 0%;");
 	app->styleSheet().addRule("#navbar", "background-color: #262626; color: #fff;");
@@ -56,7 +60,8 @@ void GRankSoftwareSolutions::initCSS() {
 	app->styleSheet().addRule("#footer", "background-color: #262626; color: #fff; padding: 0.5em;");*/
 }
 
-void GRankSoftwareSolutions::initContentLayout() {
+void GRankSoftwareSolutions::initContentLayout()
+{
 	_content = root()->addWidget(make_unique<Wt::WContainerWidget>());
 	_content->setId("content");
 	_content->setMaximumSize(400, 1600);
@@ -65,7 +70,8 @@ void GRankSoftwareSolutions::initContentLayout() {
 	_contentLayout = _content->setLayout(make_unique<Wt::WVBoxLayout>());
 }
 
-void GRankSoftwareSolutions::title() {
+void GRankSoftwareSolutions::title()
+{
 	//create header title
 	_header = _contentLayout->addWidget(make_unique<Wt::WContainerWidget>());
 	_header->setId("header");
@@ -74,7 +80,8 @@ void GRankSoftwareSolutions::title() {
 	_pageContent = _contentLayout->addWidget(make_unique<Wt::WContainerWidget>(), 0, Wt::AlignmentFlag::Center);
 }
 
-void GRankSoftwareSolutions::contentTitle() {
+void GRankSoftwareSolutions::contentTitle()
+{
 	//create header title
 	_header = _contentLayout->addWidget(make_unique<Wt::WContainerWidget>());
 	_header->setId("header");
@@ -83,7 +90,8 @@ void GRankSoftwareSolutions::contentTitle() {
 	_pageContent = _contentLayout->addWidget(make_unique<Wt::WContainerWidget>(), 0, Wt::AlignmentFlag::Left);
 }
 
-void GRankSoftwareSolutions::customerMenu() {
+void GRankSoftwareSolutions::customerMenu()
+{
 	_pageContent->clear();
 	Wt::WVBoxLayout *_menuLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
 
@@ -101,48 +109,56 @@ void GRankSoftwareSolutions::customerMenu() {
 	Wt::WPushButton *_viewMakeReviewButton = _menuLayout->addWidget(make_unique<Wt::WPushButton>("View/Make Reviews"));
 }
 
-void GRankSoftwareSolutions::loginPage() {
+void GRankSoftwareSolutions::loginPage()
+{
+	GRankSoftwareSolutions::loadUsers();
 	_pageContent->clear();
 	//create username text and input
 	_pageLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
 	_pageContent->setId("pageContent");
 	_pageContent->setWidth(400);
-	Wt::WText* _usernameText = _pageLayout->addWidget(make_unique<Wt::WText>("Username:"));
-	Wt::WLineEdit* _usernameField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
+	Wt::WText *_usernameText = _pageLayout->addWidget(make_unique<Wt::WText>("Username:"));
+	Wt::WLineEdit *_usernameField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
 	_usernameField->setPlaceholderText("user1234");
 
 	//create password text and input
-	Wt::WText* _passwordText = _pageLayout->addWidget(make_unique<Wt::WText>("Password:"));
-	Wt::WLineEdit* _passwordField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
+	Wt::WText *_passwordText = _pageLayout->addWidget(make_unique<Wt::WText>("Password:"));
+	Wt::WLineEdit *_passwordField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
 	_passwordField->setPlaceholderText("Password");
 	_passwordField->setEchoMode(Wt::EchoMode::Password);
 
 	//create pushButtons for sign in and sign up
-	Wt::WContainerWidget* _buttonsContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
+	Wt::WContainerWidget *_buttonsContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
 	_buttonsContainer->setId("buttons");
-	Wt::WHBoxLayout* _buttonsLayout = _buttonsContainer->setLayout(make_unique<Wt::WHBoxLayout>());
-	Wt::WPushButton* _signUpButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Sign Up"));
+	Wt::WHBoxLayout *_buttonsLayout = _buttonsContainer->setLayout(make_unique<Wt::WHBoxLayout>());
+	Wt::WPushButton *_signUpButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Sign Up"));
 	//_signUpButton->setLink(Wt::WLink(Wt::LinkType::InternalPath, "/register"));
 	//Wt::WApplication::instance()->internalPathChanged().connect([=] {
 	//	//handlePathChange();
 	//});
-	_signUpButton->clicked().connect([=](const Wt::WMouseEvent &e) {
+	_signUpButton->clicked().connect([=](const Wt::WMouseEvent &e)
+	{
 		GRankSoftwareSolutions::registerPage();
 	});
 	
-	Wt::WPushButton* _signInButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Sign In"));
+	Wt::WPushButton *_signInButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Sign In"));
 	//_signInButton->setLink(Wt::WLink(Wt::LinkType::InternalPath, "/service"));
-	_signInButton->clicked().connect([=](const Wt::WMouseEvent &e) {
-		GRankSoftwareSolutions::customerMenu();
-		/*(GRankSoftwareSolutions::validate()) ? {
-			GRankSoftwareSolutions::frontProfilePage();
-		}:{
-			remake this page but emit error
-		};*/
+	_signInButton->clicked().connect([=](const Wt::WMouseEvent &e)
+	{
+		if (GRankSoftwareSolutions::validateLogin(_usernameField->text()))
+		{
+			if (GRankSoftwareSolutions::validateUsersPassword(_usernameField->text(), _passwordField->text())) GRankSoftwareSolutions::customerMenu();
+		}
+		else
+		{
+
+		}
+		/*(GRankSoftwareSolutions::validate()) ? { }:{ };*/
 	});
 }
 
-void GRankSoftwareSolutions::registerPage() { // J: does not currently create user, will link into program tomorrow wednesday 15th probably
+void GRankSoftwareSolutions::registerPage()
+{ // J: does not currently create user, will link into program tomorrow wednesday 15th probably
 	_pageContent->clear();
 	_pageLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
 	_pageContent->setId("pageContent");
@@ -169,14 +185,16 @@ void GRankSoftwareSolutions::registerPage() { // J: does not currently create us
 
 	// cancel to go back to login screen
 	Wt::WPushButton *_cancelButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Cancel"));
-	_cancelButton->clicked().connect([=](const Wt::WMouseEvent &e) {
+	_cancelButton->clicked().connect([=](const Wt::WMouseEvent &e)
+	{
 		GRankSoftwareSolutions::loginPage();
 	});
 
 	// confirm will create user profile and log them in (this assumes they've confirmed their account via email...)
 	Wt::WPushButton *_confirmButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Next"));
 	_confirmButton->setStyleClass("btn-primary");
-	_confirmButton->clicked().connect([=](const Wt::WMouseEvent &e) {
+	_confirmButton->clicked().connect([=](const Wt::WMouseEvent &e)
+	{
 		GRankSoftwareSolutions::registerPage2();
 	});
 	// will check if userName is available
@@ -186,7 +204,8 @@ void GRankSoftwareSolutions::registerPage() { // J: does not currently create us
 	// the aim with multi-page registrations is to restrict the amount of information entered on each page for UX
 }
 
-void GRankSoftwareSolutions::registerPage2() {
+void GRankSoftwareSolutions::registerPage2()
+{
 	_pageContent->clear();
 	_pageLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
 	_pageContent->setId("pageContent");
@@ -213,19 +232,22 @@ void GRankSoftwareSolutions::registerPage2() {
 
 	// cancel to go back to login screen
 	Wt::WPushButton *_cancelButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Back"));
-	_cancelButton->clicked().connect([=](const Wt::WMouseEvent &e) {
+	_cancelButton->clicked().connect([=](const Wt::WMouseEvent &e)
+	{
 		GRankSoftwareSolutions::registerPage();
 	});
 
 	// confirm will create user profile and log them in (this assumes they've confirmed their account via email...)
 	Wt::WPushButton *_confirmButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Next"));
 	_confirmButton->setStyleClass("btn-primary");
-	_confirmButton->clicked().connect([=](const Wt::WMouseEvent &e) {
+	_confirmButton->clicked().connect([=](const Wt::WMouseEvent &e)
+	{
 		GRankSoftwareSolutions::registerPage3();
 	});
 }
 
-void GRankSoftwareSolutions::registerPage3() {
+void GRankSoftwareSolutions::registerPage3()
+{
 	_pageContent->clear();
 	_pageLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
 	_pageContent->setId("pageContent");
@@ -251,22 +273,112 @@ void GRankSoftwareSolutions::registerPage3() {
 
 	// cancel to go back to login screen
 	Wt::WPushButton *_retraceButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Back"));
-	_retraceButton->clicked().connect([=](const Wt::WMouseEvent &e) {
+	_retraceButton->clicked().connect([=](const Wt::WMouseEvent &e)
+	{
 		GRankSoftwareSolutions::registerPage2();
 	});
 
 	// confirm will create user profile and log them in (this assumes they've confirmed their account via email...)
 	Wt::WPushButton *_confirmButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Confirm"));
-	_confirmButton->clicked().connect([=](const Wt::WMouseEvent &e) {
+	_confirmButton->clicked().connect([=](const Wt::WMouseEvent &e)
+	{
 		GRankSoftwareSolutions::customerMenu();
-	})
+	});
 }
 
-void GRankSoftwareSolutions::servicePage() {
-	// map, combobox, description (textEdit), confirm and cancel
+void GRankSoftwareSolutions::servicePage()
+{
+	// map?STRETCH, combobox, description (textEdit), confirm and cancel
 }
 
-// use to log in a valid user
-bool GRankSoftwareSolutions::validateUser() {
-	return true;
+void GRankSoftwareSolutions::loadUsers()
+{
+	string line, username, password, fName, lName, phNumber, custID, DOB;
+	string userFile = "Customers.csv";
+
+	// get existing users from file
+	ifstream inFile;
+	inFile.open(userFile);
+	if (inFile.is_open())
+	{
+		while (getline(inFile, custID, ','))
+		{
+			getline(inFile, username, ',');
+			getline(inFile, password, ',');
+			getline(inFile, fName, ',');
+			getline(inFile, lName, ',');
+			getline(inFile, DOB, ',');
+			getline(inFile, phNumber);
+
+			existingCustomers.push_back(Customer(stoi(custID), username, password, fName, lName, stoi(DOB), phNumber));
+		}
+		inFile.close();
+	}
+	string operationalArea, specialistID;
+	userFile = "Specialists.csv";
+
+	// get existing users from file
+	inFile.open(userFile);
+	if (inFile.is_open())
+	{
+		while (getline(inFile, username, ','))
+		{
+			getline(inFile, password, ',');
+			getline(inFile, fName, ',');
+			getline(inFile, lName, ',');
+			getline(inFile, phNumber, ',');
+			getline(inFile, operationalArea, ',');
+			getline(inFile, specialistID);
+
+			existingSpecialists.push_back(Specialist(username, password, fName, lName, 0, phNumber, operationalArea, stoi(specialistID)));
+		}
+		inFile.close();
+	}
+}
+
+bool GRankSoftwareSolutions::validateLogin(Wt::WString username)
+{
+	vector<Customer>::iterator cItr = existingCustomers.begin();
+	vector<Specialist>::iterator sItr = existingSpecialists.begin();
+	while ( ( cItr != existingCustomers.end() ) && ( sItr != existingSpecialists.end() ) )
+	{
+		Wt::WString user = cItr->getUserName();
+		if (user == username)
+		{
+			userFlag = 1;
+			return true;
+		} else if(cItr != existingCustomers.end()) cItr++;
+		user = sItr->getUserName();
+		if (user == username)
+		{
+			userFlag = 2;
+			return true;
+		} else if(sItr != existingSpecialists.end()) sItr++;
+	}
+	return false;
+}
+
+bool GRankSoftwareSolutions::validateUsersPassword(Wt::WString username, Wt::WString password)
+{
+	if(userFlag != 0)
+	{
+		if (userFlag == 1)
+		{
+			for (vector<Customer>::iterator Itr = existingCustomers.begin(); Itr != existingCustomers.end(); Itr++) {
+				Wt::WString user = Itr->getUserName();
+				Wt::WString pass = Itr->getPassword();
+				if((user == username) && (pass == password)) return true;
+			}
+		}
+		else
+		{
+			for (vector<Specialist>::iterator Itr = existingSpecialists.begin(); Itr != existingSpecialists.end(); Itr++)
+			{
+				Wt::WString user = Itr->getUserName();
+				Wt::WString pass = Itr->getPassword();
+				if ((user == username) && (pass == password)) return true;
+			}
+		}
+	}// else vector<Admin>::iterator Itr = existingAdmins.begin();
+	return false;
 }

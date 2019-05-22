@@ -17,58 +17,6 @@
 
 using namespace std;
 
-/*
-J: For future testing have changed menu items from char selection to int selection, easier to manage
-J: also changed the menus to be do whiles, as they happen at least once, and before, the menu wasn't showing sometimes
-
-COMPLETED(for purpose of functionality check up) -- login and user creation is one funcitonality should focus on customer creation{ 
-	username
-	password
-	email
-	DoB
-	real name
-}
-C: for below, basics is working but the following needs to be added
-COMPLETED(for purpose of functionality check up) create a roadside assistance professional account -- still need bank details{
-	average rating out of 10
-	bank account details - not yet implemented
-	preferred area of operation
-	generated identifier
-	based on user creation for login account
-}
-COMPLETED(for purpose of functionality check up, work is to continue on the rest of the class functions) -- service request creation relates to managing roadside assistance service requests{
-	description of incident
-	location of incident
-	time created
-	customer who created
-	?
-}
-C: For below I see some of the class is done. I will work on loading them in and out of a file
-J: COMPLETE(for the purpose of functionality progress review) create review for roadside assistance professional related to a request{
-	rating out of 10?
-	reveiw description (max char length?)
-	customer username/name
-	pulls request identifier
-	pulls customer identifier
-	pulls specialist identifier
-}
-J: MOSTLY COMPLETED(receipt generation mostly complete, still needs to access the customer, specialist and request identifiers)create a way to pay professionals on service completion, this could also be considered receipt generation considering the information that we generate{
-	access bank details of specialist for payment
-	receipt has:
-		transaction ID (should be generated from a static variable that increases after each transaction is processed)
-		amount (the amount charged for the particular service type)
-		subscribed or not - include callout fee in this transaction (this will only appear on PoD user receipts)
-		time (consider whether it should include both time request, time of payment or both)
-		customer identifier (auto filled from ServiceRequest info, ie ServiceRequest should have Customer that is related to it)
-		specialist identifier (auto filled from ServiceRequest info, ie ServiceRequest should have Specialist that is related to it, but only after the Specialist has confirmed to take on the job)
-		?vehicle identification? if specialists are fleet - this is more required from the company's point of view, as a mini insurance thing, so they know which vehicle was where, and with who
-			shall ask whether this information is required, if so there will be a fleet truck class, wtih:
-			- truck rego
-			- truck ID
-			- truck status: {available, assigned, maintainanceRequired)
-}
-*/
-
 int total_customers;
 int total_specialists;
 Specialist* specialists;
@@ -97,7 +45,7 @@ void acceptSpecialist(int requestID, int specialistIndex) {
 
 void isSelected(int requestID, Specialist logged_in_user) {
 	if (selectedSpecialist[requestID].specialistID == logged_in_user.specialistID) {
-		cout << "Selected for Request: " << ServiceRequest::currentRequests[requestID].toString << endl;
+		cout << "Selected for Request: " << ServiceRequest::currentRequests[requestID].toString() << endl;
 	}
 }
 
@@ -109,8 +57,6 @@ void completeRequest(int requestID, Specialist logged_in_user) {
 		}
 	}
 }
-
-
 
 /*C: Returns array of specialist users from file Specialists.csv*/
 Specialist* loadSpecialists() {
@@ -296,11 +242,11 @@ void specialist_loginMenu(int choice) {
 		// this will be authentication
 		
 		for (int i = 0; i < total_specialists; i++) {
-			if (users[i].username == userName && users[i].getPassword() == passWord) {
-				cout << users[i].username << users[i].getPassword();
+			if (users[i].getUserName() == userName && users[i].getPassword() == passWord) {
+				cout << users[i].getUserName() << users[i].getPassword();
 				logged_in_user = users[i];
 				system("CLS");//clears console
-				cout << "Logging in as specialist: " << logged_in_user.username << endl;
+				cout << "Logging in as specialist: " << logged_in_user.getUserName() << endl;
 				valid = true;
 				break;
 			}
@@ -327,11 +273,11 @@ void customer_loginMenu(int choice) {
 		cin >> passWord;
 		// this will be authentication
 		for (int i = 0; i < total_customers; i++) {
-			if (users[i].username == userName && users[i].getPassword() == passWord) {
-				cout << users[i].username << users[i].getPassword();
+			if (users[i].getUserName() == userName && users[i].getPassword() == passWord) {
+				cout << users[i].getUserName() << users[i].getPassword();
 				logged_in_user = users[i];
 				system("CLS");//clears console
-				cout << "Logging in as customer: " << logged_in_user.username << endl;
+				cout << "Logging in as customer: " << logged_in_user.getUserName() << endl;
 				valid = true;
 				break;
 			}
@@ -506,7 +452,6 @@ int main(int argc, char **argv){
 	//system("CLS");//clears console
 
 	// main menu
-	//int choice = 99;
 	//int respondTo;
 
 	//specialists = loadSpecialists();
@@ -514,31 +459,26 @@ int main(int argc, char **argv){
 
 	//ServiceRequest req;
 	//req.loadRequests();
-
-	////first menu
-	//firstMenu(choice);
-	////cout << exitCode;
 	//Sleep(10000);//pauses for 5 seconds
 
-	Car car = Car(customers[0], "abc012", 2017, "Toyota", "Corolla", "Hatchback", 1.8, "White");
-	car.save();
+	//Car car = Car(customers[0], "abc012", 2017, "Toyota", "Corolla", "Hatchback", 1.8, "White");
+	//car.save();
 
-	cars = Car::loadCars();
+	//cars = Car::loadCars();
 
-	selectRequest(1, specialists[0]);
-	selectRequest(1, specialists[1]);
-	selectRequest(1, specialists[0]);
+	//selectRequest(1, specialists[0]);
+	//selectRequest(1, specialists[1]);
+	//selectRequest(1, specialists[0]);
 
-	showAvailable(1);
-	
-
-	//first menu
-	firstMenu(choice);
-	//cout << exitCode;
-	Sleep(10000);//pauses for 5 seconds
+	//showAvailable(1);
+	//
+	////first menu
+	//int choice = 99;
+	//firstMenu(choice);
+	//Sleep(10000);//pauses for 5 seconds
 
 	//return 0;
-	/*return Wt::WRun(argc, argv, [](const Wt::WEnvironment& env) {
+	return Wt::WRun(argc, argv, [](const Wt::WEnvironment& env) {
 		return make_unique<GRankSoftwareSolutions>(env);
-	});*/
+	});
 }

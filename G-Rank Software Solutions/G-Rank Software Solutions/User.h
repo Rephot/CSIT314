@@ -11,9 +11,9 @@ class User{
 public:
 	User();
 	User(string, string, string, string, time_t, string);
-	string username;
 	bool setPassword(string);
 	void returnUser();
+	string getUserName();
 	string getPassword();
 	string getFullName();
 	string getFirstName();
@@ -21,7 +21,7 @@ public:
 	time_t getDOB();
 	string getNumber();
 protected:
-	string password, fName, lName, phNumber;
+	string username, password, fName, lName, phNumber;
 	time_t DOB;
 };
 
