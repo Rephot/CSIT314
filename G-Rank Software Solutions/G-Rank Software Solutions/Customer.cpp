@@ -3,7 +3,6 @@
 #include"Customer.h"
 #include <fstream>
 #include <iostream>
-#include <string>
 
 
 Customer::Customer(){

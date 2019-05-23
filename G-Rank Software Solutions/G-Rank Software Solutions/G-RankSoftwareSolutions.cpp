@@ -1,12 +1,3 @@
-/*
-nav page placeholder
-serviceRequest creation
-	links to ???
-	map
-	type
-	description
-*/
-
 #include"G-RankSoftwareSolutions.h"
 
 //namespace {
@@ -40,6 +31,7 @@ GRankSoftwareSolutions::GRankSoftwareSolutions(const Wt::WEnvironment &env) : Wt
 
 void GRankSoftwareSolutions::handlePathChange()
 {
+	// if this function is not used by the end, remove
 	if (Wt::WApplication::instance()->internalPath() == "register")
 	{
 		registerPage();
@@ -90,6 +82,26 @@ void GRankSoftwareSolutions::contentTitle()
 	_pageContent = _contentLayout->addWidget(make_unique<Wt::WContainerWidget>(), 0, Wt::AlignmentFlag::Left);
 }
 
+void GRankSoftwareSolutions::specialistMenu()
+{
+	_pageContent->clear();
+	Wt::WVBoxLayout *_menuLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
+	// view current requests in area
+	Wt::WPushButton *_currentRequestsButton = _menuLayout->addWidget(make_unique<Wt::WPushButton>("Current Requests"));
+	// connect to view requests page
+
+	// view/manage user details ?should reviews be a sub menu within here?
+	Wt::WPushButton *_userDetailsButton = _menuLayout->addWidget(make_unique<Wt::WPushButton>("User Details"));
+	// connect to user details page
+	
+	// view receipts
+	Wt::WPushButton *_receiptsButton = _menuLayout->addWidget(make_unique<Wt::WPushButton>("Receipts"));
+	// connect to receipts page
+
+	// view reviews
+	Wt::WPushButton *_reviewsButtons = _menuLayout->addWidget(make_unique<Wt::WPushButton>("Reviews"));
+}
+
 void GRankSoftwareSolutions::customerMenu()
 {
 	_pageContent->clear();
@@ -98,15 +110,82 @@ void GRankSoftwareSolutions::customerMenu()
 	// links to for now 3 options that the customer can do
 	// connect to create service request page
 	Wt::WPushButton *_createRequestButton = _menuLayout->addWidget(make_unique<Wt::WPushButton>("Create Servcie"));
+	// connect to service creation page
+	_createRequestButton->clicked().connect([=](const Wt::WMouseEvent &e)
+	{
+		GRankSoftwareSolutions::createRequestPage();
+	});
 
 	// connect to view manage details page
-	Wt::WPushButton *_viewDetailsButton = _menuLayout->addWidget(make_unique<Wt::WPushButton>("View/Manage User Details"));
+	Wt::WPushButton *_viewDetailsButton = _menuLayout->addWidget(make_unique<Wt::WPushButton>("User Details"));
 
 	// connects to view reciepts
-	Wt::WPushButton *_viewReceiptsButton = _menuLayout->addWidget(make_unique<Wt::WPushButton>("View Reciepts"));
+	Wt::WPushButton *_viewReceiptsButton = _menuLayout->addWidget(make_unique<Wt::WPushButton>("Reciepts"));
 
 	// connect to view make review, only allow user to make a review of most recent service that happened in the last ?3 days?
-	Wt::WPushButton *_viewMakeReviewButton = _menuLayout->addWidget(make_unique<Wt::WPushButton>("View/Make Reviews"));
+	Wt::WPushButton *_viewMakeReviewButton = _menuLayout->addWidget(make_unique<Wt::WPushButton>("Reviews"));
+
+	// logout ??
+}
+
+void GRankSoftwareSolutions::createRequestPage() {
+	// STRETCH add map widget, and only if you can pass data to and get data from
+	_pageContent->clear();
+	_pageLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
+	// location info
+	/*
+	ServiceRequest newRequest;
+	// identifying number
+	client = user.getFullName();
+	time_t timeCreated = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+	char timeCreatedTime[26];
+	ctime_s(timeCreatedTime, 26, &timeCreated);
+	string dateTimeRequested = timeCreatedTime;
+	newRequest.clientName = client;
+	newRequest.incidentLocation = location;
+	newRequest.sType = sType;
+	newRequest.serviceRequestedAt = dateTimeRequested;
+	newRequest.requestID = ++numRequests;
+	broadcastServiceRequest(newRequest);*/
+	// break this down into seperate fields such that postcode can be grabbed
+	// street
+	// street number if possible
+	// post code
+	// other location descriptors
+
+	// location information
+	_pageLayout->addWidget(make_unique<Wt::WText>("Location:"));
+	Wt::WLineEdit *_streetField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
+	_streetField->setPlaceholderText("Street Name");
+	Wt::WLineEdit *_streetNumberField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
+	_streetNumberField->setPlaceholderText("Street Number(optional)");
+	Wt::WLineEdit *_postField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
+	_postField->setPlaceholderText("PostCode");
+	Wt::WTextArea *_locationDescriptionArea = _pageLayout->addWidget(make_unique<Wt::WTextArea>());
+	_locationDescriptionArea->setPlaceholderText("Add additional location descriptors");
+
+	_pageLayout->addWidget(make_unique<Wt::WBreak>());
+
+	// incident information
+	_pageLayout->addWidget(make_unique<Wt::WText>("Incident:"));
+	Wt::WComboBox *_serviceType = _pageLayout->addWidget(make_unique<Wt::WComboBox>());
+	_serviceType->addItem("Please Select...");
+	_serviceType->addItem("Flat Tyre");
+	_serviceType->addItem("Break Down");
+	_serviceType->addItem("Other, please describe");
+	Wt::WTextArea *_descriptionArea = _pageLayout->addWidget(make_unique<Wt::WTextArea>());
+	_descriptionArea->setPlaceholderText("Add a Description");
+	Wt::WHBoxLayout *_buttonsLayout = _pageLayout->addLayout(make_unique<Wt::WHBoxLayout>());
+	Wt::WPushButton *_cancelButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Cancel"));
+	// connect to customer menu
+	_cancelButton->clicked().connect([=](const Wt::WMouseEvent &e)
+	{
+		GRankSoftwareSolutions::customerMenu();
+	});
+
+	Wt::WPushButton *_confirmButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Confirm"));
+	// present with dialog/page for information confirmation, then connect to saveRequest such that specialist can respond
+
 }
 
 void GRankSoftwareSolutions::loginPage()
@@ -126,6 +205,21 @@ void GRankSoftwareSolutions::loginPage()
 	Wt::WLineEdit *_passwordField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
 	_passwordField->setPlaceholderText("Password");
 	_passwordField->setEchoMode(Wt::EchoMode::Password);
+	_passwordField->enterPressed().connect([=]
+	{
+		if (GRankSoftwareSolutions::validateLogin(_usernameField->text()))
+		{
+			if (GRankSoftwareSolutions::validateUsersPassword(_usernameField->text(), _passwordField->text()))
+			{
+				(userFlag == 1) ? GRankSoftwareSolutions::customerMenu() : GRankSoftwareSolutions::specialistMenu();
+			}
+			// else // emit error incorrect password
+		}
+		else
+		{
+			// emit error invalid user
+		}
+	});
 
 	//create pushButtons for sign in and sign up
 	Wt::WContainerWidget *_buttonsContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
@@ -147,13 +241,16 @@ void GRankSoftwareSolutions::loginPage()
 	{
 		if (GRankSoftwareSolutions::validateLogin(_usernameField->text()))
 		{
-			if (GRankSoftwareSolutions::validateUsersPassword(_usernameField->text(), _passwordField->text())) GRankSoftwareSolutions::customerMenu();
+			if (GRankSoftwareSolutions::validateUsersPassword(_usernameField->text(), _passwordField->text()))
+			{
+				(userFlag == 1) ? GRankSoftwareSolutions::customerMenu() : GRankSoftwareSolutions::specialistMenu();
+			}
+			// else // emit error incorrect password
 		}
 		else
 		{
-
+			// emit error invalid user
 		}
-		/*(GRankSoftwareSolutions::validate()) ? { }:{ };*/
 	});
 }
 
@@ -282,6 +379,7 @@ void GRankSoftwareSolutions::registerPage3()
 	Wt::WPushButton *_confirmButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Confirm"));
 	_confirmButton->clicked().connect([=](const Wt::WMouseEvent &e)
 	{
+		// this should point to loginPage() such that the user can log in with the newly created user
 		GRankSoftwareSolutions::customerMenu();
 	});
 }
@@ -367,16 +465,22 @@ bool GRankSoftwareSolutions::validateUsersPassword(Wt::WString username, Wt::WSt
 			for (vector<Customer>::iterator Itr = existingCustomers.begin(); Itr != existingCustomers.end(); Itr++) {
 				Wt::WString user = Itr->getUserName();
 				Wt::WString pass = Itr->getPassword();
-				if((user == username) && (pass == password)) return true;
+				if ((user == username) && (pass == password)) {
+					logged_in_customer = *Itr;
+					return true;
+				}
 			}
 		}
-		else
+		else if (userFlag == 2)
 		{
 			for (vector<Specialist>::iterator Itr = existingSpecialists.begin(); Itr != existingSpecialists.end(); Itr++)
 			{
 				Wt::WString user = Itr->getUserName();
 				Wt::WString pass = Itr->getPassword();
-				if ((user == username) && (pass == password)) return true;
+				if ((user == username) && (pass == password)) {
+					logged_in_specialist = *Itr;
+					return true;
+				}
 			}
 		}
 	}// else vector<Admin>::iterator Itr = existingAdmins.begin();

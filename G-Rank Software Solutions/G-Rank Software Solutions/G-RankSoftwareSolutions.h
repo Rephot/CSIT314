@@ -5,6 +5,7 @@
 #include <Wt/WApplication.h>
 #include <Wt/WVBoxLayout.h>
 #include <Wt/WHBoxLayout.h>
+#include <Wt/WComboBox.h>
 #include <Wt/WContainerwidget.h>
 #include <Wt/WEvent.h>
 #include <Wt/WLength.h>
@@ -14,12 +15,13 @@
 #include <Wt/WPushButton.h>
 #include <Wt/WString.h>
 #include <Wt/WText.h>
+#include <Wt/WTextArea.h>
 
 #include <fstream>
 #include <vector>
 
-#include "Customer.h"
 #include "Specialist.h"
+#include "Customer.h"
 
 using namespace std;
 
@@ -41,20 +43,25 @@ private:
 	vector<Customer> existingCustomers;
 	vector<Specialist> existingSpecialists;
 	int userFlag;
-
-public:
-	GRankSoftwareSolutions(const Wt::WEnvironment &env);
+	// may replace with logged_in_user???
+	Customer logged_in_customer;
+	Specialist logged_in_specialist;
 	void initCSS();
 	void initContentLayout();
+	void title();
+	void contentTitle();
+	void loadUsers();
 	void loginPage();
 	void servicePage();
 	void registerPage();
 	void registerPage2();
 	void registerPage3();
 	void customerMenu();
-	void title();
-	void contentTitle();
-	void loadUsers();
+	void specialistMenu();
+	void createRequestPage();
+
+public:
+	GRankSoftwareSolutions(const Wt::WEnvironment &env);
 };
 
 #endif

@@ -1,8 +1,6 @@
 #ifndef SPECIALIST_H
 #define SPECIALIST_H
 
-// inherits user
-
 //create a roadside assistance professional account{
 //	bank account details
 //	preferred area of operation
@@ -18,17 +16,14 @@
 //pulls specialist identifier
 //}
 
-#include<string>
-#include"User.h"
+#include "User.h"
 #include <vector>
-#include"ServiceRequest.h"
+#include "ServiceRequest.h"
 //#include"common.h"
 
 using namespace std;
 
-
 //class User;
-
 
 class Specialist : public User{
 public:

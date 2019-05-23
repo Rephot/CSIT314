@@ -10,7 +10,8 @@ int ServiceRequest::numCurrentRequests = 0;
 ServiceRequest ServiceRequest::currentRequests[50];
 int ServiceRequest::numRequests = 0;
 
-void ServiceRequest::saveRequests() {
+void ServiceRequest::saveRequests()
+{
 	ofstream outFile;
 	outFile.open("Requests.csv");
 
@@ -21,7 +22,8 @@ void ServiceRequest::saveRequests() {
 	outFile.close();
 }
 
-ServiceRequest::ServiceRequest() {
+ServiceRequest::ServiceRequest()
+{
 	clientName = "";
 	incidentLocation = "";
 	sType = "";
