@@ -53,7 +53,6 @@ private:
 	void initCSS();
 	void initContentLayout();
 	void title();
-	void contentTitle();
 	void loadUsers();
 	void loginPage();
 	void registerPage();

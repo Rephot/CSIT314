@@ -18,16 +18,29 @@
 
 regex emailPattern("(\\w+)@(\\w+)(\\.(\\w+))+");
 
+int userRegisterType;
+
 // registerpage tmp
 Wt::WString userTmp;
 Wt::WString pwTmp;
 // registerpage2 tmp
 Wt::WString fnameTmp;
 Wt::WString lnameTmp;
-Wt::WString lTmp;
-Wt::WString phTmp;
-Wt::WString eTmp;
+Wt::WString licNumTmp;
+Wt::WString phoneTmp;
+Wt::WString emailTmp;
 // registerpage3 tmp
+// cust
+Wt::WString homeAddressTmp;
+Wt::WString customerTmp;
+Wt::WString licPlateTmp;
+Wt::WString modelYearTmp;
+Wt::WString makeTmp;
+Wt::WString modelTmp;
+Wt::WString shapeTmp;
+Wt::WString engineSizeTmp;
+Wt::WString colourTmp;
+// spec
 
 
 GRSS::GRSS(const Wt::WEnvironment &env) : Wt::WApplication(env)
@@ -84,16 +97,6 @@ void GRSS::title()
 	_headerLayout = _header->setLayout(make_unique<Wt::WVBoxLayout>());
 	_headerText = _headerLayout->addWidget(make_unique<Wt::WText>("<h3>" + appName + "</h3>"), 0, Wt::AlignmentFlag::Center);
 	_pageContent = _contentLayout->addWidget(make_unique<Wt::WContainerWidget>(), 0, Wt::AlignmentFlag::Center);
-}
-
-void GRSS::contentTitle()
-{
-	//create header title
-	_header = _contentLayout->addWidget(make_unique<Wt::WContainerWidget>());
-	_header->setId("header");
-	_headerLayout = _header->setLayout(make_unique<Wt::WVBoxLayout>());
-	_headerText = _headerLayout->addWidget(make_unique<Wt::WText>("<h3>" + appName + "</h3>"), 0, Wt::AlignmentFlag::Left);
-	_pageContent = _contentLayout->addWidget(make_unique<Wt::WContainerWidget>(), 0, Wt::AlignmentFlag::Left);
 }
 
 void GRSS::specialistMenu()
@@ -527,11 +530,11 @@ void GRSS::registerPage2()
 	{
 		fnameTmp = _firstNameField->text();
 		lnameTmp = _lastNameField->text();
-		lTmp = _licenseField->text();
-		phTmp = _contactPhoneField->text();
-		eTmp = _emailField->text();
+		licNumTmp = _licenseField->text();
+		phoneTmp = _contactPhoneField->text();
+		emailTmp = _emailField->text();
 		string email = _emailField->text().narrow();
-		((regex_match(email, emailPattern)) && (fnameTmp != "") && (lnameTmp != "") && (lTmp != "") && (phTmp != "") && (eTmp != "")) ? GRSS::registerPage3() : _missingText->setHidden(false);
+		((regex_match(email, emailPattern)) && (fnameTmp != "") && (lnameTmp != "") && (licNumTmp != "") && (phoneTmp != "") && (emailTmp != "")) ? GRSS::registerPage3() : _missingText->setHidden(false);
 	});
 }
 
@@ -571,6 +574,7 @@ void GRSS::registerPage3()
 		// usertype flag for user creation
 		if (rawButtonGroup->id(selection) == 1) {
 			// 3rd page form specialist
+
 			_thirdPageForm->clear();
 			Wt::WVBoxLayout *_thirdPageLayout = _thirdPageForm->setLayout(make_unique<Wt::WVBoxLayout>());
 			Wt::WText *_qualNumberText = _thirdPageLayout->addWidget(make_unique<Wt::WText>("License/Qualification Number"));
@@ -582,20 +586,53 @@ void GRSS::registerPage3()
 		}
 		else if (rawButtonGroup->id(selection) == 2) {
 			// 3rd page registration(Customer): home address, car details, bankCard details
+			/*
+			Wt::WString hmTmp;
+			// car details, only needed for customer
+			Wt::WString cstTmp; // generated custId when register complete
+			Wt::WString lcnsPltTmp;
+			Wt::WString mdlYrTmp;
+			Wt::WString mkTmp;
+			Wt::WString mdlTmp;
+			Wt::WString shpTmp;
+			Wt::WString ngnSzTmp;
+			Wt::WString clrTmp;
+			*/
 			_thirdPageForm->clear();
 			Wt::WVBoxLayout *_thirdPageLayout = _thirdPageForm->setLayout(make_unique<Wt::WVBoxLayout>());
+
 			Wt::WText* _homeAddressText = _thirdPageLayout->addWidget(make_unique<Wt::WText>("Home Address"));
 			Wt::WLineEdit* _homeAddressField = _thirdPageLayout->addWidget(make_unique<Wt::WLineEdit>());
 			_homeAddressField->setPlaceholderText("221b Baker Street");
+
+			Wt::WText* _lcncPltText = _thirdPageLayout->addWidget(make_unique<Wt::WText>("Licence Plate"));
+			Wt::WLineEdit* _lcncPltField = _thirdPageLayout->addWidget(make_unique<Wt::WLineEdit>());
+			_lcncPltField->setPlaceholderText("ABC-007");
+			
+			Wt::WText* _modelYearText = _thirdPageLayout->addWidget(make_unique<Wt::WText>("Year Made"));
+			Wt::WLineEdit* _modelYearField = _thirdPageLayout->addWidget(make_unique<Wt::WLineEdit>());
+			_modelYearField->setPlaceholderText("2007");
+			
 			Wt::WText* _carMakeText = _thirdPageLayout->addWidget(make_unique<Wt::WText>("Car Make"));
 			Wt::WLineEdit* _carMakeField = _thirdPageLayout->addWidget(make_unique<Wt::WLineEdit>());
 			_carMakeField->setPlaceholderText("Toyboata");
+			
 			Wt::WText *_carModelText = _thirdPageLayout->addWidget(make_unique<Wt::WText>("Car Model"));
 			Wt::WLineEdit* _carModelField = _thirdPageLayout->addWidget(make_unique<Wt::WLineEdit>());
 			_carModelField->setPlaceholderText("Hilux");
+			
+			Wt::WText *_shapeText = _thirdPageLayout->addWidget(make_unique<Wt::WText>("Shape"));
+			// replace with combo box
+			Wt::WLineEdit* _shapeField = _thirdPageLayout->addWidget(make_unique<Wt::WLineEdit>());
+			_shapeField->setPlaceholderText("Ute");
+			
+			Wt::WText *_engineSizeText = _thirdPageLayout->addWidget(make_unique<Wt::WText>("Car Colour"));
+			Wt::WLineEdit* _engineSizeField = _thirdPageLayout->addWidget(make_unique<Wt::WLineEdit>());
+			_engineSizeField->setPlaceholderText("Blue");
+			
 			Wt::WText *_carColourText = _thirdPageLayout->addWidget(make_unique<Wt::WText>("Car Colour"));
 			Wt::WLineEdit* _carColourField = _thirdPageLayout->addWidget(make_unique<Wt::WLineEdit>());
-			_carColourField->setPlaceholderText("White");
+			_carColourField->setPlaceholderText("Blue");
 		}
 	});
 
