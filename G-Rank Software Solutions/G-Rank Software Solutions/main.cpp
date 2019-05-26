@@ -6,12 +6,11 @@
 #include <Windows.h>
 #include <vector>
 
-
 #include "ServiceRequest.h"
 #include "Specialist.h"
 #include "Customer.h"
 #include "User.h"
-#include "G-RankSoftwareSolutions.h"
+#include "GRSS.h"
 #include "Reviews.h"
 #include "car.h"
 
@@ -385,28 +384,7 @@ void firstMenu(int choice) {
 	else return;
 }
 
-int main(int argc, char **argv){
-	/*
-	1. loads in necessary info from file when we have
-	1b. runs UI render loop
-	2. performs functions as requested by user
-	3. save info to file
-	3b. closes interface
-
-	Service Request Test
-	1. input details from client
-	 a. Location
-	 b. Type
-	 c. generate date and time
-	 d. ?anything else?
-	2. create a service request from user input
-	3. broadcast the request to specialists
-	4. collate specialists who accepted the request
-	5. show client specialists who accepted
-	6. client chooses a specialist
-	7. specialist receives a go ahead notification
-	*/
-	
+int main(int argc, char **argv) {
 	/*initiation
 	User* users;
 	int count = 0;
@@ -479,6 +457,6 @@ int main(int argc, char **argv){
 
 	//return 0;
 	return Wt::WRun(argc, argv, [](const Wt::WEnvironment& env) {
-		return make_unique<GRankSoftwareSolutions>(env);
+		return make_unique<GRSS>(env);
 	});
 }

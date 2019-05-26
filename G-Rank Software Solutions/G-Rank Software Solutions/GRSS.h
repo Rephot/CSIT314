@@ -3,29 +3,33 @@
 
 #include <Wt/WAnchor.h>
 #include <Wt/WApplication.h>
-#include <Wt/WVBoxLayout.h>
-#include <Wt/WHBoxLayout.h>
 #include <Wt/WComboBox.h>
+#include <Wt/WButtonGroup.h>
 #include <Wt/WContainerwidget.h>
 #include <Wt/WEvent.h>
+#include <Wt/WHBoxLayout.h>
 #include <Wt/WLength.h>
 #include <Wt/WLineEdit.h>
 #include <Wt/WLink.h>
 #include <Wt/WNavigationBar.h>
 #include <Wt/WPushButton.h>
+#include <Wt/WRadioButton.h>
+#include <Wt/WStackedWidget.h>
 #include <Wt/WString.h>
 #include <Wt/WText.h>
 #include <Wt/WTextArea.h>
+#include <Wt/WVBoxLayout.h>
 
 #include <fstream>
 #include <vector>
+#include <regex>
 
 #include "Specialist.h"
 #include "Customer.h"
 
 using namespace std;
 
-class GRankSoftwareSolutions : public Wt::WApplication {
+class GRSS : public Wt::WApplication {
 private:
 	std::string appName;
 	Wt::WApplication* app;
@@ -40,8 +44,8 @@ private:
 	bool validateLogin(Wt::WString); // passed entered username to check if user exists
 	// ↑this is used to confirm, ↓this is then used to validate
 	bool validateUsersPassword(Wt::WString, Wt::WString); // passed enterd username and password to check if the password is correct for that user
-	vector<Customer> existingCustomers;
-	vector<Specialist> existingSpecialists;
+	vector<Customer> existingCustomers = {};
+	vector<Specialist> existingSpecialists = {};
 	int userFlag;
 	// may replace with logged_in_user???
 	Customer logged_in_customer;
@@ -52,16 +56,16 @@ private:
 	void contentTitle();
 	void loadUsers();
 	void loginPage();
-	void servicePage();
 	void registerPage();
 	void registerPage2();
 	void registerPage3();
 	void customerMenu();
 	void specialistMenu();
 	void createRequestPage();
+	bool userAvailable(Wt::WString);
 
 public:
-	GRankSoftwareSolutions(const Wt::WEnvironment &env);
+	GRSS(const Wt::WEnvironment &env);
 };
 
 #endif

@@ -12,6 +12,7 @@ class User{
 public:
 	User();
 	User(string, string, string, string, time_t, string);
+	User(string, string, string, string, string, string, string);
 	bool setPassword(string);
 	void returnUser();
 	string getUserName();
@@ -21,8 +22,9 @@ public:
 	string getLastName();
 	time_t getDOB();
 	string getNumber();
+	string getEmail();
 protected:
-	string username, password, fName, lName, phNumber;
+	string username, password, fName, lName, licenseNumber, phNumber, email;
 	time_t DOB;
 };
 

@@ -38,6 +38,6 @@ public:
 private:
 	// bankAccountClass details;
 	string operationalArea;
-	// User loginAccount;
+	// vector<int> operationalAreas;
 };
 #endif

@@ -1,4 +1,4 @@
-#include"G-RankSoftwareSolutions.h"
+#include"GRSS.h"
 
 //namespace {
 //
@@ -16,7 +16,21 @@
 //
 //}
 
-GRankSoftwareSolutions::GRankSoftwareSolutions(const Wt::WEnvironment &env) : Wt::WApplication(env)
+regex emailPattern("(\\w+)@(\\w+)(\\.(\\w+))+");
+
+// registerpage tmp
+Wt::WString userTmp;
+Wt::WString pwTmp;
+// registerpage2 tmp
+Wt::WString fnameTmp;
+Wt::WString lnameTmp;
+Wt::WString lTmp;
+Wt::WString phTmp;
+Wt::WString eTmp;
+// registerpage3 tmp
+
+
+GRSS::GRSS(const Wt::WEnvironment &env) : Wt::WApplication(env)
 {
 	app = Wt::WApplication::instance();
 	initCSS();
@@ -29,7 +43,7 @@ GRankSoftwareSolutions::GRankSoftwareSolutions(const Wt::WEnvironment &env) : Wt
 	loginPage();
 }
 
-void GRankSoftwareSolutions::handlePathChange()
+void GRSS::handlePathChange()
 {
 	// if this function is not used by the end, remove
 	if (Wt::WApplication::instance()->internalPath() == "register")
@@ -38,7 +52,7 @@ void GRankSoftwareSolutions::handlePathChange()
 	}
 }
 
-void GRankSoftwareSolutions::initCSS()
+void GRSS::initCSS()
 {
 	app->styleSheet().addRule("#content", "display: block; margin: auto;");
 	app->styleSheet().addRule("#dashboard", "width: 100%; margin-left: 0%;");
@@ -52,7 +66,7 @@ void GRankSoftwareSolutions::initCSS()
 	app->styleSheet().addRule("#footer", "background-color: #262626; color: #fff; padding: 0.5em;");*/
 }
 
-void GRankSoftwareSolutions::initContentLayout()
+void GRSS::initContentLayout()
 {
 	_content = root()->addWidget(make_unique<Wt::WContainerWidget>());
 	_content->setId("content");
@@ -62,7 +76,7 @@ void GRankSoftwareSolutions::initContentLayout()
 	_contentLayout = _content->setLayout(make_unique<Wt::WVBoxLayout>());
 }
 
-void GRankSoftwareSolutions::title()
+void GRSS::title()
 {
 	//create header title
 	_header = _contentLayout->addWidget(make_unique<Wt::WContainerWidget>());
@@ -72,7 +86,7 @@ void GRankSoftwareSolutions::title()
 	_pageContent = _contentLayout->addWidget(make_unique<Wt::WContainerWidget>(), 0, Wt::AlignmentFlag::Center);
 }
 
-void GRankSoftwareSolutions::contentTitle()
+void GRSS::contentTitle()
 {
 	//create header title
 	_header = _contentLayout->addWidget(make_unique<Wt::WContainerWidget>());
@@ -82,7 +96,7 @@ void GRankSoftwareSolutions::contentTitle()
 	_pageContent = _contentLayout->addWidget(make_unique<Wt::WContainerWidget>(), 0, Wt::AlignmentFlag::Left);
 }
 
-void GRankSoftwareSolutions::specialistMenu()
+void GRSS::specialistMenu()
 {
 	_pageContent->clear();
 	Wt::WVBoxLayout *_menuLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
@@ -102,8 +116,9 @@ void GRankSoftwareSolutions::specialistMenu()
 	Wt::WPushButton *_reviewsButtons = _menuLayout->addWidget(make_unique<Wt::WPushButton>("Reviews"));
 }
 
-void GRankSoftwareSolutions::customerMenu()
+void GRSS::customerMenu()
 {
+	// want to put current request somewhere in this menu, probably after the buttons, ONLY IF they have a current request
 	_pageContent->clear();
 	Wt::WVBoxLayout *_menuLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
 
@@ -113,7 +128,7 @@ void GRankSoftwareSolutions::customerMenu()
 	// connect to service creation page
 	_createRequestButton->clicked().connect([=](const Wt::WMouseEvent &e)
 	{
-		GRankSoftwareSolutions::createRequestPage();
+		GRSS::createRequestPage();
 	});
 
 	// connect to view manage details page
@@ -128,7 +143,8 @@ void GRankSoftwareSolutions::customerMenu()
 	// logout ??
 }
 
-void GRankSoftwareSolutions::createRequestPage() {
+void GRSS::createRequestPage()
+{
 	// STRETCH add map widget, and only if you can pass data to and get data from
 	_pageContent->clear();
 	_pageLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
@@ -180,7 +196,7 @@ void GRankSoftwareSolutions::createRequestPage() {
 	// connect to customer menu
 	_cancelButton->clicked().connect([=](const Wt::WMouseEvent &e)
 	{
-		GRankSoftwareSolutions::customerMenu();
+		GRSS::customerMenu();
 	});
 
 	Wt::WPushButton *_confirmButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Confirm"));
@@ -188,9 +204,9 @@ void GRankSoftwareSolutions::createRequestPage() {
 
 }
 
-void GRankSoftwareSolutions::loginPage()
+void GRSS::loginPage()
 {
-	GRankSoftwareSolutions::loadUsers();
+	GRSS::loadUsers();
 	_pageContent->clear();
 	//create username text and input
 	_pageLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
@@ -207,11 +223,11 @@ void GRankSoftwareSolutions::loginPage()
 	_passwordField->setEchoMode(Wt::EchoMode::Password);
 	_passwordField->enterPressed().connect([=]
 	{
-		if (GRankSoftwareSolutions::validateLogin(_usernameField->text()))
+		if (GRSS::validateLogin(_usernameField->text()))
 		{
-			if (GRankSoftwareSolutions::validateUsersPassword(_usernameField->text(), _passwordField->text()))
+			if (GRSS::validateUsersPassword(_usernameField->text(), _passwordField->text()))
 			{
-				(userFlag == 1) ? GRankSoftwareSolutions::customerMenu() : GRankSoftwareSolutions::specialistMenu();
+				(userFlag == 1) ? GRSS::customerMenu() : GRSS::specialistMenu();
 			}
 			// else // emit error incorrect password
 		}
@@ -232,18 +248,18 @@ void GRankSoftwareSolutions::loginPage()
 	//});
 	_signUpButton->clicked().connect([=](const Wt::WMouseEvent &e)
 	{
-		GRankSoftwareSolutions::registerPage();
+		GRSS::registerPage();
 	});
 	
 	Wt::WPushButton *_signInButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Sign In"));
 	//_signInButton->setLink(Wt::WLink(Wt::LinkType::InternalPath, "/service"));
 	_signInButton->clicked().connect([=](const Wt::WMouseEvent &e)
 	{
-		if (GRankSoftwareSolutions::validateLogin(_usernameField->text()))
+		if (GRSS::validateLogin(_usernameField->text()))
 		{
-			if (GRankSoftwareSolutions::validateUsersPassword(_usernameField->text(), _passwordField->text()))
+			if (GRSS::validateUsersPassword(_usernameField->text(), _passwordField->text()))
 			{
-				(userFlag == 1) ? GRankSoftwareSolutions::customerMenu() : GRankSoftwareSolutions::specialistMenu();
+				(userFlag == 1) ? GRSS::customerMenu() : GRSS::specialistMenu();
 			}
 			// else // emit error incorrect password
 		}
@@ -254,142 +270,7 @@ void GRankSoftwareSolutions::loginPage()
 	});
 }
 
-void GRankSoftwareSolutions::registerPage()
-{ // J: does not currently create user, will link into program tomorrow wednesday 15th probably
-	_pageContent->clear();
-	_pageLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
-	_pageContent->setId("pageContent");
-
-	// J: will add specialist/customer choice here, which will add/remove fields that are unique to each option
-
-	// basic account login info
-	Wt::WText* _usernameText = _pageLayout->addWidget(make_unique<Wt::WText>("Enter a Username"));
-	Wt::WLineEdit* _usernameField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
-	_usernameField->setPlaceholderText("user123");
-	Wt::WText* _passwordText = _pageLayout->addWidget(make_unique<Wt::WText>("Enter Password"));
-	Wt::WLineEdit* _passwordField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
-	_passwordField->setPlaceholderText("Password");
-	_passwordField->setEchoMode(Wt::EchoMode::Password);
-	Wt::WText* _confirmPasswordText = _pageLayout->addWidget(make_unique<Wt::WText>("Confirm Password"));
-	Wt::WLineEdit* _confirmPasswordField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
-	_confirmPasswordField->setPlaceholderText("Confirm Password");
-	_confirmPasswordField->setEchoMode(Wt::EchoMode::Password);
-
-	// create buttons for confirm and cancel
-	Wt::WContainerWidget *_buttonsContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
-	_buttonsContainer->setId("buttons");
-	Wt::WHBoxLayout *_buttonsLayout = _buttonsContainer->setLayout(make_unique<Wt::WHBoxLayout>());
-
-	// cancel to go back to login screen
-	Wt::WPushButton *_cancelButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Cancel"));
-	_cancelButton->clicked().connect([=](const Wt::WMouseEvent &e)
-	{
-		GRankSoftwareSolutions::loginPage();
-	});
-
-	// confirm will create user profile and log them in (this assumes they've confirmed their account via email...)
-	Wt::WPushButton *_confirmButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Next"));
-	_confirmButton->setStyleClass("btn-primary");
-	_confirmButton->clicked().connect([=](const Wt::WMouseEvent &e)
-	{
-		GRankSoftwareSolutions::registerPage2();
-	});
-	// will check if userName is available
-	// will check if passwords match
-	// STRETCH: will check if email is of correct format
-	// 3rd page registration: home address, car details, bankCard details
-	// the aim with multi-page registrations is to restrict the amount of information entered on each page for UX
-}
-
-void GRankSoftwareSolutions::registerPage2()
-{
-	_pageContent->clear();
-	_pageLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
-	_pageContent->setId("pageContent");
-
-	// 2nd page registration?
-	// personal details, names, license number and contact details(phone number and email, phone as way of communicating with specialists, and email for other service related commicae)
-	Wt::WText* _firstNameText = _pageLayout->addWidget(make_unique<Wt::WText>("First Name"));
-	Wt::WLineEdit* _firstNameField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
-	_firstNameField->setPlaceholderText("Jordan");
-	Wt::WText* _lastNameText = _pageLayout->addWidget(make_unique<Wt::WText>("Last Name"));
-	Wt::WLineEdit* _lastNameField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
-	_lastNameField->setPlaceholderText("Smith");
-	Wt::WText *_licenseText = _pageLayout->addWidget(make_unique<Wt::WText>("License Number"));
-	Wt::WLineEdit* _licenseField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
-	_licenseField->setPlaceholderText("23456789");
-	Wt::WText *_contactPhoneText = _pageLayout->addWidget(make_unique<Wt::WText>("Contact Phone Number"));
-	Wt::WLineEdit* _contactPhoneField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
-	_contactPhoneField->setPlaceholderText("0412345678");
-
-	// create buttons for confirm and cancel
-	Wt::WContainerWidget *_buttonsContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
-	_buttonsContainer->setId("buttons");
-	Wt::WHBoxLayout *_buttonsLayout = _buttonsContainer->setLayout(make_unique<Wt::WHBoxLayout>());
-
-	// cancel to go back to login screen
-	Wt::WPushButton *_cancelButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Back"));
-	_cancelButton->clicked().connect([=](const Wt::WMouseEvent &e)
-	{
-		GRankSoftwareSolutions::registerPage();
-	});
-
-	// confirm will create user profile and log them in (this assumes they've confirmed their account via email...)
-	Wt::WPushButton *_confirmButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Next"));
-	_confirmButton->setStyleClass("btn-primary");
-	_confirmButton->clicked().connect([=](const Wt::WMouseEvent &e)
-	{
-		GRankSoftwareSolutions::registerPage3();
-	});
-}
-
-void GRankSoftwareSolutions::registerPage3()
-{
-	_pageContent->clear();
-	_pageLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
-	_pageContent->setId("pageContent");
-
-	// 3rd page registration: home address, car details, bankCard details
-	Wt::WText* _homeAddressText = _pageLayout->addWidget(make_unique<Wt::WText>("Home Address"));
-	Wt::WLineEdit* _homeAddressField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
-	_homeAddressField->setPlaceholderText("221b Baker Street");
-	Wt::WText* _carMakeText = _pageLayout->addWidget(make_unique<Wt::WText>("Car Make"));
-	Wt::WLineEdit* _carMakeField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
-	_carMakeField->setPlaceholderText("Toyboata");
-	Wt::WText *_carModelText = _pageLayout->addWidget(make_unique<Wt::WText>("Car Model"));
-	Wt::WLineEdit* _carModelField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
-	_carModelField->setPlaceholderText("Hidux");
-	Wt::WText *_carColourText = _pageLayout->addWidget(make_unique<Wt::WText>("Car Colour"));
-	Wt::WLineEdit* _carColourField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
-	_carColourField->setPlaceholderText("White");
-
-	// create buttons for confirm and cancel
-	Wt::WContainerWidget *_buttonsContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
-	_buttonsContainer->setId("buttons");
-	Wt::WHBoxLayout *_buttonsLayout = _buttonsContainer->setLayout(make_unique<Wt::WHBoxLayout>());
-
-	// cancel to go back to login screen
-	Wt::WPushButton *_retraceButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Back"));
-	_retraceButton->clicked().connect([=](const Wt::WMouseEvent &e)
-	{
-		GRankSoftwareSolutions::registerPage2();
-	});
-
-	// confirm will create user profile and log them in (this assumes they've confirmed their account via email...)
-	Wt::WPushButton *_confirmButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Confirm"));
-	_confirmButton->clicked().connect([=](const Wt::WMouseEvent &e)
-	{
-		// this should point to loginPage() such that the user can log in with the newly created user
-		GRankSoftwareSolutions::customerMenu();
-	});
-}
-
-void GRankSoftwareSolutions::servicePage()
-{
-	// map?STRETCH, combobox, description (textEdit), confirm and cancel
-}
-
-void GRankSoftwareSolutions::loadUsers()
+void GRSS::loadUsers()
 {
 	string line, username, password, fName, lName, phNumber, custID, DOB;
 	string userFile = "Customers.csv";
@@ -434,7 +315,7 @@ void GRankSoftwareSolutions::loadUsers()
 	}
 }
 
-bool GRankSoftwareSolutions::validateLogin(Wt::WString username)
+bool GRSS::validateLogin(Wt::WString username)
 {
 	vector<Customer>::iterator cItr = existingCustomers.begin();
 	vector<Specialist>::iterator sItr = existingSpecialists.begin();
@@ -456,16 +337,18 @@ bool GRankSoftwareSolutions::validateLogin(Wt::WString username)
 	return false;
 }
 
-bool GRankSoftwareSolutions::validateUsersPassword(Wt::WString username, Wt::WString password)
+bool GRSS::validateUsersPassword(Wt::WString username, Wt::WString password)
 {
 	if(userFlag != 0)
 	{
 		if (userFlag == 1)
 		{
-			for (vector<Customer>::iterator Itr = existingCustomers.begin(); Itr != existingCustomers.end(); Itr++) {
+			for (vector<Customer>::iterator Itr = existingCustomers.begin(); Itr != existingCustomers.end(); Itr++)
+			{
 				Wt::WString user = Itr->getUserName();
 				Wt::WString pass = Itr->getPassword();
-				if ((user == username) && (pass == password)) {
+				if ((user == username) && (pass == password))
+				{
 					logged_in_customer = *Itr;
 					return true;
 				}
@@ -477,7 +360,8 @@ bool GRankSoftwareSolutions::validateUsersPassword(Wt::WString username, Wt::WSt
 			{
 				Wt::WString user = Itr->getUserName();
 				Wt::WString pass = Itr->getPassword();
-				if ((user == username) && (pass == password)) {
+				if ((user == username) && (pass == password))
+				{
 					logged_in_specialist = *Itr;
 					return true;
 				}
@@ -485,4 +369,251 @@ bool GRankSoftwareSolutions::validateUsersPassword(Wt::WString username, Wt::WSt
 		}
 	}// else vector<Admin>::iterator Itr = existingAdmins.begin();
 	return false;
+}
+
+/*
+register info
+	// additional for specialist
+	string operationalArea;
+*/
+
+bool GRSS::userAvailable(Wt::WString username) {
+	Wt::WString user;
+	vector<Customer>::iterator cItr = existingCustomers.begin();
+	while (cItr != existingCustomers.end())
+	{
+		user = cItr->getUserName();
+		if (user == username) return false;
+		else if (cItr != existingCustomers.end()) cItr++;
+	}
+	vector<Specialist>::iterator sItr = existingSpecialists.begin();
+	while (sItr != existingSpecialists.end())
+	{
+		user = sItr->getUserName();
+		if (user == username) return false;
+		else if (sItr != existingSpecialists.end()) sItr++;
+	}
+	return true;
+}
+
+void GRSS::registerPage()
+{
+	 /*
+	 // USER
+	username, password;
+	 */
+	_pageContent->clear();
+	_pageLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
+	_pageContent->setId("pageContent");
+
+	// J: will add specialist/customer choice here, which will add/remove fields that are unique to each option
+
+	// basic account login info
+	Wt::WText *_usernameText = _pageLayout->addWidget(make_unique<Wt::WText>("Enter a Username"));;
+	Wt::WLineEdit* _usernameField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
+	_usernameField->setPlaceholderText("usr123");
+	_usernameField->changed().connect([=] {
+		// check username availability
+		(!(GRSS::userAvailable(_usernameField->text()))) ? _usernameText->setText("Enter a Username<font color=\"red\"> This User Name is unavailable</font>") : _usernameText->setText("Enter a Username");
+	});
+
+	Wt::WText* _passwordText = _pageLayout->addWidget(make_unique<Wt::WText>("Enter Password"));
+	Wt::WLineEdit* _passwordField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
+	_passwordField->setPlaceholderText("Password");
+	_passwordField->setEchoMode(Wt::EchoMode::Password);
+	Wt::WText* _confirmPasswordText = _pageLayout->addWidget(make_unique<Wt::WText>("Confirm Password"));
+	Wt::WLineEdit* _confirmPasswordField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
+	_confirmPasswordField->setPlaceholderText("Confirm Password");
+	_confirmPasswordField->setEchoMode(Wt::EchoMode::Password);
+	_confirmPasswordField->changed().connect([=] {
+		(_passwordField->text() == _confirmPasswordField->text()) ? _confirmPasswordText->setText("Confirm Password") : _confirmPasswordText->setText("Confirm Password <font color=\"red\">Passwords Do NOT match</font>");
+	});
+	_passwordField->changed().connect([=] {
+		if (_confirmPasswordField->text() != "") (_passwordField->text() == _confirmPasswordField->text()) ? _confirmPasswordText->setText("Confirm Password") : _confirmPasswordText->setText("Confirm Password <font color=\"red\">Passwords Do NOT match</font>");
+	});
+
+	// create buttons for confirm and cancel
+	Wt::WContainerWidget *_buttonsContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
+	_buttonsContainer->setId("buttons");
+	Wt::WHBoxLayout *_buttonsLayout = _buttonsContainer->setLayout(make_unique<Wt::WHBoxLayout>());
+
+	// cancel to go back to login screen, resets internal tmps to ""
+	Wt::WPushButton *_cancelButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Cancel"));
+	_cancelButton->clicked().connect([=](const Wt::WMouseEvent &e)
+	{
+		userTmp = "";
+		pwTmp = "";
+		GRSS::loginPage();
+	});
+
+	// sets tmp values for username and password, if all valid
+	Wt::WPushButton *_confirmButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Next"));
+	_confirmButton->setStyleClass("btn-primary");
+
+	// missing details
+	Wt::WText *_missingText = _pageLayout->addWidget(make_unique<Wt::WText>("<font color = \"red\">All fields are required</font>"));
+	_missingText->setHidden(true);
+
+	_confirmButton->clicked().connect([=](const Wt::WMouseEvent &e)
+	{
+		// if username available and passwords match, set temp values, and proceed to registerpage2
+		if ((GRSS::userAvailable(_usernameField->text()) && (_passwordField->text() == _confirmPasswordField->text())) && (_usernameField->text() != "" && _passwordField->text() != ""  &&_confirmPasswordField->text() != "")) {
+			_missingText->setHidden(true);
+			userTmp = _usernameField->text();
+			pwTmp = _passwordField->text();
+			GRSS::registerPage2();
+		}
+		else _missingText->setHidden(false);
+	});
+	// the aim with multi-page registrations is to restrict the amount of information entered on each page for UX
+}
+
+void GRSS::registerPage2()
+{
+	/*
+	// CUSTOMER details
+	string fName, lName, phNumber, licenseNumber, email;
+	*/
+	_pageContent->clear();
+	_pageLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
+	_pageContent->setId("pageContent");
+
+	// first and last name
+	Wt::WText* _firstNameText = _pageLayout->addWidget(make_unique<Wt::WText>("First Name"));
+	Wt::WLineEdit* _firstNameField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
+	_firstNameField->setPlaceholderText("Jordan");
+	Wt::WText* _lastNameText = _pageLayout->addWidget(make_unique<Wt::WText>("Last Name"));
+	Wt::WLineEdit* _lastNameField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
+	_lastNameField->setPlaceholderText("Smith");
+
+	// license number can be used as age validation (at least in australia), not necessarily unique, because of stipulation by hoa of one car to one client
+	Wt::WText *_licenseText = _pageLayout->addWidget(make_unique<Wt::WText>("License Number"));
+	Wt::WLineEdit* _licenseField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
+	_licenseField->setPlaceholderText("23456789");
+
+	// phone
+	Wt::WText *_contactPhoneText = _pageLayout->addWidget(make_unique<Wt::WText>("Contact Phone Number"));
+	Wt::WLineEdit* _contactPhoneField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
+	_contactPhoneField->setPlaceholderText("0412345678");
+	// email
+	Wt::WText *_emailText = _pageLayout->addWidget(make_unique<Wt::WText>("Email Address"));
+	Wt::WLineEdit* _emailField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
+	_emailField->setPlaceholderText("example@email.com");
+	_emailField->changed().connect([=] {
+		string email = _emailField->text().narrow();
+		(regex_match(email, emailPattern)) ? _emailText->setText("Email Address") : _emailText->setText("Email Address <font color = \"red\">Not recognised as a valid email address</font>");
+	});
+
+	// create buttons for confirm and cancel
+	Wt::WContainerWidget *_buttonsContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
+	_buttonsContainer->setId("buttons");
+	Wt::WHBoxLayout *_buttonsLayout = _buttonsContainer->setLayout(make_unique<Wt::WHBoxLayout>());
+
+	// missing details
+	Wt::WText *_missingText = _pageLayout->addWidget(make_unique<Wt::WText>("<font color = \"red\">All fields are required</font>"));
+	_missingText->setHidden(true);
+
+	// cancel to go back to login screen
+	Wt::WPushButton *_cancelButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Back"));
+	_cancelButton->clicked().connect([=](const Wt::WMouseEvent &e)
+	{
+		GRSS::registerPage();
+	});
+
+	// confirm will add values to temp values and proceed to registerpage3
+	Wt::WPushButton *_confirmButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Next"));
+	_confirmButton->setStyleClass("btn-primary");
+	_confirmButton->clicked().connect([=](const Wt::WMouseEvent &e)
+	{
+		fnameTmp = _firstNameField->text();
+		lnameTmp = _lastNameField->text();
+		lTmp = _licenseField->text();
+		phTmp = _contactPhoneField->text();
+		eTmp = _emailField->text();
+		string email = _emailField->text().narrow();
+		((regex_match(email, emailPattern)) && (fnameTmp != "") && (lnameTmp != "") && (lTmp != "") && (phTmp != "") && (eTmp != "")) ? GRSS::registerPage3() : _missingText->setHidden(false);
+	});
+}
+
+void GRSS::registerPage3()
+{
+	/*
+	// customers car
+	int cust_id, modelYear;
+	string make, model, licencePlate, colour, shape;
+	double engineSize;
+
+	// specialists
+	string to int operationalArea
+	*/
+	// 3rd page registration: home address, car details, bankCard details
+	_pageContent->clear();
+	_pageLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
+	_pageContent->setId("pageContent");
+
+	// radio boxes for choice between specialist and client, all information previously is common
+	Wt::WContainerWidget *_buttonContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
+	Wt::WHBoxLayout *_buttonLayout = _buttonContainer->setLayout(make_unique<Wt::WHBoxLayout>());
+	auto _buttonGroup = make_shared<Wt::WButtonGroup>();
+	Wt::WRadioButton *_specRadio = _buttonLayout->addWidget(make_unique<Wt::WRadioButton>("Specialist"));
+	_buttonGroup->addButton(_specRadio, 1);
+	Wt::WRadioButton *_custRadio = _buttonLayout->addWidget(make_unique<Wt::WRadioButton>("Customer"));
+	_buttonGroup->addButton(_custRadio, 2);
+	// changes the content of a stacked widget
+
+	// 3rd page form customer
+	Wt::WContainerWidget *_thirdPageForm = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
+
+	// change content based on which radio selected
+	auto rawButtonGroup = _buttonGroup.get();
+	_buttonGroup->checkedChanged().connect([=](Wt::WRadioButton *selection)
+	{
+		// usertype flag for user creation
+		if (rawButtonGroup->id(selection) == 1) {
+			// 3rd page form specialist
+			_thirdPageForm->clear();
+			Wt::WVBoxLayout *_thirdPageLayout = _thirdPageForm->setLayout(make_unique<Wt::WVBoxLayout>());
+			Wt::WText *_qualNumberText = _thirdPageLayout->addWidget(make_unique<Wt::WText>("License/Qualification Number"));
+			Wt::WLineEdit *_qualNumberField = _thirdPageLayout->addWidget(make_unique<Wt::WLineEdit>());
+			_qualNumberField->setPlaceholderText("MVTC165396");
+			Wt::WText *_BSBText = _thirdPageLayout->addWidget(make_unique<Wt::WText>("BSB"));
+			Wt::WLineEdit *_BSBField = _thirdPageLayout->addWidget(make_unique<Wt::WLineEdit>());
+			_BSBField->setPlaceholderText("9801-1080");
+		}
+		else if (rawButtonGroup->id(selection) == 2) {
+			// 3rd page registration(Customer): home address, car details, bankCard details
+			_thirdPageForm->clear();
+			Wt::WVBoxLayout *_thirdPageLayout = _thirdPageForm->setLayout(make_unique<Wt::WVBoxLayout>());
+			Wt::WText* _homeAddressText = _thirdPageLayout->addWidget(make_unique<Wt::WText>("Home Address"));
+			Wt::WLineEdit* _homeAddressField = _thirdPageLayout->addWidget(make_unique<Wt::WLineEdit>());
+			_homeAddressField->setPlaceholderText("221b Baker Street");
+			Wt::WText* _carMakeText = _thirdPageLayout->addWidget(make_unique<Wt::WText>("Car Make"));
+			Wt::WLineEdit* _carMakeField = _thirdPageLayout->addWidget(make_unique<Wt::WLineEdit>());
+			_carMakeField->setPlaceholderText("Toyboata");
+			Wt::WText *_carModelText = _thirdPageLayout->addWidget(make_unique<Wt::WText>("Car Model"));
+			Wt::WLineEdit* _carModelField = _thirdPageLayout->addWidget(make_unique<Wt::WLineEdit>());
+			_carModelField->setPlaceholderText("Hilux");
+			Wt::WText *_carColourText = _thirdPageLayout->addWidget(make_unique<Wt::WText>("Car Colour"));
+			Wt::WLineEdit* _carColourField = _thirdPageLayout->addWidget(make_unique<Wt::WLineEdit>());
+			_carColourField->setPlaceholderText("White");
+		}
+	});
+
+	// create buttons for confirm and cancel
+	Wt::WContainerWidget *_buttonsContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
+	_buttonsContainer->setId("buttons");
+	Wt::WHBoxLayout *_buttonsLayout = _buttonsContainer->setLayout(make_unique<Wt::WHBoxLayout>());
+	// cancel to go back to login screen
+	Wt::WPushButton *_retraceButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Back"));
+	_retraceButton->clicked().connect([=](const Wt::WMouseEvent &e)
+	{
+		GRSS::registerPage2();
+	});
+	// confirm will create user profile and log them in (this assumes they've confirmed their account via email...)
+	Wt::WPushButton *_confirmButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Confirm"));
+	_confirmButton->clicked().connect([=](const Wt::WMouseEvent &e)
+	{
+		// this should point to loginPage() such that the user can log in with the newly created user
+		GRSS::loginPage();
+	});
 }

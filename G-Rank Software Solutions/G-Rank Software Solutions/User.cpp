@@ -15,6 +15,17 @@ User::User(string uname, string pwd, string fname, string lname, time_t dob, str
 	// subscriber = true/false;
 }
 
+User::User(string uname, string pwd, string fname, string lname, string lNum, string number, string mail) {
+	username = uname;
+	password = pwd;
+	fName = fname;
+	lName = lname;
+	licenseNumber = lNum;
+	phNumber = number;
+	email = mail;
+	// subscriber = true/false;
+}
+
 string User::getUserName() {
 	return username;
 }
@@ -41,6 +52,10 @@ time_t User::getDOB() {
 
 string User::getNumber() {
 	return phNumber;
+}
+
+string User::getEmail() {
+	return email;
 }
 
 bool User::setPassword(string pwd) {
