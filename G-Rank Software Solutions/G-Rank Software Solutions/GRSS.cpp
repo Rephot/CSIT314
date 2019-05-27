@@ -41,7 +41,8 @@ Wt::WString shapeTmp;
 Wt::WString engineSizeTmp;
 Wt::WString colourTmp;
 // spec
-
+Wt::WString opAreaTmp;
+Wt::WString qualNumTmp;
 
 GRSS::GRSS(const Wt::WEnvironment &env) : Wt::WApplication(env)
 {

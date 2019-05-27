@@ -128,7 +128,7 @@
     <ClInclude Include="Administrator.h" />
     <ClInclude Include="car.h" />
     <ClInclude Include="Customer.h" />
-    <ClInclude Include="G-RankSoftwareSolutions.h" />
+    <ClInclude Include="GRSS.h" />
     <ClInclude Include="receipts.h" />
     <ClInclude Include="reviews.h" />
     <ClInclude Include="ServiceRequest.h" />
@@ -140,7 +140,7 @@
     <ClCompile Include="Administrator.cpp" />
     <ClCompile Include="car.cpp" />
     <ClCompile Include="Customer.cpp" />
-    <ClCompile Include="G-RankSoftwareSolutions.cpp" />
+    <ClCompile Include="GRSS.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="receipts.cpp" />
     <ClCompile Include="reviews.cpp" />
