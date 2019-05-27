@@ -1,10 +1,7 @@
-
 #include"ServiceRequest.h"
 #include<fstream>
 
-
 using namespace std;
-
 
 int ServiceRequest::numCurrentRequests = 0;
 ServiceRequest ServiceRequest::currentRequests[50];

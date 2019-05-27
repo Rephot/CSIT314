@@ -11,10 +11,8 @@
 #include <Wt/WLength.h>
 #include <Wt/WLineEdit.h>
 #include <Wt/WLink.h>
-#include <Wt/WNavigationBar.h>
 #include <Wt/WPushButton.h>
 #include <Wt/WRadioButton.h>
-#include <Wt/WStackedWidget.h>
 #include <Wt/WString.h>
 #include <Wt/WText.h>
 #include <Wt/WTextArea.h>
@@ -40,7 +38,6 @@ private:
 	Wt::WText* _headerText;
 	Wt::WContainerWidget* _pageContent;
 	Wt::WVBoxLayout* _pageLayout;
-	void handlePathChange(); // J: will be trying to add URL path management, STRETCH goal
 	bool validateLogin(Wt::WString); // passed entered username to check if user exists
 	// ↑this is used to confirm, ↓this is then used to validate
 	bool validateUsersPassword(Wt::WString, Wt::WString); // passed enterd username and password to check if the password is correct for that user

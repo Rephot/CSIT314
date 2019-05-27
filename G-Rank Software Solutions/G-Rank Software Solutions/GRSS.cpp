@@ -57,15 +57,6 @@ GRSS::GRSS(const Wt::WEnvironment &env) : Wt::WApplication(env)
 	loginPage();
 }
 
-void GRSS::handlePathChange()
-{
-	// if this function is not used by the end, remove
-	if (Wt::WApplication::instance()->internalPath() == "register")
-	{
-		registerPage();
-	}
-}
-
 void GRSS::initCSS()
 {
 	app->styleSheet().addRule("#content", "display: block; margin: auto;");
@@ -152,7 +143,6 @@ void GRSS::createRequestPage()
 	// STRETCH add map widget, and only if you can pass data to and get data from
 	_pageContent->clear();
 	_pageLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
-	// location info
 	/*
 	ServiceRequest newRequest;
 	// identifying number
@@ -166,12 +156,8 @@ void GRSS::createRequestPage()
 	newRequest.sType = sType;
 	newRequest.serviceRequestedAt = dateTimeRequested;
 	newRequest.requestID = ++numRequests;
-	broadcastServiceRequest(newRequest);*/
-	// break this down into seperate fields such that postcode can be grabbed
-	// street
-	// street number if possible
-	// post code
-	// other location descriptors
+	broadcastServiceRequest(newRequest);
+	*/
 
 	// location information
 	_pageLayout->addWidget(make_unique<Wt::WText>("Location:"));
@@ -192,14 +178,18 @@ void GRSS::createRequestPage()
 	_serviceType->addItem("Please Select...");
 	_serviceType->addItem("Flat Tyre");
 	_serviceType->addItem("Break Down");
+	_serviceType->addItem("Flat Battery");
+	_serviceType->addItem("Car Won't Start");
 	_serviceType->addItem("Other, please describe");
 	Wt::WTextArea *_descriptionArea = _pageLayout->addWidget(make_unique<Wt::WTextArea>());
 	_descriptionArea->setPlaceholderText("Add a Description");
+
 	Wt::WHBoxLayout *_buttonsLayout = _pageLayout->addLayout(make_unique<Wt::WHBoxLayout>());
 	Wt::WPushButton *_cancelButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Cancel"));
 	// connect to customer menu
 	_cancelButton->clicked().connect([=](const Wt::WMouseEvent &e)
 	{
+		// enum serviceStatus {requested, respondedTo, accepted, inProgress, complete, cancelled, investigation}
 		GRSS::customerMenu();
 	});
 
@@ -375,12 +365,6 @@ bool GRSS::validateUsersPassword(Wt::WString username, Wt::WString password)
 	return false;
 }
 
-/*
-register info
-	// additional for specialist
-	string operationalArea;
-*/
-
 bool GRSS::userAvailable(Wt::WString username) {
 	Wt::WString user;
 	vector<Customer>::iterator cItr = existingCustomers.begin();
@@ -418,7 +402,7 @@ void GRSS::registerPage()
 	_usernameField->setPlaceholderText("usr123");
 	_usernameField->changed().connect([=] {
 		// check username availability
-		(!(GRSS::userAvailable(_usernameField->text()))) ? _usernameText->setText("Enter a Username<font color=\"red\"> This User Name is unavailable</font>") : _usernameText->setText("Enter a Username");
+		/*(!(GRSS::userAvailable(_usernameField->text()))) ? _usernameText->setText("Enter a Username<font color=\"red\"> This User Name is unavailable</font>") : _usernameText->setText("Enter a Username");*/
 	});
 
 	Wt::WText* _passwordText = _pageLayout->addWidget(make_unique<Wt::WText>("Enter Password"));
@@ -433,7 +417,7 @@ void GRSS::registerPage()
 		(_passwordField->text() == _confirmPasswordField->text()) ? _confirmPasswordText->setText("Confirm Password") : _confirmPasswordText->setText("Confirm Password <font color=\"red\">Passwords Do NOT match</font>");
 	});
 	_passwordField->changed().connect([=] {
-		if (_confirmPasswordField->text() != "") (_passwordField->text() == _confirmPasswordField->text()) ? _confirmPasswordText->setText("Confirm Password") : _confirmPasswordText->setText("Confirm Password <font color=\"red\">Passwords Do NOT match</font>");
+		/*if (_confirmPasswordField->text() != "") (_passwordField->text() == _confirmPasswordField->text()) ? _confirmPasswordText->setText("Confirm Password") : _confirmPasswordText->setText("Confirm Password <font color=\"red\">Passwords Do NOT match</font>");*/
 	});
 
 	// create buttons for confirm and cancel
@@ -445,8 +429,8 @@ void GRSS::registerPage()
 	Wt::WPushButton *_cancelButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Cancel"));
 	_cancelButton->clicked().connect([=](const Wt::WMouseEvent &e)
 	{
-		userTmp = "";
-		pwTmp = "";
+		/*userTmp = "";
+		pwTmp = "";*/
 		GRSS::loginPage();
 	});
 
@@ -461,13 +445,14 @@ void GRSS::registerPage()
 	_confirmButton->clicked().connect([=](const Wt::WMouseEvent &e)
 	{
 		// if username available and passwords match, set temp values, and proceed to registerpage2
-		if ((GRSS::userAvailable(_usernameField->text()) && (_passwordField->text() == _confirmPasswordField->text())) && (_usernameField->text() != "" && _passwordField->text() != ""  &&_confirmPasswordField->text() != "")) {
+		/*if ((GRSS::userAvailable(_usernameField->text()) && (_passwordField->text() == _confirmPasswordField->text())) && (_usernameField->text() != "" && _passwordField->text() != ""  &&_confirmPasswordField->text() != "")) {
 			_missingText->setHidden(true);
 			userTmp = _usernameField->text();
 			pwTmp = _passwordField->text();
 			GRSS::registerPage2();
 		}
-		else _missingText->setHidden(false);
+		else _missingText->setHidden(false);*/
+		GRSS::registerPage2();
 	});
 	// the aim with multi-page registrations is to restrict the amount of information entered on each page for UX
 }
@@ -504,8 +489,8 @@ void GRSS::registerPage2()
 	Wt::WLineEdit* _emailField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
 	_emailField->setPlaceholderText("example@email.com");
 	_emailField->changed().connect([=] {
-		string email = _emailField->text().narrow();
-		(regex_match(email, emailPattern)) ? _emailText->setText("Email Address") : _emailText->setText("Email Address <font color = \"red\">Not recognised as a valid email address</font>");
+		/*string email = _emailField->text().narrow();
+		(regex_match(email, emailPattern)) ? _emailText->setText("Email Address") : _emailText->setText("Email Address <font color = \"red\">Not recognised as a valid email address</font>");*/
 	});
 
 	// create buttons for confirm and cancel
@@ -521,6 +506,13 @@ void GRSS::registerPage2()
 	Wt::WPushButton *_cancelButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Back"));
 	_cancelButton->clicked().connect([=](const Wt::WMouseEvent &e)
 	{
+		/*
+		fnameTmp = "";
+		lnameTmp = "";
+		licNumTmp = "";
+		phoneTmp = "";
+		emailTmp = "";
+		*/
 		GRSS::registerPage();
 	});
 
@@ -529,13 +521,13 @@ void GRSS::registerPage2()
 	_confirmButton->setStyleClass("btn-primary");
 	_confirmButton->clicked().connect([=](const Wt::WMouseEvent &e)
 	{
-		fnameTmp = _firstNameField->text();
+		/*fnameTmp = _firstNameField->text();
 		lnameTmp = _lastNameField->text();
 		licNumTmp = _licenseField->text();
 		phoneTmp = _contactPhoneField->text();
-		emailTmp = _emailField->text();
-		string email = _emailField->text().narrow();
-		((regex_match(email, emailPattern)) && (fnameTmp != "") && (lnameTmp != "") && (licNumTmp != "") && (phoneTmp != "") && (emailTmp != "")) ? GRSS::registerPage3() : _missingText->setHidden(false);
+		emailTmp = _emailField->text().narrow();
+		((regex_match(emailTmp, emailPattern)) && (fnameTmp != "") && (lnameTmp != "") && (licNumTmp != "") && (phoneTmp != "") && (emailTmp != "")) ? GRSS::registerPage3() : _missingText->setHidden(false);*/
+		GRSS::registerPage3();
 	});
 }
 
