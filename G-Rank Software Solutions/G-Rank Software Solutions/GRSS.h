@@ -55,10 +55,12 @@ private:
 	void registerPage();
 	void registerPage2();
 	void registerPage3();
-	void customerMenu();
-	void specialistMenu();
-	void createRequestPage();
 	bool userAvailable(Wt::WString);
+
+	void userMenu();
+	void viewRequests();
+	void createRequestPage();
+	void viewUserDetails();
 
 public:
 	GRSS(const Wt::WEnvironment &env);

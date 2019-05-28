@@ -91,27 +91,28 @@ void GRSS::title()
 	_pageContent = _contentLayout->addWidget(make_unique<Wt::WContainerWidget>(), 0, Wt::AlignmentFlag::Center);
 }
 
-void GRSS::specialistMenu()
+void GRSS::viewRequests()
 {
 	_pageContent->clear();
-	Wt::WVBoxLayout *_menuLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
-	// view current requests in area
-	Wt::WPushButton *_currentRequestsButton = _menuLayout->addWidget(make_unique<Wt::WPushButton>("Current Requests"));
-	// connect to view requests page
-
-	// view/manage user details ?should reviews be a sub menu within here?
-	Wt::WPushButton *_userDetailsButton = _menuLayout->addWidget(make_unique<Wt::WPushButton>("User Details"));
-	// connect to user details page
-	
-	// view receipts
-	Wt::WPushButton *_receiptsButton = _menuLayout->addWidget(make_unique<Wt::WPushButton>("Receipts"));
-	// connect to receipts page
-
-	// view reviews
-	Wt::WPushButton *_reviewsButtons = _menuLayout->addWidget(make_unique<Wt::WPushButton>("Reviews"));
+	Wt::WVBoxLayout *_pageLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
+	Wt::WPushButton *_backButton = _pageLayout->addWidget(make_unique<Wt::WPushButton>("Back"));
+	_backButton->clicked().connect([=] { GRSS::userMenu(); });
+	//while there are requests matching area
+	for (int i = 0; i < 8; i++) {
+		Wt::WContainerWidget *_requestContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WHBoxLayout *_requestHLayout = _requestContainer->setLayout(make_unique<Wt::WHBoxLayout>());
+		Wt::WContainerWidget *_requestInfoContainer = _requestHLayout->addWidget(make_unique<Wt::WContainerWidget>(), 1);
+		Wt::WVBoxLayout *_requestInfoLayout = _requestInfoContainer->setLayout(make_unique<Wt::WVBoxLayout>());
+		_requestInfoLayout->addWidget(make_unique<Wt::WText>("Address Information: St No.(if non-zero), St Name, PostCode"));
+		_requestInfoLayout->addWidget(make_unique<Wt::WText>("Incident Info: type"));
+		Wt::WTextArea *_requestDescription = _requestInfoLayout->addWidget(make_unique<Wt::WTextArea>("Incident Description"));
+		_requestDescription->setReadOnly(true);
+		Wt::WPushButton *_acceptRequestButton = _requestHLayout->addWidget(make_unique<Wt::WPushButton>("Accept"), 0, Wt::AlignmentFlag::Middle);
+		_acceptRequestButton->setHeight(75);
+	}
 }
 
-void GRSS::customerMenu()
+void GRSS::userMenu()
 {
 	// want to put current request somewhere in this menu, probably after the buttons, ONLY IF they have a current request
 	_pageContent->clear();
@@ -119,15 +120,33 @@ void GRSS::customerMenu()
 
 	// links to for now 3 options that the customer can do
 	// connect to create service request page
-	Wt::WPushButton *_createRequestButton = _menuLayout->addWidget(make_unique<Wt::WPushButton>("Create Servcie"));
-	// connect to service creation page
-	_createRequestButton->clicked().connect([=](const Wt::WMouseEvent &e)
+	if (userFlag == 1)
 	{
-		GRSS::createRequestPage();
-	});
-
+		Wt::WPushButton *_requestButton = _menuLayout->addWidget(make_unique<Wt::WPushButton>("Create Service Request"));
+		// connect to service creation page
+		_requestButton->clicked().connect([=]
+		{
+			// STRETCH: if has current request ? goes to request : goes to create request;
+			GRSS::createRequestPage();
+		});
+	}
+	else if (userFlag == 2)
+	{
+		// view current requests in area
+		Wt::WPushButton *_currentRequestsButton = _menuLayout->addWidget(make_unique<Wt::WPushButton>("Current Requests"));
+		// connect to view requests page
+		_currentRequestsButton->clicked().connect([=](const Wt::WMouseEvent &e)
+		{
+			GRSS::viewRequests();
+		});
+	}
+	
 	// connect to view manage details page
 	Wt::WPushButton *_viewDetailsButton = _menuLayout->addWidget(make_unique<Wt::WPushButton>("User Details"));
+	_viewDetailsButton->clicked().connect([=]
+	{
+		GRSS::viewUserDetails();
+	});
 
 	// connects to view reciepts
 	Wt::WPushButton *_viewReceiptsButton = _menuLayout->addWidget(make_unique<Wt::WPushButton>("Reciepts"));
@@ -138,9 +157,40 @@ void GRSS::customerMenu()
 	// logout ??
 }
 
+void GRSS::viewUserDetails()
+{
+	// shows all user details, has button to edit, editable fields
+	_pageContent->clear();
+	Wt::WVBoxLayout *_pageLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
+	Wt::WPushButton *_backButton = _pageLayout->addWidget(make_unique<Wt::WPushButton>("Back"));
+	_backButton->clicked().connect([=]
+	{
+		GRSS::userMenu();
+	});
+
+	// userFlag
+	// username
+	Wt::WText *_usernameText = _pageLayout->addWidget(make_unique<Wt::WText>("Username"));
+	// first name
+	Wt::WText *_fnameText = _pageLayout->addWidget(make_unique<Wt::WText>("First Name")); 
+	// last name
+	Wt::WText *_lnameText = _pageLayout->addWidget(make_unique<Wt::WText>("Last Name")); 
+	// licence number
+	Wt::WText *_licenceNumberText = _pageLayout->addWidget(make_unique<Wt::WText>("Licence Number")); 
+	// phone number
+	Wt::WText *_phoneNumberText = _pageLayout->addWidget(make_unique<Wt::WText>("Phone Number")); 
+	// email
+	Wt::WText *_emailText = _pageLayout->addWidget(make_unique<Wt::WText>("eMail")); 
+}
+
+// view transactions
+
+// view / make reviews
+
 void GRSS::createRequestPage()
 {
 	// STRETCH add map widget, and only if you can pass data to and get data from
+	// really want this to either create new request or if they've created a request, shows them that request and the specialists that have responded
 	_pageContent->clear();
 	_pageLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
 	/*
@@ -187,10 +237,10 @@ void GRSS::createRequestPage()
 	Wt::WHBoxLayout *_buttonsLayout = _pageLayout->addLayout(make_unique<Wt::WHBoxLayout>());
 	Wt::WPushButton *_cancelButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Cancel"));
 	// connect to customer menu
-	_cancelButton->clicked().connect([=](const Wt::WMouseEvent &e)
+	_cancelButton->clicked().connect([=]
 	{
 		// enum serviceStatus {requested, respondedTo, accepted, inProgress, complete, cancelled, investigation}
-		GRSS::customerMenu();
+		GRSS::userMenu();
 	});
 
 	Wt::WPushButton *_confirmButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Confirm"));
@@ -221,7 +271,7 @@ void GRSS::loginPage()
 		{
 			if (GRSS::validateUsersPassword(_usernameField->text(), _passwordField->text()))
 			{
-				(userFlag == 1) ? GRSS::customerMenu() : GRSS::specialistMenu();
+				GRSS::userMenu();
 			}
 			// else // emit error incorrect password
 		}
@@ -253,7 +303,7 @@ void GRSS::loginPage()
 		{
 			if (GRSS::validateUsersPassword(_usernameField->text(), _passwordField->text()))
 			{
-				(userFlag == 1) ? GRSS::customerMenu() : GRSS::specialistMenu();
+				GRSS::userMenu();
 			}
 			// else // emit error incorrect password
 		}
