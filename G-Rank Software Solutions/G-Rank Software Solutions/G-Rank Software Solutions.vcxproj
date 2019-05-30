@@ -134,7 +134,6 @@
     <ClInclude Include="ServiceRequest.h" />
     <ClInclude Include="Specialist.h" />
     <ClInclude Include="User.h" />
-    <ClInclude Include="UserSession.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Administrator.cpp" />
@@ -147,7 +146,6 @@
     <ClCompile Include="ServiceRequest.cpp" />
     <ClCompile Include="Specialist.cpp" />
     <ClCompile Include="User.cpp" />
-    <ClCompile Include="UserSession.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

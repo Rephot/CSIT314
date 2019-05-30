@@ -8,13 +8,12 @@ Specialist::Specialist() {
 
 }
 
-Specialist::Specialist(string uname, string pwd, string fname, string lname, time_t dob, string number, string area, int specID) 
+Specialist::Specialist(string uname, string pwd, string fname, string lname, string number, string area, int specID) 
 {
 	username = uname;
 	password = pwd;
 	fName = fname;
 	lName = lname;
-	DOB = dob;
 	phNumber = number;
 	operationalArea = area;
 	specialistID = specID;
