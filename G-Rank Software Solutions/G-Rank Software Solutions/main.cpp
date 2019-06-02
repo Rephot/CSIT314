@@ -84,7 +84,7 @@ Specialist* loadSpecialists() {
 			getline(inFile, operationalArea, ',');
 			getline(inFile, specialistID);
 
-			users[i] = Specialist(username, password, fName, lName, 0, phNumber, operationalArea, stoi(specialistID));
+			users[i] = Specialist(username, password, fName, lName, phNumber, operationalArea, stoi(specialistID));
 			i++;
 		}
 		inFile.close();

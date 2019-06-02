@@ -4,9 +4,12 @@
 //credit card details for subsription payments and optionally service transaction
 
 #include"User.h"
+
+#include <fstream>
+#include <iostream>
+#include <string>
+
 using namespace std;
-
-
 
 class Administrator : public User {
 public:

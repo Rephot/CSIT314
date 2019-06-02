@@ -61,6 +61,9 @@ private:
 	void viewRequests();
 	void createRequestPage();
 	void viewUserDetails();
+	void editUserDetails();
+	void viewTransactions();
+	void viewReviews();
 
 public:
 	GRSS(const Wt::WEnvironment &env);

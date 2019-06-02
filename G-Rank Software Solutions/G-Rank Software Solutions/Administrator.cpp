@@ -1,10 +1,4 @@
-//administrator inherits user
-
 #include"Administrator.h"
-#include <fstream>
-#include <iostream>
-#include <string>
-
 
 Administrator::Administrator() {
 

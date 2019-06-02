@@ -28,7 +28,7 @@ using namespace std;
 class Specialist : public User{
 public:
 	Specialist();
-	Specialist(string, string, string, string, time_t, string, string, int);
+	Specialist(string, string, string, string, string, string, int);
 	void viewRequests();
 	void selectRequest(int);
 	void returnUser();
