@@ -52,7 +52,7 @@ void completeRequest(int requestID, Specialist logged_in_user) {
 	completedRequests.resize(total_specialists);
 	for (int i = 0; i < ServiceRequest::numRequests; i++) {
 		if (ServiceRequest::currentRequests[i].requestID == requestID) {
-			completedRequests[logged_in_user.specialistID].push_back(ServiceRequest::currentRequests[i]);
+			//completedRequests[logged_in_user.specialistID].push_back(ServiceRequest::currentRequests[i]);
 		}
 	}
 }

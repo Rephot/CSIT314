@@ -29,15 +29,19 @@ class Specialist : public User{
 public:
 	Specialist();
 	Specialist(string, string, string, string, string, string, int);
+	Specialist(string, string, string, string, string, string, string, string, string, string, string, string);
 	void viewRequests();
+	void save();
 	void selectRequest(int);
+	void addArea(int);
 	void returnUser();
 	static vector<vector<ServiceRequest>> available;
-	int specialistID;
+	string specialistID;
+	Specialist* load();
 
 private:
 	// bankAccountClass details;
-	string operationalArea;
-	// vector<int> operationalAreas;
+	string bsb, account_num, account_name, qualification_num;
+	vector<int> operationalAreas;
 };
 #endif

@@ -9,6 +9,8 @@ Customer::Customer(){
 	
 }
 
+int total_customers;
+
 Customer::Customer(int userID, string uname, string pwd, string fname, string lname, time_t dob, string number) {
 	username = uname;
 	password = pwd;
@@ -19,11 +21,77 @@ Customer::Customer(int userID, string uname, string pwd, string fname, string ln
 	custID = userID;
 }
 
+Customer::Customer(string custID, string uname, string pwd, string fname, string lname, string license_num, string phnumber, string email, string car_year, string car_make, string car_model, string car_shape, string car_colour, string car_engine_size, string sub_flag, string card_num, string security_code, string expiry) {
+	this->username = uname;
+	this->password = pwd;
+	this->fName = fname;
+	this->lName = lname;
+	this->phNumber = phnumber;
+	this->sub_flag = sub_flag;
+	this->card_num = card_num;
+	this->security_code = security_code;
+	this->expiry = expiry;
+	this->licenseNumber = license_num;
+	this->email = email;
+	this->car_year = car_year;
+	this->car_make = car_make;
+	this->car_model = car_model;
+	this->car_shape = car_shape;
+	this->car_colour = car_colour;
+	this->car_engine_size = car_engine_size;
+}
+
+Customer* Customer::load() {
+	Customer* customers;
+	total_customers = 0;
+	string line, custID, uname, pwd, fname, lname, license_num, phnumber, email, car_year, car_make, car_model, car_shape, car_colour, car_engine_size, sub_flag, card_num, security_code, expiry;
+	string userFile = "Customers.csv";
+
+	// Creating input filestream
+	ifstream file(userFile);
+	while (getline(file, line)) total_customers++;
+	customers = new Customer[total_customers + 1];
+
+	// get existing users from file
+	ifstream inFile;
+	inFile.open(userFile);
+	int i = 0;
+	if (inFile.is_open())
+	{
+		while (getline(inFile, custID, '`'))
+		{
+			getline(inFile, uname, '`');
+			getline(inFile, pwd, '`');
+			getline(inFile, fname, '`');
+			getline(inFile, lname, '`');
+			getline(inFile, license_num, '`');
+			getline(inFile, phnumber, '`');
+			getline(inFile, email, '`');
+			getline(inFile, car_year, '`');
+			getline(inFile, car_make, '`');
+			getline(inFile, car_model, '`');
+			getline(inFile, car_shape, '`');
+			getline(inFile, car_colour, '`');
+			getline(inFile, car_engine_size, '`');
+			getline(inFile, sub_flag, '`');
+			getline(inFile, card_num, '`');
+			getline(inFile, security_code, '`');
+			getline(inFile, expiry);
+
+			customers[i] = Customer(custID, uname, pwd, fname, lname, license_num, phnumber, email, car_year, car_make, car_model, car_shape, car_colour, car_engine_size, sub_flag, card_num, security_code, expiry);
+			i++;
+		}
+		inFile.close();
+	}
+
+	return customers;
+}
+
 void Customer::saveCustomer() {
 	ofstream outFile;
 	outFile.open("Customers.csv", ios_base::app);
 
-	outFile << to_string(custID) << "," << username << "," << password << "," << fName << "," << lName << "," << DOB << "," << phNumber << "\n";
+	outFile << custID << username << password << fName << lName << licenseNumber << phNumber << email << car_year << car_make << car_model << car_shape << car_colour << car_engine_size << sub_flag << card_num << security_code << expiry << "\n";
 	outFile.close();
 }
 
