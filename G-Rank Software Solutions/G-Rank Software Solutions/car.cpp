@@ -16,7 +16,8 @@ Car::Car(Customer cust, string licencePlate, int modelYear, string make, string 
 	this->colour = colour;
 }
 
-Car::Car(int cust_id, string licencePlate, int modelYear, string make, string model, string shape, double engineSize, string colour) {
+Car::Car(int cust_id, string licencePlate, int modelYear, string make, string model, string shape, double engineSize, string colour)
+ {
 	this->cust_id = cust_id;
 	this->licencePlate = licencePlate;
 	this->modelYear = modelYear;

@@ -230,6 +230,7 @@ void GRSS::createRequestPage()
 	_serviceType->addItem("Break Down");
 	_serviceType->addItem("Flat Battery");
 	_serviceType->addItem("Car Won't Start");
+	_serviceType->addItem("Out of Fuel");
 	_serviceType->addItem("Other, please describe");
 	Wt::WTextArea *_descriptionArea = _pageLayout->addWidget(make_unique<Wt::WTextArea>());
 	_descriptionArea->setPlaceholderText("Add a Description");

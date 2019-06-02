@@ -28,10 +28,10 @@
     <ClCompile Include="User.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="UserSession.cpp">
+    <ClCompile Include="GRSS.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GRSS.cpp">
+    <ClCompile Include="Transaction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -60,10 +60,10 @@
     <ClInclude Include="User.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="UserSession.h">
+    <ClInclude Include="GRSS.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GRSS.h">
+    <ClInclude Include="Transaction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
