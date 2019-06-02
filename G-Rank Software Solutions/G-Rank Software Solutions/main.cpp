@@ -231,7 +231,7 @@ void specialist_loginMenu(int choice) {
 	Specialist logged_in_user;
 	// enter login details, then validate, then show options once logged in.
 
-	users = loadSpecialists();
+	users = Specialist::load();
 
 	while (!valid) {
 		cout << "Enter your username: ";
@@ -263,7 +263,11 @@ void customer_loginMenu(int choice) {
 	Customer logged_in_user;
 	// enter login details, then validate, then show options once logged in.
 
-	users = loadCustomers();
+	users = Customer::load();
+
+	for (int i = 0; i < 10; i++){
+		cout << users[i].custID << " " << users[i].getUserName() << " " << users[i].getPassword() << endl;
+	}
 
 	while (!valid) {
 		cout << "Enter your username: ";
@@ -271,7 +275,7 @@ void customer_loginMenu(int choice) {
 		cout << "Enter your password: ";
 		cin >> passWord;
 		// this will be authentication
-		for (int i = 0; i < total_customers; i++) {
+		for (int i = 0; i < 10; i++) {
 			if (users[i].getUserName() == userName && users[i].getPassword() == passWord) {
 				cout << users[i].getUserName() << users[i].getPassword();
 				logged_in_user = users[i];
@@ -432,8 +436,8 @@ int main(int argc, char **argv) {
 	// main menu
 	//int respondTo;
 
-	//specialists = loadSpecialists();
-	//customers = loadCustomers();
+	specialists = Specialist::load();
+	customers = Customer::load();
 
 	//ServiceRequest req;
 	//req.loadRequests();
@@ -451,12 +455,12 @@ int main(int argc, char **argv) {
 	//showAvailable(1);
 	//
 	////first menu
-	//int choice = 99;
-	//firstMenu(choice);
-	//Sleep(10000);//pauses for 5 seconds
+	int choice = 99;
+	firstMenu(choice);
+	Sleep(100000);//pauses for 5 seconds
 
 	//return 0;
-	return Wt::WRun(argc, argv, [](const Wt::WEnvironment& env) {
+	/*return Wt::WRun(argc, argv, [](const Wt::WEnvironment& env) {
 		return make_unique<GRSS>(env);
-	});
+	});*/
 }

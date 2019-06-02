@@ -22,12 +22,12 @@ using namespace std;
 class Review {
 public:
 	Review();
-	Review(float, string, string, int, int, int);
+	Review(float, string, string, int, string, int);
 	float getRating();
 	string getDesc();
 	string custName();
 	int getRel_Req();
-	int getRel_Cust();
+	string getRel_Cust();
 	int getRel_Spec();
 	void saveReview(Review);
 	Review* loadReviews();
@@ -35,7 +35,8 @@ public:
 private:
 	float rating;
 	string description, customerName;
-	int relatedRequest, relatedSpecialist, relatedCustomer;
+	int relatedRequest, relatedSpecialist;
+	string relatedCustomer;
 };
 
 #endif

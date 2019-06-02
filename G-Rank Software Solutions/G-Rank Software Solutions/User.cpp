@@ -64,6 +64,5 @@ void User::returnUser() {
 	cout << "Username: " << username << endl;
 	cout << "Password: " << password << endl;
 	cout << "Full Name: " << fName << " " << lName << endl;
-	cout << "Date of Birth: " << DOB << endl;
 	cout << "Phone Number: " << phNumber << endl;
 }

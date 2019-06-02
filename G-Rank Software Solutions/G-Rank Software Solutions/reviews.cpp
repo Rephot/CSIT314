@@ -8,7 +8,7 @@ Review::Review(){
 
 }
 
-Review::Review(float rating, string description, string customerName, int relatedRequest, int relatedCustomer, int relatedSpecialist) {
+Review::Review(float rating, string description, string customerName, int relatedRequest, string relatedCustomer, int relatedSpecialist) {
 	this->rating = rating;
 	this->description = description;
 	this->customerName = customerName;
@@ -33,7 +33,7 @@ int Review::getRel_Req() {
 	return relatedRequest;
 }
 
-int Review::getRel_Cust() {
+string Review::getRel_Cust() {
 	return relatedCustomer;
 }
 
@@ -75,7 +75,7 @@ Review* Review::loadReviews() {
 			getline(inFile, relatedCustomer, ',');
 			getline(inFile, relatedSpecialist);
 
-			reviews[i] = Review(stof(rating), description, customerName, stoi(relatedRequest), stoi(relatedCustomer), stoi(relatedSpecialist));
+			reviews[i] = Review(stof(rating), description, customerName, stoi(relatedRequest), relatedCustomer, stoi(relatedSpecialist));
 			i++;
 		}
 		inFile.close();

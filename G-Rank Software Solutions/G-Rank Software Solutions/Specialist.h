@@ -37,7 +37,7 @@ public:
 	void returnUser();
 	static vector<vector<ServiceRequest>> available;
 	string specialistID;
-	Specialist* load();
+	static Specialist* load();
 
 private:
 	// bankAccountClass details;

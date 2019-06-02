@@ -6,7 +6,7 @@ using namespace std;
 Car::Car(){}
 
 Car::Car(Customer cust, string licencePlate, int modelYear, string make, string model, string shape, double engineSize, string colour) {
-	this->cust_id = cust.custID;
+	//this->cust_id = cust.custID;
 	this->licencePlate = licencePlate;
 	this->modelYear = modelYear;
 	this->make = make;

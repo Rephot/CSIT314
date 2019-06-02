@@ -6,7 +6,7 @@
 using namespace std;
 
 vector <vector<ServiceRequest>> Specialist::available;
-int total_specialists;
+int total_specialists1;
 
 Specialist::Specialist() {
 
@@ -48,14 +48,14 @@ void Specialist::viewRequests() {
 
 Specialist* Specialist::load() {
 	Specialist* specialists;
-	total_specialists = 0;
+	total_specialists1 = 0;
 	string line,  specID,  uname,  pwd,  fname,  lname,  license_num,  phnumber,  email,  qualification_num,  bsb,  acc_num,  acc_name, areas;
 	string userFile = "Specilialists.csv";
 
 	// Creating input filestream
 	ifstream file(userFile);
-	while (getline(file, line)) total_specialists++;
-	specialists = new Specialist[total_specialists + 1];
+	while (getline(file, line)) total_specialists1++;
+	specialists = new Specialist[total_specialists1 + 1];
 
 	// get existing users from file
 	ifstream inFile;
@@ -82,7 +82,7 @@ Specialist* Specialist::load() {
 			std::stringstream ss(areas);
 			std::string token;
 			while (std::getline(ss, token, '|')) {
-				operationalAreas.push_back(stoi(token));
+				specialists[i].operationalAreas.push_back(stoi(token));
 			}
 			i++;
 		}

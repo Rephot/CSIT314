@@ -9,7 +9,7 @@ Customer::Customer(){
 	
 }
 
-int total_customers;
+int total_customers1;
 
 Customer::Customer(int userID, string uname, string pwd, string fname, string lname, time_t dob, string number) {
 	username = uname;
@@ -22,6 +22,7 @@ Customer::Customer(int userID, string uname, string pwd, string fname, string ln
 }
 
 Customer::Customer(string custID, string uname, string pwd, string fname, string lname, string license_num, string phnumber, string email, string car_year, string car_make, string car_model, string car_shape, string car_colour, string car_engine_size, string sub_flag, string card_num, string security_code, string expiry) {
+	this->custID = custID;
 	this->username = uname;
 	this->password = pwd;
 	this->fName = fname;
@@ -43,14 +44,14 @@ Customer::Customer(string custID, string uname, string pwd, string fname, string
 
 Customer* Customer::load() {
 	Customer* customers;
-	total_customers = 0;
+	total_customers1 = 0;
 	string line, custID, uname, pwd, fname, lname, license_num, phnumber, email, car_year, car_make, car_model, car_shape, car_colour, car_engine_size, sub_flag, card_num, security_code, expiry;
 	string userFile = "Customers.csv";
 
 	// Creating input filestream
 	ifstream file(userFile);
-	while (getline(file, line)) total_customers++;
-	customers = new Customer[total_customers + 1];
+	while (getline(file, line)) total_customers1++;
+	customers = new Customer[total_customers1 + 1];
 
 	// get existing users from file
 	ifstream inFile;
