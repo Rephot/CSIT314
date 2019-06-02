@@ -3,6 +3,10 @@
 
 //credit card details for subsription payments and optionally service transaction
 
+#include <fstream>
+#include <iostream>
+#include <vector>
+
 #include "User.h"
 
 using namespace std;
@@ -13,6 +17,7 @@ public:
 	Customer(int, string, string, string, string, time_t, string);
 	Customer(string, string, string, string, string, string, string, string, string, string, string, string, string, string, string, string, string, string);
 	static Customer* load();
+	static vector<Customer> GRSSload();
 	void returnUser();
 	void saveCustomer();
 	string custID;//C: type can be changed later

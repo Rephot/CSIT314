@@ -57,78 +57,6 @@ void completeRequest(int requestID, Specialist logged_in_user) {
 	}
 }
 
-/*C: Returns array of specialist users from file Specialists.csv*/
-Specialist* loadSpecialists() {
-	Specialist* users;
-	total_specialists = 0;
-	string line, username, password, fName, lName, phNumber, operationalArea, specialistID;
-	string userFile = "Specialists.csv";
-
-	// Creating input filestream
-	ifstream file(userFile);
-	while (getline(file, line)) total_specialists++;
-	users = new Specialist[total_specialists + 1];
-
-	// get existing users from file
-	ifstream inFile;
-	inFile.open(userFile);
-	int i = 0;
-	if (inFile.is_open())
-	{
-		while (getline(inFile, username, ','))
-		{
-			getline(inFile, password, ',');
-			getline(inFile, fName, ',');
-			getline(inFile, lName, ',');
-			getline(inFile, phNumber, ',');
-			getline(inFile, operationalArea, ',');
-			getline(inFile, specialistID);
-
-			users[i] = Specialist(username, password, fName, lName, phNumber, operationalArea, stoi(specialistID));
-			i++;
-		}
-		inFile.close();
-	}
-
-	return users;
-}
-
-/*C: Returns array of customer users from file Customers.csv*/
-Customer* loadCustomers() {
-	Customer* users;
-	total_customers = 0;
-	string line, username, password, fName, lName, phNumber, custID, DOB;
-	string userFile = "Customers.csv";
-
-	/* Creating input filestream */
-	ifstream file(userFile);
-	while (getline(file, line)) total_customers++;
-	users = new Customer[total_customers + 1];
-
-	// get existing users from file
-	ifstream inFile;
-	inFile.open(userFile);
-	int i = 0;
-	if (inFile.is_open())
-	{
-		while (getline(inFile, custID, ','))
-		{
-			getline(inFile, username, ',');
-			getline(inFile, password, ',');
-			getline(inFile, fName, ',');
-			getline(inFile, lName, ',');
-			getline(inFile, DOB, ',');
-			getline(inFile, phNumber);
-
-			users[i] = Customer(stoi(custID), username, password, fName, lName, stoi(DOB), phNumber);
-			i++;
-		}
-		inFile.close();
-	}
-
-	return users;
-}
-
 void receiptsMenu(int choice) {
 	// view payment history
 	// view request history
@@ -389,36 +317,6 @@ void firstMenu(int choice) {
 }
 
 int main(int argc, char **argv) {
-	/*initiation
-	User* users;
-	int count = 0;
-	string line, username, password, fName, lName, phNumber;
-	string userFile = "Users.csv";
-
-	// Creating input filestream
-	ifstream file("Users.csv");
-	while (getline(file, line)) count++;
-	users = new User[count + 1];
-
-	// get existing users from file
-	ifstream inFile;
-	inFile.open(userFile);
-	int i = 0;
-	if (inFile.is_open())
-	{
-		while (getline(inFile, username, ','))
-		{
-			getline(inFile, password, ',');
-			getline(inFile, fName, ',');
-			getline(inFile, lName, ',');
-			getline(inFile, phNumber);
-
-			users[i] = User(username, password, fName, lName, 0, phNumber);
-			i++;
-		}
-		inFile.close();
-	}*/
-
 	// test user file contents
 	//User user1(username, password, fName, lName, 0, phNumber);// creates user
 	//system("CLS");//clears console
@@ -436,9 +334,6 @@ int main(int argc, char **argv) {
 	// main menu
 	//int respondTo;
 
-	specialists = Specialist::load();
-	customers = Customer::load();
-
 	//ServiceRequest req;
 	//req.loadRequests();
 	//Sleep(10000);//pauses for 5 seconds
@@ -453,14 +348,17 @@ int main(int argc, char **argv) {
 	//selectRequest(1, specialists[0]);
 
 	//showAvailable(1);
-	//
+	
+	//specialists = Specialist::load();
+	//customers = Customer::load();
+
 	////first menu
-	int choice = 99;
-	firstMenu(choice);
-	Sleep(100000);//pauses for 5 seconds
+	//int choice = 99;
+	//firstMenu(choice);
+	//Sleep(100000);//pauses for 5 seconds
 
 	//return 0;
-	/*return Wt::WRun(argc, argv, [](const Wt::WEnvironment& env) {
+	return Wt::WRun(argc, argv, [](const Wt::WEnvironment& env) {
 		return make_unique<GRSS>(env);
-	});*/
+	});
 }

@@ -33,15 +33,15 @@ public:
 	void viewRequests();
 	void save();
 	void selectRequest(int);
-	void addArea(int);
+	void addArea(string);
 	void returnUser();
 	static vector<vector<ServiceRequest>> available;
-	string specialistID;
 	static Specialist* load();
+	static vector<Specialist> GRSSload();
+	vector<string> operationalAreas;
+	string specialistID;
 
 private:
-	// bankAccountClass details;
-	string bsb, account_num, account_name, qualification_num;
-	vector<int> operationalAreas;
+	string bsb, account_num, account_name, qualification_num, licenseNumber, emailAddress;
 };
 #endif

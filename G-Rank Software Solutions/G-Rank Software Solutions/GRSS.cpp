@@ -70,55 +70,16 @@ void GRSS::title()
 	_pageContent = _contentLayout->addWidget(make_unique<Wt::WContainerWidget>(), 0, Wt::AlignmentFlag::Center);
 }
 
-void GRSS::loadUsers()
+void GRSS::loadInfo()
 {
-	string line, username, password, fName, lName, phNumber, custID, DOB;
-	string userFile = "Customers.csv";
-
-	// get existing users from file
-	ifstream inFile;
-	inFile.open(userFile);
-	if (inFile.is_open())
-	{
-		while (getline(inFile, custID, ','))
-		{
-			getline(inFile, username, ',');
-			getline(inFile, password, ',');
-			getline(inFile, fName, ',');
-			getline(inFile, lName, ',');
-			getline(inFile, DOB, ',');
-			getline(inFile, phNumber);
-			
-			existingCustomers.push_back(Customer(stoi(custID), username, password, fName, lName, stoi(DOB), phNumber));
-		}
-		inFile.close();
-	}
-	string operationalArea, specialistID;
-	userFile = "Specialists.csv";
-
-	// get existing users from file
-	inFile.open(userFile);
-	if (inFile.is_open())
-	{
-		while (getline(inFile, username, ','))
-		{
-			getline(inFile, password, ',');
-			getline(inFile, fName, ',');
-			getline(inFile, lName, ',');
-			getline(inFile, phNumber, ',');
-			getline(inFile, operationalArea, ',');
-			getline(inFile, specialistID);
-
-
-			existingSpecialists.push_back(Specialist(username, password, fName, lName, phNumber, operationalArea, stoi(specialistID)));
-		}
-		inFile.close();
-	}
+	existingCustomers = Customer::GRSSload();
+	existingSpecialists = Specialist::GRSSload();
+	previousTransactions = Transaction::GRSSload();
 }
 
 void GRSS::loginPage()
 {
-	GRSS::loadUsers();
+	GRSS::loadInfo();
 	_pageContent->clear();
 	//create username text and input
 	_pageLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
@@ -135,8 +96,10 @@ void GRSS::loginPage()
 	_passwordField->setEchoMode(Wt::EchoMode::Password);
 	_passwordField->enterPressed().connect([=]
 	{
+		cout << "\n" << _usernameField->text() << "\n";
 		if (GRSS::validateLogin(_usernameField->text()))
 		{
+			cout << "\n" << _passwordField->text() << "\n";
 			if (GRSS::validateUsersPassword(_usernameField->text(), _passwordField->text()))
 			{
 				GRSS::userMenu();
@@ -154,21 +117,18 @@ void GRSS::loginPage()
 	_buttonsContainer->setId("buttons");
 	Wt::WHBoxLayout *_buttonsLayout = _buttonsContainer->setLayout(make_unique<Wt::WHBoxLayout>());
 	Wt::WPushButton *_signUpButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Sign Up"));
-	//_signUpButton->setLink(Wt::WLink(Wt::LinkType::InternalPath, "/register"));
-	//Wt::WApplication::instance()->internalPathChanged().connect([=] {
-	//	//handlePathChange();
-	//});
 	_signUpButton->clicked().connect([=](const Wt::WMouseEvent &e)
 	{
 		GRSS::registerPage();
 	});
 
 	Wt::WPushButton *_signInButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Sign In"));
-	//_signInButton->setLink(Wt::WLink(Wt::LinkType::InternalPath, "/service"));
-	_signInButton->clicked().connect([=](const Wt::WMouseEvent &e)
+	_signInButton->clicked().connect([=]
 	{
+		cout << "\n" << _usernameField->text() << "\n";
 		if (GRSS::validateLogin(_usernameField->text()))
 		{
+			cout << "\n" << _passwordField->text() << "\n";
 			if (GRSS::validateUsersPassword(_usernameField->text(), _passwordField->text()))
 			{
 				GRSS::userMenu();
@@ -186,7 +146,7 @@ bool GRSS::validateLogin(Wt::WString username)
 {
 	vector<Customer>::iterator cItr = existingCustomers.begin();
 	vector<Specialist>::iterator sItr = existingSpecialists.begin();
-	while ((cItr != existingCustomers.end()) && (sItr != existingSpecialists.end()))
+	while (cItr != existingCustomers.end())
 	{
 		Wt::WString user = cItr->getUserName();
 		if (user == username)
@@ -195,6 +155,10 @@ bool GRSS::validateLogin(Wt::WString username)
 			return true;
 		}
 		else if (cItr != existingCustomers.end()) cItr++;
+	}
+	while (sItr != existingSpecialists.end())
+	{
+		Wt::WString user = sItr->getUserName();
 		user = sItr->getUserName();
 		if (user == username)
 		{

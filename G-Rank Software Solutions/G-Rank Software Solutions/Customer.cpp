@@ -1,8 +1,6 @@
 //customer inherits user
 
 #include"Customer.h"
-#include <fstream>
-#include <iostream>
 
 
 Customer::Customer(){
@@ -88,11 +86,65 @@ Customer* Customer::load() {
 	return customers;
 }
 
+vector<Customer> Customer::GRSSload() {
+	vector<Customer> customers;
+	string line, custID, uname, pwd, fname, lname, license_num, phnumber, email, car_year, car_make, car_model, car_shape, car_colour, car_engine_size, sub_flag, card_num, security_code, expiry;
+
+	// get existing users from file
+	ifstream inFile;
+	inFile.open("Customers.csv");
+	if (inFile.is_open())
+	{
+		while (getline(inFile, custID, '`'))
+		{
+			getline(inFile, uname, '`');
+			getline(inFile, pwd, '`');
+			getline(inFile, fname, '`');
+			getline(inFile, lname, '`');
+			getline(inFile, license_num, '`');
+			getline(inFile, phnumber, '`');
+			getline(inFile, email, '`');
+			getline(inFile, car_year, '`');
+			getline(inFile, car_make, '`');
+			getline(inFile, car_model, '`');
+			getline(inFile, car_shape, '`');
+			getline(inFile, car_colour, '`');
+			getline(inFile, car_engine_size, '`');
+			getline(inFile, sub_flag, '`');
+			getline(inFile, card_num, '`');
+			getline(inFile, security_code, '`');
+			getline(inFile, expiry);
+
+			customers.push_back(Customer(custID, uname, pwd, fname, lname, license_num, phnumber, email, car_year, car_make, car_model, car_shape, car_colour, car_engine_size, sub_flag, card_num, security_code, expiry));
+		}
+		inFile.close();
+	}
+
+	return customers;
+}
+
 void Customer::saveCustomer() {
 	ofstream outFile;
 	outFile.open("Customers.csv", ios_base::app);
 
-	outFile << custID << username << password << fName << lName << licenseNumber << phNumber << email << car_year << car_make << car_model << car_shape << car_colour << car_engine_size << sub_flag << card_num << security_code << expiry << "\n";
+	outFile << custID << "`"
+		<< username << "`"
+		<< password << "`"
+		<< fName << "`"
+		<< lName << "`"
+		<< licenseNumber << "`"
+		<< phNumber << "`"
+		<< email << "`"
+		<< car_year << "`"
+		<< car_make << "`"
+		<< car_model << "`"
+		<< car_shape << "`"
+		<< car_colour << "`"
+		<< car_engine_size << "`"
+		<< sub_flag << "`"
+		<< card_num << "`"
+		<< security_code << "`"
+		<< expiry << "\n";
 	outFile.close();
 }
 

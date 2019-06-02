@@ -24,6 +24,7 @@
 
 #include "Specialist.h"
 #include "Customer.h"
+#include "Transaction.h"
 
 using namespace std;
 
@@ -41,8 +42,9 @@ private:
 	bool validateLogin(Wt::WString); // passed entered username to check if user exists
 	// ↑this is used to confirm, ↓this is then used to validate
 	bool validateUsersPassword(Wt::WString, Wt::WString); // passed enterd username and password to check if the password is correct for that user
-	vector<Customer> existingCustomers = {};
-	vector<Specialist> existingSpecialists = {};
+	vector<Customer> existingCustomers;
+	vector<Specialist> existingSpecialists;
+	vector<Transaction> previousTransactions;
 	int userFlag;
 	// may replace with logged_in_user???
 	Customer logged_in_customer;
@@ -50,7 +52,7 @@ private:
 	void initCSS();
 	void initContentLayout();
 	void title();
-	void loadUsers();
+	void loadInfo();
 	void loginPage();
 	void registerPage();
 	void registerPage2();
