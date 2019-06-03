@@ -17,6 +17,12 @@ Review::Review(float rating, string description, string customerName, int relate
 	this->relatedSpecialist = relatedSpecialist;
 }
 
+Review::Review(string rateJob, string revDesc)
+{
+	jobRating = rateJob;
+	reviewDesc = revDesc;
+}
+
 float Review::getRating() {
 	return rating;
 }
@@ -40,7 +46,6 @@ string Review::getRel_Cust() {
 int Review::getRel_Spec() {
 	return relatedSpecialist;
 }
-
 
 void Review::saveReview(Review reviews) {
 	ofstream outFile;
@@ -105,4 +110,14 @@ void Review::createReview(Customer logged_in_user) {
 	Sleep(5000);
 	rev = Review(rating, reviewDescription, logged_in_user.getFullName(), requestID, logged_in_user.custID, specialistID);
 	saveReview(rev);
+}
+
+string Review::getJobRating()
+{
+	return jobRating;
+}
+
+string Review::getReviewDesc()
+{
+	return reviewDesc;
 }

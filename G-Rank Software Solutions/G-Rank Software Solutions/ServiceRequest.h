@@ -15,14 +15,10 @@ using namespace std;
 class ServiceRequest {
 public:
 	ServiceRequest();
+	ServiceRequest(string, string, string, string, string);
 	void saveRequests();
 	void createServiceRequest(Customer);
 	void broadcastServiceRequest(ServiceRequest);
-	int displayProfessionalsWhoAccepted(int);
-	void sendAffirmitiveToProfessional();
-	void specialisAcceptServiceRequest();
-	void professionalAcknowledgment();
-	void clientChoosesProfessional();
 	void loadRequests();
 	string toString(), incidentLocation;
 	static string toString(ServiceRequest);
@@ -30,8 +26,14 @@ public:
 	static ServiceRequest currentRequests[50];
 	static int numCurrentRequests, numRequests;
 	int requestID;
+	string getStName();
+	string getPostCode();
+	string getStNum();
+	string getServiceType();
+	string getIncDesc();
 private:
 	string clientName, sType, serviceRequestedAt;
+	string stName, postCode, stNum, serviceType, incDesc;
 	
 };
 #endif

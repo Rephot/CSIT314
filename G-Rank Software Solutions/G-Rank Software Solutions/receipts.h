@@ -31,9 +31,19 @@ class Receipt {
 public:
 	Receipt();
 	Receipt(int, float, bool, time_t, int, int, int);
+	Receipt(string, string, string, string, string, string, string);
 	void generateReceipt();
 	static int numReceipts;
+	string getBSB();
+	string getAccNum();
+	string getAccName();
+	string getCardNum();
+	string getCardExpiry();
+	string getCallOut();
+	string getServiceCost();
+
 private:
+	string BSB, accNum, accName, cardNum, cardExpiry, callOut, serviceCost;
 	int receiptID;
 	float amount;
 	bool subscribed;

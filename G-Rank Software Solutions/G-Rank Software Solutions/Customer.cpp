@@ -2,12 +2,11 @@
 
 #include"Customer.h"
 
+int total_customers1;
 
 Customer::Customer(){
 	
 }
-
-int total_customers1;
 
 Customer::Customer(int userID, string uname, string pwd, string fname, string lname, time_t dob, string number) {
 	username = uname;
@@ -151,4 +150,12 @@ void Customer::saveCustomer() {
 void Customer::returnUser() {
 	cout << "custID: " << custID << endl;
 	User::returnUser();
+}
+
+string Customer::returnSubFlag() {
+	return sub_flag;
+}
+
+string Customer::getUserName() {
+	return username;
 }

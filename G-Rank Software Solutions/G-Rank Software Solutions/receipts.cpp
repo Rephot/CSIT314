@@ -40,6 +40,17 @@ Receipt::Receipt(int recID, float amt, bool subbed, time_t generated, int custom
 	requestID = reqID;
 }
 
+Receipt::Receipt(string specBSB, string specAccNum, string specAccName, string custCardNum, string custCardExpiry, string callFee, string amountDue)
+{
+	BSB = specBSB;
+	accNum = specAccNum;
+	accName = specAccName;
+	cardNum = custCardNum;
+	cardExpiry = custCardExpiry;
+	callOut = callFee;
+	serviceCost = amountDue;
+}
+
 void Receipt::generateReceipt(/*passed specialist, serviceRequest, and customer related to transaction*/) {
 	/*
 	format
@@ -61,4 +72,39 @@ void Receipt::generateReceipt(/*passed specialist, serviceRequest, and customer 
 	int specID = 20; // access specialist.specialistID;
 	int reqID = 34; // access serviceRequest.requestID;
 
+}
+
+string Receipt::getBSB()
+{
+	return BSB;
+}
+
+string Receipt::getAccNum()
+{
+	return accNum;
+}
+
+string Receipt::getAccName()
+{
+	return accName;
+}
+
+string Receipt::getCardNum()
+{
+	return cardNum;
+}
+
+string Receipt::getCardExpiry()
+{
+	return cardExpiry;
+}
+
+string Receipt::getCallOut()
+{
+	return callOut;
+}
+
+string Receipt::getServiceCost()
+{
+	return serviceCost;
 }

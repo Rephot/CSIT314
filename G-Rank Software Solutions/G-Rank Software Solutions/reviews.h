@@ -23,6 +23,7 @@ class Review {
 public:
 	Review();
 	Review(float, string, string, int, string, int);
+	Review(string, string);
 	float getRating();
 	string getDesc();
 	string custName();
@@ -32,11 +33,15 @@ public:
 	void saveReview(Review);
 	Review* loadReviews();
 	void createReview(Customer); // types are temporary will replace with more suitable
+	string getJobRating();
+	string getReviewDesc();
+
 private:
 	float rating;
 	string description, customerName;
 	int relatedRequest, relatedSpecialist;
 	string relatedCustomer;
+	string jobRating, reviewDesc;
 };
 
 #endif

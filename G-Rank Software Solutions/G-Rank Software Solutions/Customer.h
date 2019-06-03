@@ -21,8 +21,9 @@ public:
 	void returnUser();
 	void saveCustomer();
 	string custID;//C: type can be changed later
+	string returnSubFlag();
+	string getUserName();
 private:
-	// BankCard cardDetails;
 	string sub_flag, card_num, security_code, expiry, car_year, car_make, car_model, car_shape, car_colour, car_engine_size;
 };
 

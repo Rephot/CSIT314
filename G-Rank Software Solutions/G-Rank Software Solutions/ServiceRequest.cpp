@@ -7,6 +7,24 @@ int ServiceRequest::numCurrentRequests = 0;
 ServiceRequest ServiceRequest::currentRequests[50];
 int ServiceRequest::numRequests = 0;
 
+ServiceRequest::ServiceRequest()
+{
+	clientName = "";
+	incidentLocation = "";
+	sType = "";
+	serviceRequestedAt = "";
+	requestID = 0;
+}
+
+ServiceRequest::ServiceRequest(string nameSt, string codePost, string numSt, string typeService, string descInc)
+{
+	stName = nameSt;
+	postCode = codePost;
+	stNum = numSt;
+	serviceType = typeService;
+	incDesc = descInc;
+}
+
 void ServiceRequest::saveRequests()
 {
 	ofstream outFile;
@@ -17,15 +35,6 @@ void ServiceRequest::saveRequests()
 	}
 	//C: serviceRequestedAt has a /n at the end of it for some reason and that causes saving it to use 2 lines so ive substitued 0 in its place for now
 	outFile.close();
-}
-
-ServiceRequest::ServiceRequest()
-{
-	clientName = "";
-	incidentLocation = "";
-	sType = "";
-	serviceRequestedAt = "";
-	requestID = 0;
 }
 
 void ServiceRequest::loadRequests() {
@@ -92,37 +101,6 @@ void ServiceRequest::createServiceRequest(Customer user) {
 	broadcastServiceRequest(newRequest);
 }
 
-// a get function that returns the array of professionals that accepted
-int ServiceRequest::displayProfessionalsWhoAccepted(int requestID) {
-	// lets client see who is available to help
-	// displays formatted data from an array
-	
-	return 0;
-}
-
-void ServiceRequest::sendAffirmitiveToProfessional(){
-	// when client accepts a professional, they get alerted that they were picked
-}
-
-// these may be better placed in Specialist 
-
-void ServiceRequest::specialisAcceptServiceRequest(){
-	// I think this should be called by the specialist and it adds their info to the array of accepted specialists
-}
-
-void ServiceRequest::professionalAcknowledgment(){
-	// professional acknowledges
-	// and this should be called by the specialist which calls the 
-
-
-}
-
-// this may be better placed in Customer
-
-void ServiceRequest::clientChoosesProfessional(){
-	// client chooses from the array of accepted specialists
-}
-
 string ServiceRequest::toString() {
 	stringstream request;
 	request << clientName << " has requested assistance for a " << sType << " service, at " << incidentLocation << ", at the time, " << serviceRequestedAt;
@@ -135,4 +113,29 @@ string ServiceRequest::toString(ServiceRequest requestString) {
 	request << requestString.requestID << " " << requestString.clientName << " has requested assistance for a " << requestString.sType << " service, at " << requestString.incidentLocation << ", at the time, " << requestString.serviceRequestedAt;
 	string requested = request.str();
 	return requested;
+}
+
+string ServiceRequest::getStName()
+{
+	return stName;
+}
+
+string ServiceRequest::getPostCode()
+{
+	return postCode;
+}
+
+string ServiceRequest::getStNum()
+{
+	return stNum;
+}
+
+string ServiceRequest::getServiceType()
+{
+	return serviceType;
+}
+
+string ServiceRequest::getIncDesc()
+{
+	return incDesc;
 }

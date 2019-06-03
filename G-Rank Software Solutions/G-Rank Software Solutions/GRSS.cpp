@@ -74,7 +74,7 @@ void GRSS::loadInfo()
 {
 	existingCustomers = Customer::GRSSload();
 	existingSpecialists = Specialist::GRSSload();
-	previousTransactions = Transaction::GRSSload();
+	previousTransactions = Transaction::GRSSload(existingCustomers);
 }
 
 void GRSS::loginPage()
@@ -474,19 +474,16 @@ void GRSS::registerPage3()
 // register page 4 payment details
 
 bool GRSS::userAvailable(Wt::WString username) {
-	Wt::WString user;
 	vector<Customer>::iterator cItr = existingCustomers.begin();
 	while (cItr != existingCustomers.end())
 	{
-		user = cItr->getUserName();
-		if (user == username) return false;
+		if (cItr->getUserName() == username) return false;
 		else if (cItr != existingCustomers.end()) cItr++;
 	}
 	vector<Specialist>::iterator sItr = existingSpecialists.begin();
 	while (sItr != existingSpecialists.end())
 	{
-		user = sItr->getUserName();
-		if (user == username) return false;
+		if (sItr->getUserName() == username) return false;
 		else if (sItr != existingSpecialists.end()) sItr++;
 	}
 	return true;
