@@ -705,7 +705,7 @@ void GRSS::registerPage4()
 		// this should point to loginPage() such that the user can log in with the newly created user
 		// customer creation
 		if (userFlag == 1) {
-			Customer joined = Customer(("c" + to_string(existingCustomers.size() + 1)), userTmp, pwTmp, fnameTmp, lnameTmp, licNumTmp, phoneTmp, emailTmp, modelYearTmp, makeTmp, modelTmp, shapeTmp, colourTmp, engineSizeTmp, subFlagTmp, cardNumTmp, cardSecTmp, cardExpTmp);
+			Customer joined = Customer(("c" + to_string(existingCustomers.size() + 1)), userTmp, pwTmp, fnameTmp, lnameTmp, licNumTmp, phoneTmp, emailTmp, licPlateTmp, modelYearTmp, makeTmp, modelTmp, shapeTmp, colourTmp, engineSizeTmp, subFlagTmp, cardNumTmp, cardSecTmp, cardExpTmp);
 			joined.saveCustomer();
 			existingCustomers.push_back(joined);
 		}
@@ -887,18 +887,92 @@ void GRSS::viewUserDetails()
 	});
 
 	// userFlag
-	// username
-	Wt::WText *_usernameText = _pageLayout->addWidget(make_unique<Wt::WText>("Username"));
-	// first name
-	Wt::WText *_fnameText = _pageLayout->addWidget(make_unique<Wt::WText>("First Name")); 
-	// last name
-	Wt::WText *_lnameText = _pageLayout->addWidget(make_unique<Wt::WText>("Last Name")); 
-	// licence number
-	Wt::WText *_licenceNumberText = _pageLayout->addWidget(make_unique<Wt::WText>("Licence Number")); 
-	// phone number
-	Wt::WText *_phoneNumberText = _pageLayout->addWidget(make_unique<Wt::WText>("Phone Number")); 
-	// email
-	Wt::WText *_emailText = _pageLayout->addWidget(make_unique<Wt::WText>("eMail")); 
+	if (userFlag == 1)
+	{
+		_pageLayout->addWidget(make_unique<Wt::WText>("User Details:"))->setId("buttons");
+		Wt::WContainerWidget *_userContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WContainerWidget *_usernameContainer = _userContainer->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WHBoxLayout *_usernameLayout = _usernameContainer->setLayout(make_unique<Wt::WHBoxLayout>());
+		_usernameLayout->addWidget(make_unique<Wt::WText>("Username:"), 1);
+		_usernameLayout->addWidget(make_unique<Wt::WText>(logged_in_customer.getUserName()));
+
+		_pageLayout->addWidget(make_unique<Wt::WText>("Personal Details:"))->setId("buttons");
+		Wt::WContainerWidget *_personalContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WContainerWidget *_firstContainer = _personalContainer->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WHBoxLayout *_firstLayout = _firstContainer->setLayout(make_unique<Wt::WHBoxLayout>());
+		_firstLayout->addWidget(make_unique<Wt::WText>("First Name:"), 1);
+		_firstLayout->addWidget(make_unique<Wt::WText>(logged_in_customer.getFirstName()));
+
+		Wt::WContainerWidget *_lastContainer = _personalContainer->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WHBoxLayout *_lastLayout = _lastContainer->setLayout(make_unique<Wt::WHBoxLayout>());
+		_lastLayout->addWidget(make_unique<Wt::WText>("Last Name:"), 1);
+		_lastLayout->addWidget(make_unique<Wt::WText>(logged_in_customer.getLastName()));
+
+		Wt::WContainerWidget *_phoneContainer = _personalContainer->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WHBoxLayout *_phoneLayout = _phoneContainer->setLayout(make_unique<Wt::WHBoxLayout>());
+		_phoneLayout->addWidget(make_unique<Wt::WText>("Phone Number:"), 1);
+		_phoneLayout->addWidget(make_unique<Wt::WText>(logged_in_customer.getNumber()));
+
+		Wt::WContainerWidget *_licNumContainer = _personalContainer->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WHBoxLayout *_licNumLayout = _licNumContainer->setLayout(make_unique<Wt::WHBoxLayout>());
+		_licNumLayout->addWidget(make_unique<Wt::WText>("License Number:"), 1);
+		_licNumLayout->addWidget(make_unique<Wt::WText>(logged_in_customer.getLicenseNumber()));
+
+		Wt::WContainerWidget *_emailContainer = _personalContainer->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WHBoxLayout *_emailLayout = _emailContainer->setLayout(make_unique<Wt::WHBoxLayout>());
+		_emailLayout->addWidget(make_unique<Wt::WText>("eMail Address:"), 1);
+		_emailLayout->addWidget(make_unique<Wt::WText>(logged_in_customer.getEmail()));
+
+		_pageLayout->addWidget(make_unique<Wt::WText>("Card Details:"))->setId("buttons");
+		Wt::WContainerWidget *_cardContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
+
+		Wt::WContainerWidget *_cardNumContainer = _cardContainer->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WHBoxLayout *_cardNumLayout = _cardNumContainer->setLayout(make_unique<Wt::WHBoxLayout>());
+		_cardNumLayout->addWidget(make_unique<Wt::WText>("Card Number:"), 1);
+		_cardNumLayout->addWidget(make_unique<Wt::WText>(logged_in_customer.getCardNumber()));
+
+		Wt::WContainerWidget *_cardExpContainer = _cardContainer->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WHBoxLayout *_cardExpLayout = _cardExpContainer->setLayout(make_unique<Wt::WHBoxLayout>());
+		_cardExpLayout->addWidget(make_unique<Wt::WText>("Card Expiry:"), 1);
+		_cardExpLayout->addWidget(make_unique<Wt::WText>(logged_in_customer.getCardExpiry()));
+
+		_pageLayout->addWidget(make_unique<Wt::WText>("Card Details:"))->setId("buttons");
+		Wt::WContainerWidget *_carContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
+
+		Wt::WContainerWidget *_carYearContainer = _carContainer->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WHBoxLayout *_carYearLayout = _carYearContainer->setLayout(make_unique<Wt::WHBoxLayout>());
+		_carYearLayout->addWidget(make_unique<Wt::WText>("Year Car Made:"), 1);
+		_carYearLayout->addWidget(make_unique<Wt::WText>(logged_in_customer.getCarYear()));
+
+		Wt::WContainerWidget *_carMakeContainer = _carContainer->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WHBoxLayout *_carMakeLayout = _carMakeContainer->setLayout(make_unique<Wt::WHBoxLayout>());
+		_carMakeLayout->addWidget(make_unique<Wt::WText>("Car Make:"), 1);
+		_carMakeLayout->addWidget(make_unique<Wt::WText>(logged_in_customer.getCarMake()));
+
+		Wt::WContainerWidget *_carModelContainer = _carContainer->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WHBoxLayout *_carModelLayout = _carModelContainer->setLayout(make_unique<Wt::WHBoxLayout>());
+		_carModelLayout->addWidget(make_unique<Wt::WText>("Car Model:"), 1);
+		_carModelLayout->addWidget(make_unique<Wt::WText>(logged_in_customer.getCarModel()));
+
+		Wt::WContainerWidget *_carShapeContainer = _carContainer->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WHBoxLayout *_carShapeLayout = _carShapeContainer->setLayout(make_unique<Wt::WHBoxLayout>());
+		_carShapeLayout->addWidget(make_unique<Wt::WText>("Car Shape:"), 1);
+		_carShapeLayout->addWidget(make_unique<Wt::WText>(logged_in_customer.getCarShape()));
+
+		Wt::WContainerWidget *_carEngContainer = _carContainer->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WHBoxLayout *_carEngLayout = _carEngContainer->setLayout(make_unique<Wt::WHBoxLayout>());
+		_carEngLayout->addWidget(make_unique<Wt::WText>("Car Engine Size:"), 1);
+		_carEngLayout->addWidget(make_unique<Wt::WText>(logged_in_customer.getCarEngineSize()));
+
+		Wt::WContainerWidget *_carColourContainer = _carContainer->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WHBoxLayout *_carColourLayout = _carColourContainer->setLayout(make_unique<Wt::WHBoxLayout>());
+		_carColourLayout->addWidget(make_unique<Wt::WText>("Car Colour:"), 1);
+		_carColourLayout->addWidget(make_unique<Wt::WText>(logged_in_customer.getCarColour()));
+	}
+	else if (userFlag == 2)
+	{
+
+	}
 }
 
 void GRSS::editUserDetails()

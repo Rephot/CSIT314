@@ -185,7 +185,3 @@ void Specialist::returnUser() {
 	User::returnUser();//C: User::returnUser() just calls the parent function on the same object that calls this function (inheritance)
 	//cout << "Operation Area: " << operationalArea << endl;
 }
-
-string Specialist::getUserName() {
-	return username;
-}

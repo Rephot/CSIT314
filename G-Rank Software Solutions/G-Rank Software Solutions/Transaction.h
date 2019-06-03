@@ -12,7 +12,7 @@ public:
 	Transaction(string, string, string, string, string, string, string, string, string, string, string, string, string, string, string, string, string, string);
 	void create(string, string, string, string, string, string, string, string, string);
 	ServiceRequest getRequestData();
-	void saveTransaction();
+	// void saveTransaction();
 	string getArea();
 	Review getReviewData();
 	Receipt getReceiptData();

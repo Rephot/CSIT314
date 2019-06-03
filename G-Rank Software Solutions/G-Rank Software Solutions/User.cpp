@@ -23,6 +23,10 @@ User::User(string uname, string pwd, string fname, string lname, string lNum, st
 	// subscriber = true/false;
 }
 
+string User::getUserName() {
+	return username;
+}
+
 string User::getPassword() {
 	return password;
 }
@@ -49,6 +53,10 @@ string User::getNumber() {
 
 string User::getEmail() {
 	return email;
+}
+
+string User::getLicenseNumber() {
+	return licenseNumber;
 }
 
 bool User::setPassword(string pwd) {

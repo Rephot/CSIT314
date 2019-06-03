@@ -18,7 +18,7 @@ Customer::Customer(int userID, string uname, string pwd, string fname, string ln
 	custID = userID;
 }
 
-Customer::Customer(string custID, string uname, string pwd, string fname, string lname, string license_num, string phnumber, string email, string car_year, string car_make, string car_model, string car_shape, string car_colour, string car_engine_size, string sub_flag, string card_num, string security_code, string expiry) {
+Customer::Customer(string custID, string uname, string pwd, string fname, string lname, string license_num, string phnumber, string email, string licPlate, string car_year, string car_make, string car_model, string car_shape, string car_colour, string car_engine_size, string sub_flag, string card_num, string security_code, string expiry) {
 	this->custID = custID;
 	this->username = uname;
 	this->password = pwd;
@@ -31,6 +31,7 @@ Customer::Customer(string custID, string uname, string pwd, string fname, string
 	this->expiry = expiry;
 	this->licenseNumber = license_num;
 	this->email = email;
+	this->licPlate = licPlate;
 	this->car_year = car_year;
 	this->car_make = car_make;
 	this->car_model = car_model;
@@ -42,7 +43,7 @@ Customer::Customer(string custID, string uname, string pwd, string fname, string
 Customer* Customer::load() {
 	Customer* customers;
 	total_customers1 = 0;
-	string line, custID, uname, pwd, fname, lname, license_num, phnumber, email, car_year, car_make, car_model, car_shape, car_colour, car_engine_size, sub_flag, card_num, security_code, expiry;
+	string line, custID, uname, pwd, fname, lname, license_num, phnumber, email, licPlate, car_year, car_make, car_model, car_shape, car_colour, car_engine_size, sub_flag, card_num, security_code, expiry;
 	string userFile = "Customers.csv";
 
 	// Creating input filestream
@@ -65,6 +66,7 @@ Customer* Customer::load() {
 			getline(inFile, license_num, '`');
 			getline(inFile, phnumber, '`');
 			getline(inFile, email, '`');
+			getline(inFile, licPlate, '`');
 			getline(inFile, car_year, '`');
 			getline(inFile, car_make, '`');
 			getline(inFile, car_model, '`');
@@ -76,7 +78,7 @@ Customer* Customer::load() {
 			getline(inFile, security_code, '`');
 			getline(inFile, expiry);
 
-			customers[i] = Customer(custID, uname, pwd, fname, lname, license_num, phnumber, email, car_year, car_make, car_model, car_shape, car_colour, car_engine_size, sub_flag, card_num, security_code, expiry);
+			customers[i] = Customer(custID, uname, pwd, fname, lname, license_num, phnumber, email, licPlate, car_year, car_make, car_model, car_shape, car_colour, car_engine_size, sub_flag, card_num, security_code, expiry);
 			i++;
 		}
 		inFile.close();
@@ -87,7 +89,7 @@ Customer* Customer::load() {
 
 vector<Customer> Customer::GRSSload() {
 	vector<Customer> customers;
-	string line, custID, uname, pwd, fname, lname, license_num, phnumber, email, car_year, car_make, car_model, car_shape, car_colour, car_engine_size, sub_flag, card_num, security_code, expiry;
+	string line, custID, uname, pwd, fname, lname, license_num, phnumber, email, licPlate, car_year, car_make, car_model, car_shape, car_colour, car_engine_size, sub_flag, card_num, security_code, expiry;
 
 	// get existing users from file
 	ifstream inFile;
@@ -103,6 +105,7 @@ vector<Customer> Customer::GRSSload() {
 			getline(inFile, license_num, '`');
 			getline(inFile, phnumber, '`');
 			getline(inFile, email, '`');
+			getline(inFile, licPlate, '`');
 			getline(inFile, car_year, '`');
 			getline(inFile, car_make, '`');
 			getline(inFile, car_model, '`');
@@ -114,7 +117,7 @@ vector<Customer> Customer::GRSSload() {
 			getline(inFile, security_code, '`');
 			getline(inFile, expiry);
 
-			customers.push_back(Customer(custID, uname, pwd, fname, lname, license_num, phnumber, email, car_year, car_make, car_model, car_shape, car_colour, car_engine_size, sub_flag, card_num, security_code, expiry));
+			customers.push_back(Customer(custID, uname, pwd, fname, lname, license_num, phnumber, email, licPlate, car_year, car_make, car_model, car_shape, car_colour, car_engine_size, sub_flag, card_num, security_code, expiry));
 		}
 		inFile.close();
 	}
@@ -134,6 +137,7 @@ void Customer::saveCustomer() {
 		<< licenseNumber << "`"
 		<< phNumber << "`"
 		<< email << "`"
+		<< licPlate << "`"
 		<< car_year << "`"
 		<< car_make << "`"
 		<< car_model << "`"
@@ -156,6 +160,47 @@ string Customer::returnSubFlag() {
 	return sub_flag;
 }
 
-string Customer::getUserName() {
-	return username;
+string Customer::getCardNumber()
+{
+	return card_num;
+}
+
+string Customer::getCardSec()
+{
+	return security_code;
+}
+
+string Customer::getCardExpiry()
+{
+	return expiry;
+}
+
+string Customer::getCarYear()
+{
+	return car_year;
+}
+
+string Customer::getCarMake()
+{
+	return car_make;
+}
+
+string Customer::getCarModel()
+{
+	return car_model;
+}
+
+string Customer::getCarShape()
+{
+	return car_shape;
+}
+
+string Customer::getCarEngineSize()
+{
+	return car_engine_size;
+}
+
+string Customer::getCarColour()
+{
+	return car_colour;
 }

@@ -23,6 +23,7 @@ public:
 	time_t getDOB();
 	string getNumber();
 	string getEmail();
+	string getLicenseNumber();
 protected:
 	string username, password, fName, lName, licenseNumber, phNumber, email;
 	time_t DOB;

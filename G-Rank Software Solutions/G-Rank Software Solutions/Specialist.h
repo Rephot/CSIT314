@@ -41,7 +41,6 @@ public:
 	static vector<Specialist> GRSSload();
 	vector<string> operationalAreas;
 	string specialistID;
-	string getUserName();
 
 private:
 	string bsb, account_num, account_name, qualification_num, licenseNumber, emailAddress;
