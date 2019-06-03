@@ -20,7 +20,7 @@ Transaction::Transaction(string transactionID, string specID, string custID, str
 void Transaction::create(string transactionID, string custID, string custCardNum, string custCardExpiry, string stName, string postCode, string stNum, string serviceType, string incDesc) {
 	this->transactionID = transactionID;
 	relCustID = custID;
-	completed = false;
+	completed = "0";
 	requestData = ServiceRequest(transactionID, custID, custCardNum, custCardExpiry, stName, postCode, stNum, serviceType, incDesc);
 	reviewData = Review();
 	receiptData = Receipt();

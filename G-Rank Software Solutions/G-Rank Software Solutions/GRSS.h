@@ -5,6 +5,7 @@
 #include <Wt/WApplication.h>
 #include <Wt/WComboBox.h>
 #include <Wt/WButtonGroup.h>
+#include <Wt/WCheckBox.h>
 #include <Wt/WContainerwidget.h>
 #include <Wt/WEvent.h>
 #include <Wt/WHBoxLayout.h>
@@ -54,6 +55,7 @@ private:
 	void registerPage();
 	void registerPage2();
 	void registerPage3();
+	void registerPage4();
 	bool userAvailable(Wt::WString);
 
 	void userMenu();

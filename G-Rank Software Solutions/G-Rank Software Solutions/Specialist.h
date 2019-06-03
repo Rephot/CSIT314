@@ -29,6 +29,7 @@ class Specialist : public User{
 public:
 	Specialist();
 	Specialist(string, string, string, string, string, string, int);
+	Specialist(string, string, string, string, string, string, string, string, string, string, string, string, vector<string>);
 	Specialist(string, string, string, string, string, string, string, string, string, string, string, string);
 	void viewRequests();
 	void save();

@@ -2,31 +2,41 @@
 
 regex emailPattern("(\\w+)@(\\w+)(\\.(\\w+))+");
 
-int userRegisterType;
-
 // registerpage tmp
-Wt::WString userTmp;
-Wt::WString pwTmp;
+string userTmp;
+string pwTmp;
 // registerpage2 tmp
-Wt::WString fnameTmp;
-Wt::WString lnameTmp;
-Wt::WString licNumTmp;
-Wt::WString phoneTmp;
-Wt::WString emailTmp;
+string fnameTmp;
+string lnameTmp;
+string licNumTmp;
+string phoneTmp;
+string emailTmp;
 // registerpage3 tmp
 // cust
-Wt::WString homeAddressTmp;
-Wt::WString customerTmp;
-Wt::WString licPlateTmp;
-Wt::WString modelYearTmp;
-Wt::WString makeTmp;
-Wt::WString modelTmp;
-Wt::WString shapeTmp;
-Wt::WString engineSizeTmp;
-Wt::WString colourTmp;
+string homeAddressTmp;
+string customerTmp;
+string licPlateTmp;
+string modelYearTmp;
+string makeTmp;
+string modelTmp;
+string shapeTmp;
+string engineSizeTmp;
+string colourTmp;
 // spec
-Wt::WString opAreaTmp;
-Wt::WString qualNumTmp;
+vector<string> opAreaTmp;
+int check[15] = {};
+string postCodes[15] = { "2515", "2516", "2517", "2518", "2519", "2500", "2525", "2526", "2527", "2528", "2529", "2530", "2502", "2505", "2506" };
+string qualNumTmp;
+// registerPage4 tmp
+// cust
+string cardNumTmp;
+string cardExpTmp;
+string cardSecTmp;
+string subFlagTmp;
+// spec
+string BSBTmp;
+string accNumTmp;
+string accNameTmp;
 
 GRSS::GRSS(const Wt::WEnvironment &env) : Wt::WApplication(env)
 {
@@ -220,7 +230,7 @@ void GRSS::registerPage()
 	_usernameField->setPlaceholderText("usr123");
 	_usernameField->changed().connect([=] {
 		// check username availability
-		/*(!(GRSS::userAvailable(_usernameField->text()))) ? _usernameText->setText("Enter a Username<font color=\"red\"> This User Name is unavailable</font>") : _usernameText->setText("Enter a Username");*/
+		(!(GRSS::userAvailable(_usernameField->text()))) ? _usernameText->setText("Enter a Username<font color=\"red\"> This User Name is unavailable</font>") : _usernameText->setText("Enter a Username");
 	});
 
 	// password creation and matching
@@ -233,10 +243,10 @@ void GRSS::registerPage()
 	_confirmPasswordField->setPlaceholderText("Confirm Password");
 	_confirmPasswordField->setEchoMode(Wt::EchoMode::Password);
 	_confirmPasswordField->changed().connect([=] {
-		/*(_passwordField->text() == _confirmPasswordField->text()) ? _confirmPasswordText->setText("Confirm Password") : _confirmPasswordText->setText("Confirm Password <font color=\"red\">Passwords Do NOT match</font>");*/
+		(_passwordField->text() == _confirmPasswordField->text()) ? _confirmPasswordText->setText("Confirm Password") : _confirmPasswordText->setText("Confirm Password <font color=\"red\">Passwords Do NOT match</font>");
 	});
 	_passwordField->changed().connect([=] {
-		/*if (_confirmPasswordField->text() != "") (_passwordField->text() == _confirmPasswordField->text()) ? _confirmPasswordText->setText("Confirm Password") : _confirmPasswordText->setText("Confirm Password <font color=\"red\">Passwords Do NOT match</font>");*/
+		if (_confirmPasswordField->text() != "") (_passwordField->text() == _confirmPasswordField->text()) ? _confirmPasswordText->setText("Confirm Password") : _confirmPasswordText->setText("Confirm Password <font color=\"red\">Passwords Do NOT match</font>");
 	});
 
 	// create buttons for confirm and cancel
@@ -248,8 +258,8 @@ void GRSS::registerPage()
 	Wt::WPushButton *_cancelButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Cancel"));
 	_cancelButton->clicked().connect([=](const Wt::WMouseEvent &e)
 	{
-		/*userTmp = "";
-		pwTmp = "";*/
+		userTmp = "";
+		pwTmp = "";
 		GRSS::loginPage();
 	});
 
@@ -264,14 +274,13 @@ void GRSS::registerPage()
 	_confirmButton->clicked().connect([=](const Wt::WMouseEvent &e)
 	{
 		// if username available and passwords match, set temp values, and proceed to registerpage2
-		/*if ((GRSS::userAvailable(_usernameField->text()) && (_passwordField->text() == _confirmPasswordField->text())) && (_usernameField->text() != "" && _passwordField->text() != ""  &&_confirmPasswordField->text() != "")) {
+		if ((GRSS::userAvailable(_usernameField->text()) && (_passwordField->text() == _confirmPasswordField->text())) && (_usernameField->text() != "" && _passwordField->text() != ""  &&_confirmPasswordField->text() != "")) {
 			_missingText->setHidden(true);
-			userTmp = _usernameField->text();
-			pwTmp = _passwordField->text();
+			userTmp = _usernameField->text().narrow();
+			pwTmp = _passwordField->text().narrow();
 			GRSS::registerPage2();
 		}
-		else _missingText->setHidden(false);*/
-		GRSS::registerPage2();
+		else _missingText->setHidden(false);
 	});
 	// the aim with multi-page registrations is to restrict the amount of information entered on each page for UX
 }
@@ -308,8 +317,8 @@ void GRSS::registerPage2()
 	Wt::WLineEdit* _emailField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
 	_emailField->setPlaceholderText("example@email.com");
 	_emailField->changed().connect([=] {
-		/*string email = _emailField->text().narrow();
-		(regex_match(email, emailPattern)) ? _emailText->setText("Email Address") : _emailText->setText("Email Address <font color = \"red\">Not recognised as a valid email address</font>");*/
+		
+
 	});
 
 	// create buttons for confirm and cancel
@@ -325,13 +334,11 @@ void GRSS::registerPage2()
 	Wt::WPushButton *_cancelButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Back"));
 	_cancelButton->clicked().connect([=](const Wt::WMouseEvent &e)
 	{
-		/*
 		fnameTmp = "";
 		lnameTmp = "";
 		licNumTmp = "";
 		phoneTmp = "";
 		emailTmp = "";
-		*/
 		GRSS::registerPage();
 	});
 
@@ -340,13 +347,12 @@ void GRSS::registerPage2()
 	_confirmButton->setStyleClass("btn-primary");
 	_confirmButton->clicked().connect([=](const Wt::WMouseEvent &e)
 	{
-		/*fnameTmp = _firstNameField->text();
-		lnameTmp = _lastNameField->text();
-		licNumTmp = _licenseField->text();
-		phoneTmp = _contactPhoneField->text();
+		fnameTmp = _firstNameField->text().narrow();
+		lnameTmp = _lastNameField->text().narrow();
+		licNumTmp = _licenseField->text().narrow();
+		phoneTmp = _contactPhoneField->text().narrow();
 		emailTmp = _emailField->text().narrow();
-		((regex_match(emailTmp, emailPattern)) && (fnameTmp != "") && (lnameTmp != "") && (licNumTmp != "") && (phoneTmp != "") && (emailTmp != "")) ? GRSS::registerPage3() : _missingText->setHidden(false);*/
-		GRSS::registerPage3();
+		((regex_match(_emailField->text().narrow(), emailPattern)) && (fnameTmp != "") && (lnameTmp != "") && (licNumTmp != "") && (phoneTmp != "") && (emailTmp != "")) ? GRSS::registerPage3() : _missingText->setHidden(false);
 	});
 }
 
@@ -393,26 +399,110 @@ void GRSS::registerPage3()
 			Wt::WText *_qualNumberText = _thirdPageLayout->addWidget(make_unique<Wt::WText>("License/Qualification Number"));
 			Wt::WLineEdit *_qualNumberField = _thirdPageLayout->addWidget(make_unique<Wt::WLineEdit>());
 			_qualNumberField->setPlaceholderText("MVTC165396");
+			_qualNumberField->changed().connect([=]
+			{
+				qualNumTmp = _qualNumberField->text().narrow();
+			});
 
-			// may move to registerPage4 for payment details
-			Wt::WText *_BSBText = _thirdPageLayout->addWidget(make_unique<Wt::WText>("BSB"));
-			Wt::WLineEdit *_BSBField = _thirdPageLayout->addWidget(make_unique<Wt::WLineEdit>());
-			_BSBField->setPlaceholderText("9801-1080");
+			Wt::WText *_postCodeArea = _thirdPageLayout->addWidget(make_unique<Wt::WText>("Choose your operating areas"));
+
+			Wt::WContainerWidget *_checkContainer = _thirdPageLayout->addWidget(make_unique<Wt::WContainerWidget>());
+			Wt::WVBoxLayout *_checkVBoxLayout = _checkContainer->setLayout(make_unique<Wt::WVBoxLayout>());
+			Wt::WContainerWidget *_checkContainer1 = _checkVBoxLayout->addWidget(make_unique<Wt::WContainerWidget>());
+			Wt::WHBoxLayout *_checkHBoxLayout1 = _checkContainer1->setLayout(make_unique<Wt::WHBoxLayout>());
+			Wt::WCheckBox *_postCode2515 = _checkHBoxLayout1->addWidget(make_unique<Wt::WCheckBox>("2515"));
+			_postCode2515->changed().connect([=]
+			{
+				(_postCode2515->isChecked()) ? check[0] = 1 : check[0] = 0;
+			});
+			Wt::WCheckBox *_postCode2516 = _checkHBoxLayout1->addWidget(make_unique<Wt::WCheckBox>("2516"));
+			_postCode2516->changed().connect([=]
+			{
+				(_postCode2516->isChecked()) ? check[0] = 1 : check[0] = 0;
+			});
+			Wt::WCheckBox *_postCode2517 = _checkHBoxLayout1->addWidget(make_unique<Wt::WCheckBox>("2517"));
+			_postCode2517->changed().connect([=]
+			{
+				(_postCode2517->isChecked()) ? check[0] = 1 : check[0] = 0;
+			});
+
+			Wt::WContainerWidget *_checkContainer2 = _checkVBoxLayout->addWidget(make_unique<Wt::WContainerWidget>());
+			Wt::WHBoxLayout *_checkHBoxLayout2 = _checkContainer2->setLayout(make_unique<Wt::WHBoxLayout>());
+			Wt::WCheckBox *_postCode2518 = _checkHBoxLayout2->addWidget(make_unique<Wt::WCheckBox>("2518"));
+			_postCode2518->changed().connect([=]
+			{
+				(_postCode2518->isChecked()) ? check[0] = 1 : check[0] = 0;
+			});
+			Wt::WCheckBox *_postCode2519 = _checkHBoxLayout2->addWidget(make_unique<Wt::WCheckBox>("2519"));
+			_postCode2519->changed().connect([=]
+			{
+				(_postCode2519->isChecked()) ? check[0] = 1 : check[0] = 0;
+			});
+			Wt::WCheckBox *_postCode2500 = _checkHBoxLayout2->addWidget(make_unique<Wt::WCheckBox>("2500"));
+			_postCode2500->changed().connect([=]
+			{
+				(_postCode2500->isChecked()) ? check[0] = 1 : check[0] = 0;
+			});
+
+
+			Wt::WContainerWidget *_checkContainer3 = _checkVBoxLayout->addWidget(make_unique<Wt::WContainerWidget>());
+			Wt::WHBoxLayout *_checkHBoxLayout3 = _checkContainer3->setLayout(make_unique<Wt::WHBoxLayout>());
+			Wt::WCheckBox *_postCode2525 = _checkHBoxLayout3->addWidget(make_unique<Wt::WCheckBox>("2525"));
+			_postCode2525->changed().connect([=]
+			{
+				(_postCode2525->isChecked()) ? check[0] = 1 : check[0] = 0;
+			});
+			Wt::WCheckBox *_postCode2526 = _checkHBoxLayout3->addWidget(make_unique<Wt::WCheckBox>("2526"));
+			_postCode2526->changed().connect([=]
+			{
+				(_postCode2526->isChecked()) ? check[0] = 1 : check[0] = 0;
+			});
+			Wt::WCheckBox *_postCode2527 = _checkHBoxLayout3->addWidget(make_unique<Wt::WCheckBox>("2527"));
+			_postCode2527->changed().connect([=]
+			{
+				(_postCode2527->isChecked()) ? check[0] = 1 : check[0] = 0;
+			});
+
+
+			Wt::WContainerWidget *_checkContainer4 = _checkVBoxLayout->addWidget(make_unique<Wt::WContainerWidget>());
+			Wt::WHBoxLayout *_checkHBoxLayout4 = _checkContainer4->setLayout(make_unique<Wt::WHBoxLayout>());
+			Wt::WCheckBox *_postCode2528 = _checkHBoxLayout4->addWidget(make_unique<Wt::WCheckBox>("2528"));
+			_postCode2528->changed().connect([=]
+			{
+				(_postCode2528->isChecked()) ? check[0] = 1 : check[0] = 0;
+			});
+			Wt::WCheckBox *_postCode2529 = _checkHBoxLayout4->addWidget(make_unique<Wt::WCheckBox>("2529"));
+			_postCode2529->changed().connect([=]
+			{
+				(_postCode2529->isChecked()) ? check[0] = 1 : check[0] = 0;
+			});
+			Wt::WCheckBox *_postCode2530 = _checkHBoxLayout4->addWidget(make_unique<Wt::WCheckBox>("2530"));
+			_postCode2530->changed().connect([=]
+			{
+				(_postCode2530->isChecked()) ? check[0] = 1 : check[0] = 0;
+			});
+
+
+			Wt::WContainerWidget *_checkContainer5 = _checkVBoxLayout->addWidget(make_unique<Wt::WContainerWidget>());
+			Wt::WHBoxLayout *_checkHBoxLayout5 = _checkContainer5->setLayout(make_unique<Wt::WHBoxLayout>());
+			Wt::WCheckBox *_postCode2502 = _checkHBoxLayout5->addWidget(make_unique<Wt::WCheckBox>("2502"));
+			_postCode2502->changed().connect([=]
+			{
+				(_postCode2502->isChecked()) ? check[0] = 1 : check[0] = 0;
+			});
+			Wt::WCheckBox *_postCode2505 = _checkHBoxLayout5->addWidget(make_unique<Wt::WCheckBox>("2505"));
+			_postCode2505->changed().connect([=]
+			{
+				(_postCode2505->isChecked()) ? check[0] = 1 : check[0] = 0;
+			});
+			Wt::WCheckBox *_postCode2506 = _checkHBoxLayout5->addWidget(make_unique<Wt::WCheckBox>("2506"));
+			_postCode2506->changed().connect([=]
+			{
+				(_postCode2506->isChecked()) ? check[0] = 1 : check[0] = 0;
+			});
 		}
 		else if (rawButtonGroup->id(selection) == 2) {
 			// 3rd page registration(Customer): home address, car details, bankCard details
-			/*
-			Wt::WString hmTmp;
-			// car details, only needed for customer
-			Wt::WString cstTmp; // generated custId when register complete
-			Wt::WString lcnsPltTmp;
-			Wt::WString mdlYrTmp;
-			Wt::WString mkTmp;
-			Wt::WString mdlTmp;
-			Wt::WString shpTmp;
-			Wt::WString ngnSzTmp;
-			Wt::WString clrTmp;
-			*/
 			_thirdPageForm->clear();
 			userFlag = 1;
 			Wt::WVBoxLayout *_thirdPageLayout = _thirdPageForm->setLayout(make_unique<Wt::WVBoxLayout>());
@@ -420,35 +510,67 @@ void GRSS::registerPage3()
 			Wt::WText* _homeAddressText = _thirdPageLayout->addWidget(make_unique<Wt::WText>("Home Address"));
 			Wt::WLineEdit* _homeAddressField = _thirdPageLayout->addWidget(make_unique<Wt::WLineEdit>());
 			_homeAddressField->setPlaceholderText("221b Baker Street");
+			_homeAddressField->changed().connect([=]
+			{
+				homeAddressTmp = _homeAddressField->text().narrow();
+			});
 
 			Wt::WText* _lcncPltText = _thirdPageLayout->addWidget(make_unique<Wt::WText>("Licence Plate"));
 			Wt::WLineEdit* _lcncPltField = _thirdPageLayout->addWidget(make_unique<Wt::WLineEdit>());
 			_lcncPltField->setPlaceholderText("BJB-007");
+			_lcncPltField->changed().connect([=]
+			{
+				licPlateTmp = _lcncPltField->text().narrow();
+			});
 
 			Wt::WText* _modelYearText = _thirdPageLayout->addWidget(make_unique<Wt::WText>("Year Made"));
 			Wt::WLineEdit* _modelYearField = _thirdPageLayout->addWidget(make_unique<Wt::WLineEdit>());
 			_modelYearField->setPlaceholderText("2007");
+			_modelYearField->changed().connect([=]
+			{
+				modelYearTmp = _modelYearField->text().narrow();
+			});
 
 			Wt::WText* _carMakeText = _thirdPageLayout->addWidget(make_unique<Wt::WText>("Car Make"));
 			Wt::WLineEdit* _carMakeField = _thirdPageLayout->addWidget(make_unique<Wt::WLineEdit>());
 			_carMakeField->setPlaceholderText("Toyboata");
+			_carMakeField->changed().connect([=]
+			{
+				makeTmp = _carMakeField->text().narrow();
+			});
 
 			Wt::WText *_carModelText = _thirdPageLayout->addWidget(make_unique<Wt::WText>("Car Model"));
 			Wt::WLineEdit* _carModelField = _thirdPageLayout->addWidget(make_unique<Wt::WLineEdit>());
 			_carModelField->setPlaceholderText("Hilux");
+			_carModelField->changed().connect([=]
+			{
+				modelTmp = _carModelField->text().narrow();
+			});
 
 			Wt::WText *_shapeText = _thirdPageLayout->addWidget(make_unique<Wt::WText>("Shape"));
-			// replace with combo box
+			// replace with combo box MAYBE
 			Wt::WLineEdit* _shapeField = _thirdPageLayout->addWidget(make_unique<Wt::WLineEdit>());
 			_shapeField->setPlaceholderText("Ute");
+			_shapeField->changed().connect([=]
+			{
+				shapeTmp = _shapeField->text().narrow();
+			});
 
 			Wt::WText *_engineSizeText = _thirdPageLayout->addWidget(make_unique<Wt::WText>("Car Colour"));
 			Wt::WLineEdit* _engineSizeField = _thirdPageLayout->addWidget(make_unique<Wt::WLineEdit>());
 			_engineSizeField->setPlaceholderText("3.4L");
+			_engineSizeField->changed().connect([=]
+			{
+				engineSizeTmp = _engineSizeField->text().narrow();
+			});
 
 			Wt::WText *_carColourText = _thirdPageLayout->addWidget(make_unique<Wt::WText>("Car Colour"));
 			Wt::WLineEdit* _carColourField = _thirdPageLayout->addWidget(make_unique<Wt::WLineEdit>());
 			_carColourField->setPlaceholderText("Blue");
+			_carColourField->changed().connect([=]
+			{
+				colourTmp = _carColourField->text().narrow();
+			});
 		}
 	});
 
@@ -460,20 +582,145 @@ void GRSS::registerPage3()
 	Wt::WPushButton *_retraceButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Back"));
 	_retraceButton->clicked().connect([=](const Wt::WMouseEvent &e)
 	{
+		for(int i = 0; i < 15; i++) check[i] = 0;
+		qualNumTmp = "";
+		homeAddressTmp = "";
+		customerTmp = "";
+		licPlateTmp = "";
+		modelYearTmp = "";
+		makeTmp = "";
+		modelTmp = "";
+		shapeTmp = "";
+		engineSizeTmp = "";
+		colourTmp = "";
 		GRSS::registerPage2();
+	});
+	// confirm will create user profile and log them in (this assumes they've confirmed their account via email...)
+	Wt::WPushButton *_confirmButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Next"));
+	_confirmButton->clicked().connect([=](const Wt::WMouseEvent &e)
+	{
+		if (userFlag == 1) {
+			for (int i = 0; i < 15; i++)
+			{
+				if (check[i] == 1)
+				{
+					opAreaTmp.push_back(postCodes[i]);
+				}
+			}
+		}
+		GRSS::registerPage4();
+	});
+}
+
+void GRSS::registerPage4()
+{
+	cout << "\n" << userFlag << "\n"; 
+	if (userFlag == 1) {
+		// customers
+		_pageContent->clear();
+		_pageLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
+		_pageContent->setId("pageContent");
+
+		Wt::WText *_subscribeText = _pageLayout->addWidget(make_unique<Wt::WText>("Do you want to subscribe?"));
+		Wt::WCheckBox *_subscribeCheck = _pageLayout->addWidget(make_unique<Wt::WCheckBox>("Subscribe?"));
+		_subscribeCheck->changed().connect([=]
+		{
+			(_subscribeCheck->isChecked()) ? subFlagTmp = "0" : subFlagTmp = "1";
+		});
+
+		Wt::WText* _cadrNumText = _pageLayout->addWidget(make_unique<Wt::WText>("Credit Card Number"));
+		Wt::WLineEdit* _cardNumField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
+		_cardNumField->setPlaceholderText("5353091234567890");
+		_cardNumField->changed().connect([=]
+		{
+			cardNumTmp = _cardNumField->text().narrow();
+		});
+
+		Wt::WText* _cardExpiryText = _pageLayout->addWidget(make_unique<Wt::WText>("Credit Card Expiry"));
+		Wt::WLineEdit* _cardExpiryField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
+		_cardExpiryField->setPlaceholderText("12/23");
+		_cardExpiryField->changed().connect([=]
+		{
+			cardExpTmp = _cardExpiryField->text().narrow();
+		});
+
+		Wt::WText* _cardSecText = _pageLayout->addWidget(make_unique<Wt::WText>("Credit Card CSV"));
+		Wt::WLineEdit* _cardSecField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
+		_cardSecField->setPlaceholderText("XXX");
+		_cardSecField->changed().connect([=]
+		{
+			cardSecTmp = _cardSecField->text().narrow();
+		});
+	}
+	else if (userFlag == 2) {
+		// specialists
+		_pageContent->clear();
+		_pageLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
+		_pageContent->setId("pageContent");
+		Wt::WText* _BSBText = _pageLayout->addWidget(make_unique<Wt::WText>("BSB"));
+		Wt::WLineEdit* _BSBField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
+		_BSBField->setPlaceholderText("XXX-XXX");
+		_BSBField->changed().connect([=]
+		{
+			BSBTmp = _BSBField->text().narrow();
+		});
+
+		Wt::WText* _accNumText = _pageLayout->addWidget(make_unique<Wt::WText>("Account Number"));
+		Wt::WLineEdit* _accNumField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
+		_accNumField->setPlaceholderText("Bank account number, for your preferred payment account");
+		_accNumField->changed().connect([=]
+		{
+			accNumTmp = _accNumField->text().narrow();
+		});
+
+		Wt::WText* _accNameText = _pageLayout->addWidget(make_unique<Wt::WText>("Account Name"));
+		Wt::WLineEdit* _accNameField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
+		_accNameField->setPlaceholderText("Bank account name, for your preferred payment account");
+		_accNameField->changed().connect([=]
+		{
+			accNameTmp = _accNameField->text().narrow();
+		});
+	}
+
+	// create buttons for confirm and cancel
+	Wt::WContainerWidget *_buttonsContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
+	_buttonsContainer->setId("buttons");
+	Wt::WHBoxLayout *_buttonsLayout = _buttonsContainer->setLayout(make_unique<Wt::WHBoxLayout>());
+	// cancel to go back to login screen
+	Wt::WPushButton *_retraceButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Back"));
+	_retraceButton->clicked().connect([=](const Wt::WMouseEvent &e)
+	{
+		cardNumTmp = "";
+		cardExpTmp = "";
+		cardSecTmp = "";
+		BSBTmp = "";
+		accNumTmp = "";
+		accNameTmp = "";
+		GRSS::registerPage3();
 	});
 	// confirm will create user profile and log them in (this assumes they've confirmed their account via email...)
 	Wt::WPushButton *_confirmButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Confirm"));
 	_confirmButton->clicked().connect([=](const Wt::WMouseEvent &e)
 	{
 		// this should point to loginPage() such that the user can log in with the newly created user
+		// customer creation
+		if (userFlag == 1) {
+			Customer joined = Customer(("c" + to_string(existingCustomers.size() + 1)), userTmp, pwTmp, fnameTmp, lnameTmp, licNumTmp, phoneTmp, emailTmp, modelYearTmp, makeTmp, modelTmp, shapeTmp, colourTmp, engineSizeTmp, subFlagTmp, cardNumTmp, cardSecTmp, cardExpTmp);
+			joined.saveCustomer();
+			existingCustomers.push_back(joined);
+		}
+		// specialist creation
+		else if (userFlag == 2) {
+			Specialist joined = Specialist(("s" + to_string(existingSpecialists.size() + 1)), userTmp, pwTmp, fnameTmp, lnameTmp, licNumTmp, phoneTmp, emailTmp, qualNumTmp, BSBTmp, accNumTmp, accNameTmp, opAreaTmp);
+			joined.save();
+			existingSpecialists.push_back(joined);
+		}
 		GRSS::loginPage();
 	});
 }
 
-// register page 4 payment details
-
-bool GRSS::userAvailable(Wt::WString username) {
+bool GRSS::userAvailable(Wt::WString username)
+{
 	vector<Customer>::iterator cItr = existingCustomers.begin();
 	while (cItr != existingCustomers.end())
 	{

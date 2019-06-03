@@ -23,6 +23,22 @@ Specialist::Specialist(string uname, string pwd, string fname, string lname, str
 	specialistID = specID;
 }
 
+Specialist::Specialist(string specID, string uname, string pwd, string fname, string lname, string license_num, string phnumber, string email, string qualification_num, string bsb, string acc_num, string acc_name, vector<string> opArea) {
+	specialistID = specID;
+	username = uname;
+	password = pwd;
+	this->fName = fname;
+	this->lName = lname;
+	licenseNumber = license_num;
+	this->phNumber = phnumber;
+	emailAddress = email;
+	this->qualification_num = qualification_num;
+	this->bsb = bsb;
+	account_num = acc_num;
+	account_name = acc_name;
+	operationalAreas = opArea;
+}
+
 Specialist::Specialist(string specID, string uname, string pwd, string fname, string lname, string license_num, string phnumber, string email, string qualification_num, string bsb, string acc_num, string acc_name) {
 	specialistID = specID;
 	username = uname;
@@ -136,14 +152,25 @@ void Specialist::save() {
 	ofstream outFile;
 	outFile.open("Specialists.csv", ios_base::app);
 
-	outFile << specialistID << "`" << username << "`" << password << "`" << fName << "`" << lName << "`" << licenseNumber << "`" << phNumber << "`" << email << "`" << qualification_num << "`";
+	outFile << specialistID << "`"
+		<< username << "`"
+		<< password << "`"
+		<< fName << "`"
+		<< lName << "`"
+		<< licenseNumber << "`"
+		<< phNumber << "`"
+		<< email << "`"
+		<< qualification_num << "`";
 
 	for (std::vector<string>::iterator it = operationalAreas.begin(); it != operationalAreas.end(); ++it) {
 		if (it != operationalAreas.begin()) outFile << "|";
 		outFile << *it;
 	}
 
-	outFile << "`" << bsb << "`" << account_num << "`" << account_name << "\n";
+	outFile << "`"
+		<< bsb << "`"
+		<< account_num << "`"
+		<< account_name << "\n";
 	outFile.close();
 }
 
