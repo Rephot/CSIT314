@@ -26,6 +26,68 @@ void Transaction::create(string transactionID, string custID, string custCardNum
 	receiptData = Receipt();
 }
 
+string Transaction::getArea() {
+	return requestData.getPostCode();
+}
+
+void Transaction::setSpecialist(Specialist spec) {
+	relSpecID = spec.specialistID;
+}
+
+void Transaction::addAvailableSpecialist(Specialist spec) {
+	availableSpecialists.push_back(spec);
+}
+
+void Transaction::loadAvailableSpecialists(vector<Specialist> spec) {
+	string transID, specialists;
+	string userFile = "availableSpecialists.csv";
+
+
+	ifstream inFile;
+	inFile.open(userFile);
+	if (inFile.is_open())
+	{
+		while (getline(inFile, transID, '`'))
+		{
+			getline(inFile, specialists);
+			if (transID == this->transactionID) {
+				std::stringstream ss(specialists);
+				std::string token;
+				while (std::getline(ss, token, '|')) {
+					for (std::vector<Specialist>::iterator it = spec.begin(); it != spec.end(); ++it) {
+						if (it->specialistID == token) availableSpecialists.push_back(*it);
+					}
+				}
+			}
+			
+		}
+		inFile.close();
+	}
+}
+
+void Transaction::saveAvailableSpecialists()
+{
+	ofstream outFile;
+	outFile.open("availableSpecialists.csv");
+
+	outFile << transactionID << "`";
+
+	vector<Specialist>::iterator it = availableSpecialists.begin();
+	while (it != availableSpecialists.end())
+	{
+		outFile << it->specialistID << "|";
+		it++;
+	}
+
+	outFile << "\n";
+
+	outFile.close();
+}
+
+vector<Specialist> Transaction::getAvailableSpecialists() {
+	return availableSpecialists;
+}
+
 ServiceRequest Transaction::getRequestData() {
 	return requestData;
 }
