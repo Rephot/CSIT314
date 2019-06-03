@@ -25,6 +25,19 @@ ServiceRequest::ServiceRequest(string nameSt, string codePost, string numSt, str
 	incDesc = descInc;
 }
 
+ServiceRequest::ServiceRequest(string transactionID, string custID, string custCardNum, string custCardExpiry, string stName, string postCode, string stNum, string serviceType, string incDesc) {
+	
+	time_t timeCreated = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+	char timeCreatedTime[26];
+	ctime_s(timeCreatedTime, 26, &timeCreated);
+	string dateTimeRequested = timeCreatedTime;
+	clientName = custID;
+	incidentLocation = postCode;
+	sType = sType;
+	serviceRequestedAt = dateTimeRequested;
+	requestID = ++numRequests;
+}
+
 void ServiceRequest::saveRequests()
 {
 	ofstream outFile;

@@ -16,6 +16,7 @@ class ServiceRequest {
 public:
 	ServiceRequest();
 	ServiceRequest(string, string, string, string, string);
+	ServiceRequest(string, string, string, string, string, string, string, string, string);
 	void saveRequests();
 	void createServiceRequest(Customer);
 	void broadcastServiceRequest(ServiceRequest);
