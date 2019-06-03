@@ -28,6 +28,19 @@ ServiceRequest::ServiceRequest()
 	requestID = 0;
 }
 
+ServiceRequest::ServiceRequest(string transactionID, string custID, string custCardNum, string custCardExpiry, string stName, string postCode, string stNum, string serviceType, string incDesc) {
+	
+	time_t timeCreated = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+	char timeCreatedTime[26];
+	ctime_s(timeCreatedTime, 26, &timeCreated);
+	string dateTimeRequested = timeCreatedTime;
+	clientName = custID;
+	incidentLocation = postCode;
+	sType = sType;
+	serviceRequestedAt = dateTimeRequested;
+	requestID = ++numRequests;
+}
+
 void ServiceRequest::loadRequests() {
 	ServiceRequest serviceReq;
 	string line, clientName, requestID, incidentLocation, sType, serviceRequestedAt;

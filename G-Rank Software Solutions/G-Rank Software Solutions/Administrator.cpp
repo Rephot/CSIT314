@@ -1,4 +1,5 @@
 #include"Administrator.h"
+#include <vector>
 
 Administrator::Administrator() {
 
@@ -16,9 +17,9 @@ Administrator::Administrator(int userID, string uname, string pwd, string fname,
 
 void Administrator::saveAdministrator() {
 	ofstream outFile;
-	outFile.open("Customers.csv", ios_base::app);
+	outFile.open("Administrators.csv", ios_base::app);
 
-	outFile << to_string(adminID) << "," << username << "," << password << "," << fName << "," << lName << "," << DOB << "," << phNumber << "\n";
+	outFile << to_string(adminID) << "`" << username << "`" << password << "`" << fName << "`" << lName << "`" << DOB << "`" << phNumber << "\n";
 	outFile.close();
 }
 
@@ -27,37 +28,41 @@ void Administrator::returnUser() {
 	User::returnUser();
 }
 
-Administrator* loadAdministrators() {
-	Administrator* users;
-	int total_administrators = 0;
+vector<Administrator> Administrator::loadAdministrators() {
+	vector<Administrator> users;
 	string line, username, password, fName, lName, phNumber, custID, DOB;
-	string userFile = "Specialists.csv";
-
-	// Creating input filestream
-	ifstream file(userFile);
-	while (getline(file, line)) total_administrators++;
-	users = new Administrator[total_administrators + 1];
+	string userFile = "Administrators.csv";
 
 	// get existing users from file
 	ifstream inFile;
 	inFile.open(userFile);
-	int i = 0;
 	if (inFile.is_open())
 	{
-		while (getline(inFile, custID, ','))
+		while (getline(inFile, custID, '`'))
 		{
-			getline(inFile, username, ',');
-			getline(inFile, password, ',');
-			getline(inFile, fName, ',');
-			getline(inFile, lName, ',');
-			getline(inFile, DOB, ',');
+			getline(inFile, username, '`');
+			getline(inFile, password, '`');
+			getline(inFile, fName, '`');
+			getline(inFile, lName, '`');
+			getline(inFile, DOB, '`');
 			getline(inFile, phNumber);
 
-			users[i] = Administrator(stoi(custID), username, password, fName, lName, stoi(DOB), phNumber);
-			i++;
+			users.push_back(Administrator(stoi(custID), username, password, fName, lName, stoi(DOB), phNumber));
 		}
 		inFile.close();
 	}
 
 	return users;
+}
+
+void Administrator::viewTransactions(vector<Transaction> transactions) {
+	//view all
+}
+
+void Administrator::suspendUser(string custID, vector<Customer> customers) {
+	//match to list and ban
+}
+
+void Administrator::suspendUser(string custID, vector<Specialist> specialists) {
+	//match to list and ban
 }

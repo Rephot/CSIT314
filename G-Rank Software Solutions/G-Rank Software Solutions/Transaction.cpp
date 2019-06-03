@@ -13,6 +13,15 @@ Transaction::Transaction(string transactionID, string specID, string custID, str
 	receiptData = Receipt();
 }
 
+void Transaction::create(string transactionID, string custID, string custCardNum, string custCardExpiry, string stName, string postCode, string stNum, string serviceType, string incDesc) {
+	this->transactionID = transactionID;
+	relCustID = custID;
+	completed = false;
+	requestData = ServiceRequest(transactionID, custID, custCardNum, custCardExpiry, stName, postCode, stNum, serviceType, incDesc);
+	reviewData = Review();
+	receiptData = Receipt();
+}
+
 ServiceRequest Transaction::getRequestData() {
 	return requestData;
 }
@@ -57,3 +66,23 @@ vector<Transaction> Transaction::GRSSload() {
 
 	return transactions;
 }
+
+/*void Transaction::saveTransaction() {
+	ofstream outFile;
+	outFile.open("Transactions.csv", ios_base::app);
+
+	outFile << transactionID << "`"
+		<< specID << "`"
+		<< custID << "`"
+		<< specBSB << "`"
+		<< specAccNum << "`"
+		<< specAccName << "`"
+		<< custCardNum << "`"
+		<< custCardExpiry << "`"
+		<< stName << "`"
+		<< postCode << "`"
+		<< serviceType << "`"
+		<< jobRating << "`"
+		<< reviewDesc << "\n";
+	outFile.close();
+}*/
