@@ -29,7 +29,7 @@ void Administrator::returnUser() {
 
 vector<Administrator> Administrator::loadAdministrators() {
 	vector<Administrator> users;
-	string line, username, password, fName, lName, phNumber, custID, DOB;
+	string line, username, password, fName, lName, phNumber, adminID, DOB;
 	string userFile = "Administrators.csv";
 
 	// get existing users from file
@@ -37,7 +37,7 @@ vector<Administrator> Administrator::loadAdministrators() {
 	inFile.open(userFile);
 	if (inFile.is_open())
 	{
-		while (getline(inFile, custID, '`'))
+		while (getline(inFile, adminID, '`'))
 		{
 			getline(inFile, username, '`');
 			getline(inFile, password, '`');
@@ -46,7 +46,7 @@ vector<Administrator> Administrator::loadAdministrators() {
 			getline(inFile, DOB, '`');
 			getline(inFile, phNumber);
 
-			users.push_back(Administrator(custID, username, password, fName, lName, phNumber));
+			users.push_back(Administrator(adminID, username, password, fName, lName, phNumber));
 		}
 		inFile.close();
 	}

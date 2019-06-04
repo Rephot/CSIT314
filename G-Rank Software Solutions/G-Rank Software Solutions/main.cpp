@@ -319,7 +319,7 @@ void firstMenu(int choice) {
 vector<Transaction> viewAvailableRequests(Specialist spec, vector<Transaction> transactions) {
 	vector<Transaction> available;
 
-	for (std::vector<string>::iterator it = spec.operationalAreas.begin(); it != spec.operationalAreas.end(); ++it) {
+	for (std::set<string>::iterator it = spec.operationalAreas.begin(); it != spec.operationalAreas.end(); ++it) {
 		for (std::vector<Transaction>::iterator ti = transactions.begin(); ti != transactions.end(); ++ti) {
 			if (ti->getArea() == *it) {
 				available.push_back(*ti);

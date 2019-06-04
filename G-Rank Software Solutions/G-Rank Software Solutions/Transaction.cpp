@@ -132,7 +132,7 @@ void Transaction::loadAvailableSpecialists() {
 				std::stringstream sss(areas);
 				std::string token;
 				while (std::getline(sss, token, '|')) {
-					s.operationalAreas.push_back(token);
+					s.operationalAreas.insert(token);
 				}
 
 				this->addAvailableSpecialist(s, callOut);
@@ -163,7 +163,7 @@ void Transaction::saveAvailableSpecialists()
 			<< it->getEmail() << "`"
 			<< it->getQualification() << "`";
 
-		for (std::vector<string>::iterator t = it->operationalAreas.begin(); t != it->operationalAreas.end(); ++t) {
+		for (std::set<string>::iterator t = it->operationalAreas.begin(); t != it->operationalAreas.end(); ++t) {
 			if (t != it->operationalAreas.begin()) outFile << "|";
 			outFile << *t;
 		}

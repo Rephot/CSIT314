@@ -29,6 +29,7 @@
 #include "Specialist.h"
 #include "Customer.h"
 #include "Transaction.h"
+#include "Administrator.h"
 
 using namespace std;
 
@@ -72,11 +73,11 @@ private:
 	void viewUserDetails();
 	void editUserDetails();
 	void viewTransactions();
-	void viewReviews();
 
 public:
 	vector<Customer> existingCustomers;
 	vector<Specialist> existingSpecialists;
+	vector<Administrator> existingAdmins;
 	vector<Transaction> previousTransactions;
 	vector<Transaction> inProgress; // customer created requests
 	vector<Transaction> specAvailable; // specialists responding

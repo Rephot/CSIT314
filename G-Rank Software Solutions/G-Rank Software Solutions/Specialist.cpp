@@ -54,6 +54,16 @@ Specialist::Specialist(string specID, string uname, string pwd, string fname, st
 	account_name = acc_name;
 }
 
+void Specialist::viewRequests() {
+	for (int i = 0; i < ServiceRequest::numCurrentRequests; i++) {
+		for (std::set<string>::iterator it = operationalAreas.begin(); it != operationalAreas.end(); ++it) {
+			if (ServiceRequest::currentRequests[i].incidentLocation == *it) {
+				cout << ServiceRequest::toString(ServiceRequest::currentRequests[i]) << endl;
+			}
+		}
+	}
+}
+
 void Specialist::setQualification(string qualification_num) {
 	this->qualification_num = qualification_num;
 }

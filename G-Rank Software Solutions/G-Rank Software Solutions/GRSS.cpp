@@ -74,7 +74,7 @@ void GRSS::initContentLayout()
 {
 	_content = root()->addWidget(make_unique<Wt::WContainerWidget>());
 	_content->setId("content");
-	_content->setMaximumSize(400, 1600);
+	_content->setMaximumSize(400, 1000000);
 
 	//create vertical layout
 	_contentLayout = _content->setLayout(make_unique<Wt::WVBoxLayout>());
@@ -94,6 +94,7 @@ void GRSS::loadInfo()
 {
 	existingCustomers = Customer::GRSSload();
 	existingSpecialists = Specialist::GRSSload();
+	existingAdmins = Administrator::loadAdministrators();
 	inProgress = Transaction::GRSSload("GRSScreated.csv"); // customer creates
 	specAvailable = Transaction::GRSSload("GRSSspecAvailable.csv"); // specialists says they're available
 	specAccepted = Transaction::GRSSload("GRSSspecialistAccepted.csv"); // customer chooses specialist
@@ -818,17 +819,10 @@ void GRSS::userMenu()
 	});
 
 	// connects to view reciepts
-	Wt::WPushButton *_viewTransactionsButton = _menuLayout->addWidget(make_unique<Wt::WPushButton>("Reciepts"));
+	Wt::WPushButton *_viewTransactionsButton = _menuLayout->addWidget(make_unique<Wt::WPushButton>("Transactions"));
 	_viewTransactionsButton->clicked().connect([=]
 	{
 		GRSS::viewTransactions();
-	});
-
-	// connect to view make review, only allow user to make a review of most recent service that happened in the last ?3 days?
-	Wt::WPushButton *_viewMakeReviewButton = _menuLayout->addWidget(make_unique<Wt::WPushButton>("Reviews"));
-	_viewMakeReviewButton->clicked().connect([=]
-	{
-		GRSS::viewReviews();
 	});
 
 	// logout
@@ -1324,45 +1318,72 @@ void GRSS::viewTransactions()
 {
 	_pageContent->clear();
 	Wt::WVBoxLayout *_pageLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
-	Wt::WPushButton *_backButton = _pageLayout->addWidget(make_unique<Wt::WPushButton>("Back"));
-	_backButton->clicked().connect([=]
+	Wt::WPushButton *_backButton = _pageLayout->addWidget(make_unique<Wt::WPushButton>("Back"), 1, Wt::AlignmentFlag::Middle);
+	_backButton->clicked().connect([=] { GRSS::userMenu(); });
+	int i = 0;
+	if (userFlag == 1)
 	{
-		GRSS::userMenu();
-	});
-
-	// related to current user
-	// service request info
-	Wt::WText *_serReqInfText = _pageLayout->addWidget(make_unique<Wt::WText>("Service Request Info"));
-	// reciept info
-	Wt::WText *_recInfoText = _pageLayout->addWidget(make_unique<Wt::WText>("Reciept Info"));
-	// review info
-	Wt::WText *_reviewInfoText = _pageLayout->addWidget(make_unique<Wt::WText>("Review Info"));
-}
-
-// view / make reviews
-// pulls review data out of transactions and displays to user
-// customer provides specialist identifier, whilst specialist user can only see reviews related to them
-void GRSS::viewReviews()
-{
-	// shows most recent request if less than 2-3 days old, allows review to be made
-	// shows all reviews customer has made, allows user to select specialist to view all their reviews
-	// by clicking on the specialist
-
-	_pageContent->clear();
-	Wt::WVBoxLayout *_pageLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
-	Wt::WPushButton *_backButton = _pageLayout->addWidget(make_unique<Wt::WPushButton>("Back"));
-	_backButton->clicked().connect([=]
+		for (vector<Transaction>::iterator it = previousTransactions.begin(); it != previousTransactions.end(); ++it)
+		{
+			Specialist related;
+			if (logged_in_customer.custID == (*it).getCustID())
+			{
+				for (vector<Specialist>::iterator itr = existingSpecialists.begin(); itr != existingSpecialists.end(); ++itr)
+				{
+					if ((*itr).specialistID == (*it).getSpecID())
+					{
+						related = (*itr);
+						break;
+					}
+				}
+				_pageLayout->addWidget(make_unique<Wt::WText>("Transaction " + to_string(++i)));
+				_pageLayout->addWidget(make_unique<Wt::WText>("Location Information: " + (*it).getRequestData().getStNum() + " " + (*it).getRequestData().getStName() + ", " + (*it).getRequestData().getPostCode()));
+				Wt::WTextArea *_locationDescArea = _pageLayout->addWidget(make_unique<Wt::WTextArea>((*it).getRequestData().getLocDesc()));
+				_locationDescArea->setReadOnly(true);
+				_pageLayout->addWidget(make_unique<Wt::WText>("Incident infomration: " + (*it).getRequestData().getServiceType()));
+				Wt::WTextArea *_incDescArea = _pageLayout->addWidget(make_unique<Wt::WTextArea>((*it).getRequestData().getIncDesc()));
+				_incDescArea->setReadOnly(true);
+				_pageLayout->addWidget(make_unique<Wt::WText>("Specialist Information: " + related.getFullName() + " " + related.getQualNum() /* add average rating info? */));
+				_pageLayout->addWidget(make_unique<Wt::WText>((*it).getReceiptData().getBSB() + " " + (*it).getReceiptData().getAccNum() + " " + (*it).getReceiptData().getAccName()));
+				_pageLayout->addWidget(make_unique<Wt::WText>("Customer Information: " + logged_in_customer.getFullName()));
+				_pageLayout->addWidget(make_unique<Wt::WText>((*it).getReceiptData().getCardNum() + " " + (*it).getReceiptData().getCardExpiry()));
+				_pageLayout->addWidget(make_unique<Wt::WText>("Payment Information: " + (*it).getReceiptData().getCallOut() + " " + (*it).getReceiptData().getServiceCost()));
+				_pageLayout->addWidget(make_unique<Wt::WText>("Review Informaion: " + (*it).getReviewData().getJobRating() + " " + (*it).getReviewData().getReviewDesc()));
+				_pageLayout->addWidget(make_unique<Wt::WText>());
+			}
+		}
+	}
+	else if (userFlag == 2)
 	{
-		GRSS::userMenu();
-	});
 
-	for (int i = 0; i < 5; i++)
-	{
-		// if transaction custid matches current customer id print review details
-		// put all info in  a container
-		Wt::WText *_requestText = _pageLayout->addWidget(make_unique<Wt::WText>("Request ID"));
-		Wt::WText *_specialistText = _pageLayout->addWidget(make_unique<Wt::WText>("Specialist who completed this request"));
-		Wt::WText *_reviewText = _pageLayout->addWidget(make_unique<Wt::WText>("Review Details"));
-		Wt::WText *_ratingText = _pageLayout->addWidget(make_unique<Wt::WText>("Rating out of 10"));
+		for (vector<Transaction>::iterator it = previousTransactions.begin(); it != previousTransactions.end(); ++it)
+		{
+			Customer related;
+			if (logged_in_specialist.specialistID == (*it).getSpecID())
+			{
+				for (vector<Customer>::iterator itr = existingCustomers.begin(); itr != existingCustomers.end(); ++itr)
+				{
+					if ((*itr).custID == (*it).getCustID())
+					{
+						related = (*itr);
+						break;
+					}
+				}
+				_pageLayout->addWidget(make_unique<Wt::WText>("Transaction " + to_string(++i)));
+				_pageLayout->addWidget(make_unique<Wt::WText>("Location Information: " + (*it).getRequestData().getStNum() + " " + (*it).getRequestData().getStName() + ", " + (*it).getRequestData().getPostCode()));
+				Wt::WTextArea *_locationDescArea = _pageLayout->addWidget(make_unique<Wt::WTextArea>((*it).getRequestData().getLocDesc()));
+				_locationDescArea->setReadOnly(true);
+				_pageLayout->addWidget(make_unique<Wt::WText>("Incident infomration: " + (*it).getRequestData().getServiceType()));
+				Wt::WTextArea *_incDescArea = _pageLayout->addWidget(make_unique<Wt::WTextArea>((*it).getRequestData().getIncDesc()));
+				_incDescArea->setReadOnly(true);
+				_pageLayout->addWidget(make_unique<Wt::WText>("Specialist Information: " + logged_in_specialist.getFullName() + " " + logged_in_specialist.getQualNum() /* add average rating info? */));
+				_pageLayout->addWidget(make_unique<Wt::WText>((*it).getReceiptData().getBSB() + " " + (*it).getReceiptData().getAccNum() + " " + (*it).getReceiptData().getAccName()));
+				_pageLayout->addWidget(make_unique<Wt::WText>("Customer Information: " + related.getFullName()));
+				_pageLayout->addWidget(make_unique<Wt::WText>((*it).getReceiptData().getCardNum() + " " + (*it).getReceiptData().getCardExpiry()));
+				_pageLayout->addWidget(make_unique<Wt::WText>("Payment Information: " + (*it).getReceiptData().getCallOut() + " " + (*it).getReceiptData().getServiceCost()));
+				_pageLayout->addWidget(make_unique<Wt::WText>("Review Informaion: " + (*it).getReviewData().getJobRating() + " " + (*it).getReviewData().getReviewDesc()));
+				_pageLayout->addWidget(make_unique<Wt::WText>());
+			}
+		}
 	}
 }

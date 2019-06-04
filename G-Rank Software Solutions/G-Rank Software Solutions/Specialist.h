@@ -19,6 +19,7 @@ public:
 	void selectRequest(int);
 	void addArea(string);
 	void returnUser();
+	void viewRequests();
 	string getQualification();
 	string getBsb();
 	string getAccount_num();
@@ -31,7 +32,7 @@ public:
 	static Specialist* load();
 	static vector<Specialist> GRSSload();
 	set<string> operationalAreas;
-	string specialistID;
+	string specialistID, callOutFee;
 	string getQualNum();
 	string getBSB();
 	string getAccNum();
