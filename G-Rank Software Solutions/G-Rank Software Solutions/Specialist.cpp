@@ -190,6 +190,39 @@ void Specialist::save() {
 	outFile.close();
 }
 
+void Specialist::saveAll(vector<Specialist> inSpec) {
+	ofstream outFile;
+	outFile.open("Specialists.csv");
+
+	vector<Specialist>::iterator it = inSpec.begin();
+	if (outFile.is_open()) {
+		while (it != inSpec.end())
+		{
+			outFile << it->specialistID << "`"
+				<< it->username << "`"
+				<< it->password << "`"
+				<< it->fName << "`"
+				<< it->lName << "`"
+				<< it->licenseNumber << "`"
+				<< it->phNumber << "`"
+				<< it->email << "`"
+				<< it->qualification_num << "`";
+
+			for (std::set<string>::iterator itr = it->operationalAreas.begin(); itr != it->operationalAreas.end(); ++it) {
+				if (itr != it->operationalAreas.begin()) outFile << "|";
+				outFile << *itr;
+			}
+
+			outFile << "`"
+				<< it->bsb << "`"
+				<< it->account_num << "`"
+				<< it->account_name << "\n";
+			it++;
+		}
+	}
+	outFile.close();
+}
+
 string Specialist::getQualification() {
 	return qualification_num;
 }

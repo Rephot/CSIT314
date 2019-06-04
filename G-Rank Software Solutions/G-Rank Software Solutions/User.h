@@ -13,7 +13,7 @@ public:
 	User();
 	User(string, string, string, string, time_t, string);
 	User(string, string, string, string, string, string, string);
-	bool setPassword(string);
+	void setPassword(string);
 	void returnUser();
 	string getUserName();
 	string getPassword();
@@ -25,7 +25,6 @@ public:
 	string getEmail();
 	string getLicenseNumber();
 	void setUserName(string);
-	void setFullName(string);
 	void setFirstName(string);
 	void setLastName(string);
 	void setNumber(string);

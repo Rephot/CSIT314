@@ -51,6 +51,7 @@ private:
 	// may replace with logged_in_user???
 	Customer logged_in_customer;
 	Specialist logged_in_specialist;
+	Administrator logged_in_admin;
 	void initCSS();
 	void initContentLayout();
 	void title();
@@ -73,6 +74,7 @@ private:
 	void viewUserDetails();
 	void editUserDetails();
 	void viewTransactions();
+	void updateUsers();
 
 public:
 	vector<Customer> existingCustomers;

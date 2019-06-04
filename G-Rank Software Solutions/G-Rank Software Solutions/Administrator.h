@@ -21,6 +21,7 @@ public:
 	static vector<Administrator> loadAdministrators();
 	void returnUser();
 	void saveAdministrator();
+	static void saveAdministratorAll(vector<Administrator>);
 	void viewTransactions(vector<Transaction>);
 	void suspendUser(string, vector<Customer>);
 	void suspendUser(string, vector<Specialist>);

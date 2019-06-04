@@ -16,6 +16,7 @@ public:
 	Specialist(string, string, string, string, string, string, string, string, string, string, string, string, set<string>);
 	Specialist(string, string, string, string, string, string, string, string, string, string, string, string);
 	void save();
+	static void saveAll(vector<Specialist>);
 	void selectRequest(int);
 	void addArea(string);
 	void returnUser();

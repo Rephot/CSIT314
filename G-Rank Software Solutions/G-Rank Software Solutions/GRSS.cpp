@@ -92,8 +92,11 @@ void GRSS::title()
 
 void GRSS::loadInfo()
 {
+	existingCustomers.clear();
 	existingCustomers = Customer::GRSSload();
+	existingSpecialists.clear();
 	existingSpecialists = Specialist::GRSSload();
+	existingAdmins.clear();
 	existingAdmins = Administrator::loadAdministrators();
 	inProgress = Transaction::GRSSload("GRSScreated.csv"); // customer creates
 	specAvailable = Transaction::GRSSload("GRSSspecAvailable.csv"); // specialists says they're available
@@ -232,6 +235,7 @@ bool GRSS::validateLogin(Wt::WString username)
 {
 	vector<Customer>::iterator cItr = existingCustomers.begin();
 	vector<Specialist>::iterator sItr = existingSpecialists.begin();
+	vector<Administrator>::iterator aItr = existingAdmins.begin();
 	do
 	{
 		Wt::WString user = cItr->getUserName();;
@@ -253,6 +257,17 @@ bool GRSS::validateLogin(Wt::WString username)
 		}
 		else if (sItr != existingSpecialists.end()) sItr++;
 	} while (sItr != existingSpecialists.end());
+	do
+	{
+		Wt::WString user = aItr->getUserName();
+		user = aItr->getUserName();
+		if (user == username)
+		{
+			userFlag = 3;
+			return true;
+		}
+		else if (aItr != existingAdmins.end()) aItr++;
+	} while (aItr != existingAdmins.end());
 	return false;
 }
 
@@ -282,6 +297,19 @@ bool GRSS::validateUsersPassword(Wt::WString username, Wt::WString password)
 				if ((user == username) && (pass == password))
 				{
 					logged_in_specialist = *Itr;
+					return true;
+				}
+			}
+		}
+		else if (userFlag == 3)
+		{
+			for (vector<Administrator>::iterator Itr = existingAdmins.begin(); Itr != existingAdmins.end(); Itr++)
+			{
+				Wt::WString user = Itr->getUserName();
+				Wt::WString pass = Itr->getPassword();
+				if ((user == username) && (pass == password))
+				{
+					logged_in_admin = *Itr;
 					return true;
 				}
 			}
@@ -1118,163 +1146,171 @@ void GRSS::viewUserDetails()
 		GRSS::userMenu();
 	});
 
-	// userFlag
 	if (userFlag == 1)
 	{
 		_pageLayout->addWidget(make_unique<Wt::WText>("User Details:"))->setId("buttons");
 		Wt::WContainerWidget *_userContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
-		Wt::WContainerWidget *_usernameContainer = _userContainer->addWidget(make_unique<Wt::WContainerWidget>());
-		Wt::WHBoxLayout *_usernameLayout = _usernameContainer->setLayout(make_unique<Wt::WHBoxLayout>());
-		_usernameLayout->addWidget(make_unique<Wt::WText>("Username:"), 1);
-		_usernameLayout->addWidget(make_unique<Wt::WText>(logged_in_customer.getUserName()));
+		_userContainer->addWidget(make_unique<Wt::WText>("Username: " + logged_in_customer.getUserName()));
 
 		_pageLayout->addWidget(make_unique<Wt::WText>("Personal Details:"))->setId("buttons");
 		Wt::WContainerWidget *_personalContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
-		Wt::WContainerWidget *_firstContainer = _personalContainer->addWidget(make_unique<Wt::WContainerWidget>());
-		Wt::WHBoxLayout *_firstLayout = _firstContainer->setLayout(make_unique<Wt::WHBoxLayout>());
-		_firstLayout->addWidget(make_unique<Wt::WText>("First Name:"), 1);
-		_firstLayout->addWidget(make_unique<Wt::WText>(logged_in_customer.getFirstName()));
+		_personalContainer->addWidget(make_unique<Wt::WText>("First Name: " + logged_in_customer.getFirstName()));
 
 		Wt::WContainerWidget *_lastContainer = _personalContainer->addWidget(make_unique<Wt::WContainerWidget>());
-		Wt::WHBoxLayout *_lastLayout = _lastContainer->setLayout(make_unique<Wt::WHBoxLayout>());
-		_lastLayout->addWidget(make_unique<Wt::WText>("Last Name:"), 1);
-		_lastLayout->addWidget(make_unique<Wt::WText>(logged_in_customer.getLastName()));
+		_lastContainer->addWidget(make_unique<Wt::WText>("Last Name: " + logged_in_customer.getLastName()));
 
 		Wt::WContainerWidget *_phoneContainer = _personalContainer->addWidget(make_unique<Wt::WContainerWidget>());
-		Wt::WHBoxLayout *_phoneLayout = _phoneContainer->setLayout(make_unique<Wt::WHBoxLayout>());
-		_phoneLayout->addWidget(make_unique<Wt::WText>("Phone Number:"), 1);
-		_phoneLayout->addWidget(make_unique<Wt::WText>(logged_in_customer.getNumber()));
+		_phoneContainer->addWidget(make_unique<Wt::WText>("Phone Number: " + logged_in_customer.getNumber()));
 
 		Wt::WContainerWidget *_licNumContainer = _personalContainer->addWidget(make_unique<Wt::WContainerWidget>());
-		Wt::WHBoxLayout *_licNumLayout = _licNumContainer->setLayout(make_unique<Wt::WHBoxLayout>());
-		_licNumLayout->addWidget(make_unique<Wt::WText>("License Number:"), 1);
-		_licNumLayout->addWidget(make_unique<Wt::WText>(logged_in_customer.getLicenseNumber()));
+		_licNumContainer->addWidget(make_unique<Wt::WText>("License Number: " + logged_in_customer.getLicenseNumber()));
 
 		Wt::WContainerWidget *_emailContainer = _personalContainer->addWidget(make_unique<Wt::WContainerWidget>());
-		Wt::WHBoxLayout *_emailLayout = _emailContainer->setLayout(make_unique<Wt::WHBoxLayout>());
-		_emailLayout->addWidget(make_unique<Wt::WText>("eMail Address:"), 1);
-		_emailLayout->addWidget(make_unique<Wt::WText>(logged_in_customer.getEmail()));
+		_emailContainer->addWidget(make_unique<Wt::WText>("eMail Address: " + logged_in_customer.getEmail()));
 
 		_pageLayout->addWidget(make_unique<Wt::WText>("Card Details:"))->setId("buttons");
 		Wt::WContainerWidget *_cardContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
 
 		Wt::WContainerWidget *_cardNumContainer = _cardContainer->addWidget(make_unique<Wt::WContainerWidget>());
-		Wt::WHBoxLayout *_cardNumLayout = _cardNumContainer->setLayout(make_unique<Wt::WHBoxLayout>());
-		_cardNumLayout->addWidget(make_unique<Wt::WText>("Card Number:"), 1);
-		_cardNumLayout->addWidget(make_unique<Wt::WText>(logged_in_customer.getCardNumber()));
+		_cardNumContainer->addWidget(make_unique<Wt::WText>("Card Number: " + logged_in_customer.getCardNumber()));
 
 		Wt::WContainerWidget *_cardExpContainer = _cardContainer->addWidget(make_unique<Wt::WContainerWidget>());
-		Wt::WHBoxLayout *_cardExpLayout = _cardExpContainer->setLayout(make_unique<Wt::WHBoxLayout>());
-		_cardExpLayout->addWidget(make_unique<Wt::WText>("Card Expiry:"), 1);
-		_cardExpLayout->addWidget(make_unique<Wt::WText>(logged_in_customer.getCardExpiry()));
+		_cardExpContainer->addWidget(make_unique<Wt::WText>("Card Expiry: " + logged_in_customer.getCardExpiry()));
 
 		_pageLayout->addWidget(make_unique<Wt::WText>("Card Details:"))->setId("buttons");
 		Wt::WContainerWidget *_carContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
 
 		Wt::WContainerWidget *_carYearContainer = _carContainer->addWidget(make_unique<Wt::WContainerWidget>());
-		Wt::WHBoxLayout *_carYearLayout = _carYearContainer->setLayout(make_unique<Wt::WHBoxLayout>());
-		_carYearLayout->addWidget(make_unique<Wt::WText>("Year Car Made:"), 1);
-		_carYearLayout->addWidget(make_unique<Wt::WText>(logged_in_customer.getCarYear()));
+		_carYearContainer->addWidget(make_unique<Wt::WText>("Year Car Made: " + logged_in_customer.getCarYear()));
 
 		Wt::WContainerWidget *_carMakeContainer = _carContainer->addWidget(make_unique<Wt::WContainerWidget>());
-		Wt::WHBoxLayout *_carMakeLayout = _carMakeContainer->setLayout(make_unique<Wt::WHBoxLayout>());
-		_carMakeLayout->addWidget(make_unique<Wt::WText>("Car Make:"), 1);
-		_carMakeLayout->addWidget(make_unique<Wt::WText>(logged_in_customer.getCarMake()));
+		_carMakeContainer->addWidget(make_unique<Wt::WText>("Car Make: " + logged_in_customer.getCarMake()));
 
 		Wt::WContainerWidget *_carModelContainer = _carContainer->addWidget(make_unique<Wt::WContainerWidget>());
-		Wt::WHBoxLayout *_carModelLayout = _carModelContainer->setLayout(make_unique<Wt::WHBoxLayout>());
-		_carModelLayout->addWidget(make_unique<Wt::WText>("Car Model:"), 1);
-		_carModelLayout->addWidget(make_unique<Wt::WText>(logged_in_customer.getCarModel()));
+		_carModelContainer->addWidget(make_unique<Wt::WText>("Car Model: " + logged_in_customer.getCarModel()));
 
 		Wt::WContainerWidget *_carShapeContainer = _carContainer->addWidget(make_unique<Wt::WContainerWidget>());
-		Wt::WHBoxLayout *_carShapeLayout = _carShapeContainer->setLayout(make_unique<Wt::WHBoxLayout>());
-		_carShapeLayout->addWidget(make_unique<Wt::WText>("Car Shape:"), 1);
-		_carShapeLayout->addWidget(make_unique<Wt::WText>(logged_in_customer.getCarShape()));
+		_carShapeContainer->addWidget(make_unique<Wt::WText>("Car Shape: " + logged_in_customer.getCarShape()));
 
 		Wt::WContainerWidget *_carEngContainer = _carContainer->addWidget(make_unique<Wt::WContainerWidget>());
-		Wt::WHBoxLayout *_carEngLayout = _carEngContainer->setLayout(make_unique<Wt::WHBoxLayout>());
-		_carEngLayout->addWidget(make_unique<Wt::WText>("Car Engine Size:"), 1);
-		_carEngLayout->addWidget(make_unique<Wt::WText>(logged_in_customer.getCarEngineSize()));
+		_carEngContainer->addWidget(make_unique<Wt::WText>("Car Engine Size: " + logged_in_customer.getCarEngineSize()));
 
 		Wt::WContainerWidget *_carColourContainer = _carContainer->addWidget(make_unique<Wt::WContainerWidget>());
-		Wt::WHBoxLayout *_carColourLayout = _carColourContainer->setLayout(make_unique<Wt::WHBoxLayout>());
-		_carColourLayout->addWidget(make_unique<Wt::WText>("Car Colour:"), 1);
-		_carColourLayout->addWidget(make_unique<Wt::WText>(logged_in_customer.getCarColour()));
+		_carColourContainer->addWidget(make_unique<Wt::WText>("Car Colour: " + logged_in_customer.getCarColour()));
 	}
 	else if (userFlag == 2)
 	{
 		_pageLayout->addWidget(make_unique<Wt::WText>("User Details:"))->setId("buttons");
 		Wt::WContainerWidget *_userContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
-		Wt::WContainerWidget *_usernameContainer = _userContainer->addWidget(make_unique<Wt::WContainerWidget>());
-		Wt::WHBoxLayout *_usernameLayout = _usernameContainer->setLayout(make_unique<Wt::WHBoxLayout>());
-		_usernameLayout->addWidget(make_unique<Wt::WText>("Username:"), 1);
-		_usernameLayout->addWidget(make_unique<Wt::WText>(logged_in_specialist.getUserName()));
+		_userContainer->addWidget(make_unique<Wt::WText>("Username: " + logged_in_specialist.getUserName()));
 
 		_pageLayout->addWidget(make_unique<Wt::WText>("Personal Details:"))->setId("buttons");
 		Wt::WContainerWidget *_personalContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
-		Wt::WContainerWidget *_firstContainer = _personalContainer->addWidget(make_unique<Wt::WContainerWidget>());
-		Wt::WHBoxLayout *_firstLayout = _firstContainer->setLayout(make_unique<Wt::WHBoxLayout>());
-		_firstLayout->addWidget(make_unique<Wt::WText>("First Name:"), 1);
-		_firstLayout->addWidget(make_unique<Wt::WText>(logged_in_specialist.getFirstName()));
+		_personalContainer->addWidget(make_unique<Wt::WText>("First Name: " + logged_in_specialist.getFirstName()));
 
 		Wt::WContainerWidget *_lastContainer = _personalContainer->addWidget(make_unique<Wt::WContainerWidget>());
-		Wt::WHBoxLayout *_lastLayout = _lastContainer->setLayout(make_unique<Wt::WHBoxLayout>());
-		_lastLayout->addWidget(make_unique<Wt::WText>("Last Name:"), 1);
-		_lastLayout->addWidget(make_unique<Wt::WText>(logged_in_specialist.getLastName()));
+		_lastContainer->addWidget(make_unique<Wt::WText>("Last Name: " + logged_in_specialist.getLastName()));
 
 		Wt::WContainerWidget *_phoneContainer = _personalContainer->addWidget(make_unique<Wt::WContainerWidget>());
-		Wt::WHBoxLayout *_phoneLayout = _phoneContainer->setLayout(make_unique<Wt::WHBoxLayout>());
-		_phoneLayout->addWidget(make_unique<Wt::WText>("Phone Number:"), 1);
-		_phoneLayout->addWidget(make_unique<Wt::WText>(logged_in_specialist.getNumber()));
+		_phoneContainer->addWidget(make_unique<Wt::WText>("Phone Number: " + logged_in_specialist.getNumber()));
 
 		Wt::WContainerWidget *_licNumContainer = _personalContainer->addWidget(make_unique<Wt::WContainerWidget>());
-		Wt::WHBoxLayout *_licNumLayout = _licNumContainer->setLayout(make_unique<Wt::WHBoxLayout>());
-		_licNumLayout->addWidget(make_unique<Wt::WText>("License Number:"), 1);
-		_licNumLayout->addWidget(make_unique<Wt::WText>(logged_in_specialist.getLicenseNumber()));
+		_licNumContainer->addWidget(make_unique<Wt::WText>("License Number: " + logged_in_specialist.getLicenseNumber()));
 
 		Wt::WContainerWidget *_emailContainer = _personalContainer->addWidget(make_unique<Wt::WContainerWidget>());
-		Wt::WHBoxLayout *_emailLayout = _emailContainer->setLayout(make_unique<Wt::WHBoxLayout>());
-		_emailLayout->addWidget(make_unique<Wt::WText>("eMail Address:"), 1);
-		_emailLayout->addWidget(make_unique<Wt::WText>(logged_in_specialist.getEmail()));
+		_emailContainer->addWidget(make_unique<Wt::WText>("eMail Address: " + logged_in_specialist.getEmail()));
 
 		_pageLayout->addWidget(make_unique<Wt::WText>("Payment Details:"))->setId("buttons");
 		Wt::WContainerWidget *_paymentContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
 		Wt::WContainerWidget *_BSBContainer = _paymentContainer->addWidget(make_unique<Wt::WContainerWidget>());
-		Wt::WHBoxLayout *_BSBLayout = _BSBContainer->setLayout(make_unique<Wt::WHBoxLayout>());
-		_BSBLayout->addWidget(make_unique<Wt::WText>("BSB:"), 1);
-		_BSBLayout->addWidget(make_unique<Wt::WText>(logged_in_specialist.getBSB()));
+		_BSBContainer->addWidget(make_unique<Wt::WText>("BSB: " + logged_in_specialist.getBSB()));
 
 		Wt::WContainerWidget *_accNumContainer = _paymentContainer->addWidget(make_unique<Wt::WContainerWidget>());
-		Wt::WHBoxLayout *_accNumLayout = _accNumContainer->setLayout(make_unique<Wt::WHBoxLayout>());
-		_accNumLayout->addWidget(make_unique<Wt::WText>("Account Number:"), 1);
-		_accNumLayout->addWidget(make_unique<Wt::WText>(logged_in_specialist.getAccNum()));
+		_accNumContainer->addWidget(make_unique<Wt::WText>("Account Number: " + logged_in_specialist.getAccNum()));
 
 		Wt::WContainerWidget *_accNameContainer = _paymentContainer->addWidget(make_unique<Wt::WContainerWidget>());
-		Wt::WHBoxLayout *_accNameLayout = _accNameContainer->setLayout(make_unique<Wt::WHBoxLayout>());
-		_accNameLayout->addWidget(make_unique<Wt::WText>("Account Name:"), 1);
-		_accNameLayout->addWidget(make_unique<Wt::WText>(logged_in_specialist.getAccName()));
+		_accNameContainer->addWidget(make_unique<Wt::WText>("Account Name: " + logged_in_specialist.getAccName()));
 
 		_pageLayout->addWidget(make_unique<Wt::WText>("Specialist Details:"))->setId("buttons");
 		Wt::WContainerWidget *_specialistContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
-		Wt::WContainerWidget *_qualNumContainer = _specialistContainer->addWidget(make_unique<Wt::WContainerWidget>());
-		Wt::WHBoxLayout *_qualNumLayout = _qualNumContainer->setLayout(make_unique<Wt::WHBoxLayout>());
-		_qualNumLayout->addWidget(make_unique<Wt::WText>("Qualification Number:"), 1);
-		_qualNumLayout->addWidget(make_unique<Wt::WText>(logged_in_specialist.getQualNum()));
+		_specialistContainer->addWidget(make_unique<Wt::WText>("Qualification Number: " + logged_in_specialist.getQualNum()));
 
 		Wt::WContainerWidget *_opAreaContainer = _specialistContainer->addWidget(make_unique<Wt::WContainerWidget>());
-		Wt::WHBoxLayout *_opAreaLayout = _opAreaContainer->setLayout(make_unique<Wt::WHBoxLayout>());
-		_opAreaLayout->addWidget(make_unique<Wt::WText>("Qualification Number:"), 1);
-		Wt::WContainerWidget *_opAreasContainer = _opAreaLayout->addWidget(make_unique<Wt::WContainerWidget>());
-		Wt::WVBoxLayout *_operAreasLayout = _opAreasContainer->setLayout(make_unique<Wt::WVBoxLayout>());
+		stringstream ss;
+		ss << "Qualification Number: ";
 		for (set<string>::iterator it = logged_in_specialist.operationalAreas.begin(); it != logged_in_specialist.operationalAreas.end(); ++it)
 		{
-			_operAreasLayout->addWidget(make_unique<Wt::WText>(*it));
-		}		
+			if (it != logged_in_specialist.operationalAreas.begin()) ss << ", ";
+			ss << (*it);
+		}
+		_opAreaContainer->addWidget(make_unique<Wt::WText>(ss.str()));
 	}
+	else if (userFlag == 3)
+	{
+		_pageLayout->addWidget(make_unique<Wt::WText>("User Details:"))->setId("buttons");
+		Wt::WContainerWidget *_userContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
+		_userContainer->addWidget(make_unique<Wt::WText>("Username: " + logged_in_admin.getUserName()));
+
+		_pageLayout->addWidget(make_unique<Wt::WText>("Personal Details:"))->setId("buttons");
+		Wt::WContainerWidget *_personalContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
+		_personalContainer->addWidget(make_unique<Wt::WText>("First Name: " + logged_in_admin.getFirstName()));
+
+		Wt::WContainerWidget *_lastContainer = _personalContainer->addWidget(make_unique<Wt::WContainerWidget>());
+		_lastContainer->addWidget(make_unique<Wt::WText>("Last Name: " + logged_in_admin.getLastName()));
+
+		Wt::WContainerWidget *_phoneContainer = _personalContainer->addWidget(make_unique<Wt::WContainerWidget>());
+		_phoneContainer->addWidget(make_unique<Wt::WText>("Phone Number: " + logged_in_admin.getNumber()));
+	}
+
+	Wt::WPushButton *_editButton = _pageLayout->addWidget(make_unique<Wt::WPushButton>("Edit"));
+	_editButton->clicked().connect([=] { GRSS::editUserDetails(); });
 }
 
 void GRSS::editUserDetails()
 {
+	pwTmp = "";
+	// registerpage2 tmp
+	fnameTmp = "";
+	lnameTmp = "";
+	licNumTmp = "";
+	phoneTmp = "";
+	emailTmp = "";
+	// registerpage3 tmp
+	// cust
+	homeAddressTmp = "";
+	customerTmp = "";
+	licPlateTmp = "";
+	modelYearTmp = "";
+	makeTmp = "";
+	modelTmp = "";
+	shapeTmp = "";
+	engineSizeTmp = "";
+	colourTmp = "";
+	// spec
+	opAreaTmp.clear();
+	check[15] = {};
+	qualNumTmp = "";
+	// registerPage4 tmp
+	// cust
+	cardNumTmp = "";
+	cardExpTmp = "";
+	cardSecTmp = "";
+	subFlagTmp = "";
+	// spec
+	BSBTmp = "";
+	accNumTmp = "";
+	accNameTmp = "";
+
+	// create request tmp
+	// location
+	stNameTmp = "";
+	stNumTmp = "";
+	postCodeTmp = "";
+	locationDescTmp = "";
+	// incident
+	incidentTypeTmp = "";
+	incidentDescTmp = "";
+
 	// shows all user details, has button to edit, editable fields
 	_pageContent->clear();
 	Wt::WVBoxLayout *_pageLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
@@ -1284,33 +1320,309 @@ void GRSS::editUserDetails()
 		GRSS::viewUserDetails();
 	});
 
-	// userFlag
-	// first name
-	Wt::WText *_fnameText = _pageLayout->addWidget(make_unique<Wt::WText>("Current First Name" /* + current fname*/));
-	Wt::WLineEdit *_newFnameField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
-	_newFnameField->setPlaceholderText("Enter your new first name");
-	// last name
-	Wt::WText *_lnameText = _pageLayout->addWidget(make_unique<Wt::WText>("Current Last Name" /* + current lname*/));
-	Wt::WLineEdit *_newLnameField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
-	_newLnameField->setPlaceholderText("Enter your new last name");
-	// licence number
-	Wt::WText *_licenceNumberText = _pageLayout->addWidget(make_unique<Wt::WText>("Current Licence Number" /* + current licnum*/));
-	Wt::WLineEdit *_newLicenceNumberField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
-	_newLicenceNumberField->setPlaceholderText("Enter your new licence number");
-	// phone number
-	Wt::WText *_phoneNumberText = _pageLayout->addWidget(make_unique<Wt::WText>("Current Phone Number" /* + Current number*/));
-	Wt::WLineEdit *_newPhoneNumberField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
-	_newPhoneNumberField->setPlaceholderText("Enter your new phone number");
-	// email
-	Wt::WText *_emailText = _pageLayout->addWidget(make_unique<Wt::WText>("Current eMail" /* + Current email*/));
-	Wt::WLineEdit *_newEmailField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
-	_newEmailField->setPlaceholderText("Enter your new eMail address");
-
-	Wt::WPushButton *_confirmButton = _pageLayout->addWidget(make_unique<Wt::WPushButton>("Confirmm"));
-	_confirmButton->clicked().connect([=]
+	if (userFlag == 1)
 	{
-		// update details that were changed and go back to view user details
-	});
+		_pageLayout->addWidget(make_unique<Wt::WText>("User Details:"))->setId("buttons");
+		Wt::WContainerWidget *_userContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WVBoxLayout *_userLayout = _userContainer->setLayout(make_unique<Wt::WVBoxLayout>());
+		_userLayout->addWidget(make_unique<Wt::WText>("Username: " + logged_in_customer.getUserName()));
+
+		_userLayout->addWidget(make_unique<Wt::WText>("Old Password: "));
+		Wt::WLineEdit *_pwOldEdit = _userLayout->addWidget(make_unique<Wt::WLineEdit>());
+		_pwOldEdit->setPlaceholderText("Enter your old password");
+		_pwOldEdit->setEchoMode(Wt::EchoMode::Password);
+		_userLayout->addWidget(make_unique<Wt::WText>("New Password: "));
+		Wt::WLineEdit *_pwNewEdit = _userLayout->addWidget(make_unique<Wt::WLineEdit>());
+		_pwNewEdit->setPlaceholderText("Enter your new password");
+		_pwNewEdit->setEchoMode(Wt::EchoMode::Password);
+		_userLayout->addWidget(make_unique<Wt::WText>("Confirm New Password: "));
+		Wt::WLineEdit *_pwConNewEdit = _userLayout->addWidget(make_unique<Wt::WLineEdit>());
+		_pwConNewEdit->setPlaceholderText("Confirm your new password");
+		_pwConNewEdit->setEchoMode(Wt::EchoMode::Password);
+
+		_pageLayout->addWidget(make_unique<Wt::WText>("Personal Details:"))->setId("buttons");
+		Wt::WContainerWidget *_personalContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WVBoxLayout *_personalLayout = _personalContainer->setLayout(make_unique<Wt::WVBoxLayout>());
+
+		_personalLayout->addWidget(make_unique<Wt::WText>("First Name: " + logged_in_customer.getFirstName()));
+		Wt::WLineEdit *_firstEdit = _personalLayout->addWidget(make_unique<Wt::WLineEdit>());
+		_firstEdit->setPlaceholderText("Enter your new First Name");
+
+		_personalLayout->addWidget(make_unique<Wt::WText>("Last Name: " + logged_in_customer.getLastName()));
+		Wt::WLineEdit *_lastEdit = _personalLayout->addWidget(make_unique<Wt::WLineEdit>());
+		_lastEdit->setPlaceholderText("Enter your new Last Name");
+
+		_personalLayout->addWidget(make_unique<Wt::WText>("Phone Number: " + logged_in_customer.getNumber()));
+		Wt::WLineEdit *_phoneEdit = _personalLayout->addWidget(make_unique<Wt::WLineEdit>());
+		_phoneEdit->setPlaceholderText("Enter your new Phone Number");
+
+		_personalLayout->addWidget(make_unique<Wt::WText>("License Number: " + logged_in_customer.getLicenseNumber()));
+		Wt::WLineEdit *_licenseEdit = _personalLayout->addWidget(make_unique<Wt::WLineEdit>());
+		_licenseEdit->setPlaceholderText("Enter your new License Number");
+
+		_personalLayout->addWidget(make_unique<Wt::WText>("eMail Address: " + logged_in_customer.getEmail()));
+		Wt::WLineEdit *_eMailEdit = _personalLayout->addWidget(make_unique<Wt::WLineEdit>());
+		_eMailEdit->setPlaceholderText("Enter your new eMail Address");
+
+		_pageLayout->addWidget(make_unique<Wt::WText>("Card Details:"))->setId("buttons");
+		Wt::WContainerWidget *_cardContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WVBoxLayout *_cardLayout = _cardContainer->setLayout(make_unique<Wt::WVBoxLayout>());
+
+		_cardLayout->addWidget(make_unique<Wt::WText>("Card Number: " + logged_in_customer.getCardNumber()));
+		Wt::WLineEdit *_numEdit = _cardLayout->addWidget(make_unique<Wt::WLineEdit>());
+		_numEdit->setPlaceholderText("Enter your new Card Number");
+
+		_cardLayout->addWidget(make_unique<Wt::WText>("Card Expiry: " + logged_in_customer.getCardExpiry()));
+		Wt::WLineEdit *_expEdit = _cardLayout->addWidget(make_unique<Wt::WLineEdit>());
+		_expEdit->setPlaceholderText("Enter your new Card Expiry");
+
+		_cardLayout->addWidget(make_unique<Wt::WText>("Card Security: " + logged_in_customer.getCardSec()));
+		Wt::WLineEdit *_secEdit = _cardLayout->addWidget(make_unique<Wt::WLineEdit>());
+		_secEdit->setPlaceholderText("Enter your new Card Security");
+
+		_pageLayout->addWidget(make_unique<Wt::WText>("Car Details:"))->setId("buttons");
+		Wt::WContainerWidget *_carContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WVBoxLayout *_carLayout = _carContainer->setLayout(make_unique<Wt::WVBoxLayout>());
+
+		_carLayout->addWidget(make_unique<Wt::WText>("Year Car Made: " + logged_in_customer.getCarYear()));
+		Wt::WLineEdit *_yearEdit = _carLayout->addWidget(make_unique<Wt::WLineEdit>());
+		_yearEdit->setPlaceholderText("Enter your new Car Year");
+
+		_carLayout->addWidget(make_unique<Wt::WText>("Car Make: " + logged_in_customer.getCarMake()));
+		Wt::WLineEdit *_makeEdit = _carLayout->addWidget(make_unique<Wt::WLineEdit>());
+		_makeEdit->setPlaceholderText("Enter your new Car Make");
+
+		_carLayout->addWidget(make_unique<Wt::WText>("Car Model: " + logged_in_customer.getCarModel()));
+		Wt::WLineEdit *_modelEdit = _carLayout->addWidget(make_unique<Wt::WLineEdit>());
+		_modelEdit->setPlaceholderText("Enter your new Car Model");
+
+		_carLayout->addWidget(make_unique<Wt::WText>("Car Shape: " + logged_in_customer.getCarShape()));
+		Wt::WLineEdit *_shapeEdit = _carLayout->addWidget(make_unique<Wt::WLineEdit>());
+		_shapeEdit->setPlaceholderText("Enter your new Car Shape");
+
+		_carLayout->addWidget(make_unique<Wt::WText>("Car Engine Size: " + logged_in_customer.getCarEngineSize()));
+		Wt::WLineEdit *_sizeEdit = _carLayout->addWidget(make_unique<Wt::WLineEdit>());
+		_sizeEdit->setPlaceholderText("Enter your new Car Engine Size");
+
+		_carLayout->addWidget(make_unique<Wt::WText>("Car Colour: " + logged_in_customer.getCarColour()));
+		Wt::WLineEdit *_colourEdit = _carLayout->addWidget(make_unique<Wt::WLineEdit>());
+		_colourEdit->setPlaceholderText("Enter your new Car Colour");
+
+		Wt::WPushButton *_confirmButton = _pageLayout->addWidget(make_unique<Wt::WPushButton>("Confirm"));
+		_confirmButton->clicked().connect([=]
+		{
+			if (logged_in_customer.getPassword() == _pwOldEdit->text().narrow()) {
+				if ((_pwNewEdit->text() == _pwConNewEdit->text()) && (_pwNewEdit->text() != "")) pwTmp = _pwNewEdit->text().narrow();
+				if (_firstEdit->text() != "") fnameTmp = _firstEdit->text().narrow();
+				if (_lastEdit->text() != "") lnameTmp = _lastEdit->text().narrow();
+				if (_phoneEdit->text() != "") phoneTmp = _phoneEdit->text().narrow();
+				if (_licenseEdit->text() != "") licNumTmp = _licenseEdit->text().narrow();
+				if ((_eMailEdit->text() != "") && (regex_match(_eMailEdit->text().narrow(), emailPattern))) emailTmp = _eMailEdit->text().narrow();
+				if (_numEdit->text() != "") cardNumTmp = _numEdit->text().narrow();
+				if (_expEdit->text() != "") cardExpTmp = _expEdit->text().narrow();
+				if (_secEdit->text() != "") cardSecTmp = _secEdit->text().narrow();
+				if (_yearEdit->text() != "") modelYearTmp = _yearEdit->text().narrow();
+				if (_makeEdit->text() != "") makeTmp = _makeEdit->text().narrow();
+				if (_modelEdit->text() != "") modelTmp = _modelEdit->text().narrow();
+				if (_shapeEdit->text() != "") shapeTmp = _shapeEdit->text().narrow();
+				if (_sizeEdit->text() != "") engineSizeTmp = _sizeEdit->text().narrow();
+				if (_colourEdit->text() != "") colourTmp = _colourEdit->text().narrow();
+			}
+			// else emit error
+			GRSS::updateUsers();
+			GRSS::loadInfo();
+			vector<Customer>::iterator it = existingCustomers.begin();
+			while (it != existingCustomers.end() && (*it).custID != logged_in_customer.custID) ++it;
+			logged_in_customer = *it;
+			GRSS::viewUserDetails();
+			// update details that were changed and go back to view user details
+		});
+	}
+	else if (userFlag == 2)
+	{
+		_pageLayout->addWidget(make_unique<Wt::WText>("User Details:"))->setId("buttons");
+		Wt::WContainerWidget *_userContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WVBoxLayout *_userLayout = _userContainer->setLayout(make_unique<Wt::WVBoxLayout>());
+		_userLayout->addWidget(make_unique<Wt::WText>("Username: " + logged_in_specialist.getUserName()));
+
+		_userLayout->addWidget(make_unique<Wt::WText>("Old Password: "));
+		Wt::WLineEdit *_pwOldEdit = _userLayout->addWidget(make_unique<Wt::WLineEdit>());
+		_pwOldEdit->setPlaceholderText("Enter your old password");
+		_pwOldEdit->setEchoMode(Wt::EchoMode::Password);
+		_userLayout->addWidget(make_unique<Wt::WText>("New Password: "));
+		Wt::WLineEdit *_pwNewEdit = _userLayout->addWidget(make_unique<Wt::WLineEdit>());
+		_pwNewEdit->setPlaceholderText("Enter your new password");
+		_pwNewEdit->setEchoMode(Wt::EchoMode::Password);
+		_userLayout->addWidget(make_unique<Wt::WText>("Confirm New Password: "));
+		Wt::WLineEdit *_pwConNewEdit = _userLayout->addWidget(make_unique<Wt::WLineEdit>());
+		_pwConNewEdit->setPlaceholderText("Confirm your new password");
+		_pwConNewEdit->setEchoMode(Wt::EchoMode::Password);
+
+		_pageLayout->addWidget(make_unique<Wt::WText>("Personal Details:"))->setId("buttons");
+		Wt::WContainerWidget *_personalContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WVBoxLayout *_personalLayout = _personalContainer->setLayout(make_unique<Wt::WVBoxLayout>());
+		
+		_personalLayout->addWidget(make_unique<Wt::WText>("First Name: " + logged_in_specialist.getFirstName()));
+		Wt::WLineEdit *_firstEdit = _personalLayout->addWidget(make_unique<Wt::WLineEdit>());
+		_firstEdit->setPlaceholderText("Enter your new First Name");
+
+		_personalLayout->addWidget(make_unique<Wt::WText>("Last Name: " + logged_in_specialist.getLastName()));
+		Wt::WLineEdit *_lastEdit = _personalLayout->addWidget(make_unique<Wt::WLineEdit>());
+		_lastEdit->setPlaceholderText("Enter your new Last Name");
+
+		_personalLayout->addWidget(make_unique<Wt::WText>("Phone Number: " + logged_in_specialist.getNumber()));
+		Wt::WLineEdit *_phoneEdit = _personalLayout->addWidget(make_unique<Wt::WLineEdit>());
+		_phoneEdit->setPlaceholderText("Enter your new Phone Number");
+
+		_personalLayout->addWidget(make_unique<Wt::WText>("License Number: " + logged_in_specialist.getLicenseNumber()));
+		Wt::WLineEdit *_licenseEdit = _personalLayout->addWidget(make_unique<Wt::WLineEdit>());
+		_licenseEdit->setPlaceholderText("Enter your new License Number");
+
+		_personalLayout->addWidget(make_unique<Wt::WText>("eMail Address: " + logged_in_specialist.getEmail()));
+		Wt::WLineEdit *_eMailEdit = _personalLayout->addWidget(make_unique<Wt::WLineEdit>());
+		_eMailEdit->setPlaceholderText("Enter your new eMail Address");
+
+		_pageLayout->addWidget(make_unique<Wt::WText>("Payment Details:"))->setId("buttons");
+		Wt::WContainerWidget *_paymentContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WVBoxLayout *_paymentLayout = _paymentContainer->setLayout(make_unique<Wt::WVBoxLayout>());
+		
+		_paymentLayout->addWidget(make_unique<Wt::WText>("BSB: " + logged_in_specialist.getBSB()));
+		Wt::WLineEdit *_bsbEdit = _paymentLayout->addWidget(make_unique<Wt::WLineEdit>());
+		_bsbEdit->setPlaceholderText("Enter your new BSB");
+
+		_paymentLayout->addWidget(make_unique<Wt::WText>("Account Number: " + logged_in_specialist.getAccNum()));
+		Wt::WLineEdit *_numEdit = _paymentLayout->addWidget(make_unique<Wt::WLineEdit>());
+		_numEdit->setPlaceholderText("Enter your new Account Number");
+
+		_paymentLayout->addWidget(make_unique<Wt::WText>("Account Name: " + logged_in_specialist.getAccName()));
+		Wt::WLineEdit *_nameEdit = _paymentLayout->addWidget(make_unique<Wt::WLineEdit>());
+		_nameEdit->setPlaceholderText("Enter your new Account Name");
+
+		_pageLayout->addWidget(make_unique<Wt::WText>("Specialist Details:"))->setId("buttons");
+		Wt::WContainerWidget *_specialistContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WVBoxLayout *_specLayout = _specialistContainer->setLayout(make_unique<Wt::WVBoxLayout>());
+		
+		_specLayout->addWidget(make_unique<Wt::WText>("Qualification Number: " + logged_in_specialist.getQualNum()));
+		Wt::WLineEdit *_qualEdit = _specLayout->addWidget(make_unique<Wt::WLineEdit>());
+		_qualEdit->setPlaceholderText("Enter your new Qualification Number");
+
+		stringstream ss;
+		ss << "Operation Areas: ";
+		for (set<string>::iterator it = logged_in_specialist.operationalAreas.begin(); it != logged_in_specialist.operationalAreas.end(); ++it)
+		{
+			if (it != logged_in_specialist.operationalAreas.begin()) ss << ", ";
+			ss << (*it);
+		}
+		_specLayout->addWidget(make_unique<Wt::WText>(ss.str()));
+
+		Wt::WSelectionBox *_postCodeSelection = _specLayout->addWidget(make_unique<Wt::WSelectionBox>());
+		_postCodeSelection->addItem("2515");
+		_postCodeSelection->addItem("2516");
+		_postCodeSelection->addItem("2517");
+		_postCodeSelection->addItem("2518");
+		_postCodeSelection->addItem("2519");
+		_postCodeSelection->addItem("2500");
+		_postCodeSelection->addItem("2525");
+		_postCodeSelection->addItem("2526");
+		_postCodeSelection->addItem("2527");
+		_postCodeSelection->addItem("2528");
+		_postCodeSelection->addItem("2529");
+		_postCodeSelection->addItem("2530");
+		_postCodeSelection->addItem("2502");
+		_postCodeSelection->addItem("2505");
+		_postCodeSelection->addItem("2506");
+		_postCodeSelection->setSelectionMode(Wt::SelectionMode::Extended);
+		_postCodeSelection->activated().connect([=]
+		{
+			std::set<int> selection = _postCodeSelection->selectedIndexes();
+			for (std::set<int>::iterator it = selection.begin(); it != selection.end(); ++it)
+			{
+				opAreaTmp.insert(_postCodeSelection->itemText(*it).narrow());
+			}
+		});
+
+		Wt::WPushButton *_confirmButton = _pageLayout->addWidget(make_unique<Wt::WPushButton>("Confirm"));
+		_confirmButton->clicked().connect([=]
+		{
+			if (logged_in_specialist.getPassword() == _pwOldEdit->text().narrow())
+			{
+				if ((_pwNewEdit->text() == _pwConNewEdit->text()) && (_pwNewEdit->text() != "")) pwTmp = _pwNewEdit->text().narrow();
+				if (_firstEdit->text() != "") fnameTmp = _firstEdit->text().narrow();
+				if (_lastEdit->text() != "") lnameTmp = _lastEdit->text().narrow();
+				if (_phoneEdit->text() != "") phoneTmp = _phoneEdit->text().narrow();
+				if (_licenseEdit->text() != "") licNumTmp = _licenseEdit->text().narrow();
+				if ((_eMailEdit->text() != "") && (regex_match(_eMailEdit->text().narrow(), emailPattern))) emailTmp = _eMailEdit->text().narrow();
+				if (_bsbEdit->text() != "") BSBTmp = _bsbEdit->text().narrow();
+				if (_numEdit->text() != "") accNumTmp = _numEdit->text().narrow();
+				if (_nameEdit->text() != "") accNameTmp = _nameEdit->text().narrow();
+				if (_qualEdit->text() != "") qualNumTmp = _qualEdit->text().narrow();
+			}
+			// else emit error
+			GRSS::updateUsers();
+			GRSS::loadInfo();
+			vector<Specialist>::iterator it = existingSpecialists.begin();
+			while (it != existingSpecialists.end() && (*it).specialistID != logged_in_specialist.specialistID) ++it;
+			logged_in_specialist = *it;
+			GRSS::viewUserDetails();
+			// update details that were changed and go back to view user details
+		});
+	}
+	else if (userFlag == 3)
+	{
+		_pageLayout->addWidget(make_unique<Wt::WText>("User Details:"))->setId("buttons");
+		Wt::WContainerWidget *_userContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WVBoxLayout *_userLayout = _userContainer->setLayout(make_unique<Wt::WVBoxLayout>());
+		_userLayout->addWidget(make_unique<Wt::WText>("Username: " + logged_in_admin.getUserName()));
+
+		_userLayout->addWidget(make_unique<Wt::WText>("Old Password: "));
+		Wt::WLineEdit *_pwOldEdit = _userLayout->addWidget(make_unique<Wt::WLineEdit>());
+		_pwOldEdit->setPlaceholderText("Enter your old password");
+		_pwOldEdit->setEchoMode(Wt::EchoMode::Password);
+		_userLayout->addWidget(make_unique<Wt::WText>("New Password: "));
+		Wt::WLineEdit *_pwNewEdit = _userLayout->addWidget(make_unique<Wt::WLineEdit>());
+		_pwNewEdit->setPlaceholderText("Enter your new password");
+		_pwNewEdit->setEchoMode(Wt::EchoMode::Password);
+		_userLayout->addWidget(make_unique<Wt::WText>("Confirm New Password: "));
+		Wt::WLineEdit *_pwConNewEdit = _userLayout->addWidget(make_unique<Wt::WLineEdit>());
+		_pwConNewEdit->setPlaceholderText("Confirm your new password");
+		_pwConNewEdit->setEchoMode(Wt::EchoMode::Password);
+
+		_pageLayout->addWidget(make_unique<Wt::WText>("Personal Details:"))->setId("buttons");
+		Wt::WContainerWidget *_personalContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WVBoxLayout *_personalLayout = _personalContainer->setLayout(make_unique<Wt::WVBoxLayout>());
+		
+		_personalLayout->addWidget(make_unique<Wt::WText>("First Name: " + logged_in_admin.getFirstName()));
+		Wt::WLineEdit *_firstEdit = _personalLayout->addWidget(make_unique<Wt::WLineEdit>());
+		_firstEdit->setPlaceholderText("Enter your new First Name");
+
+		_personalLayout->addWidget(make_unique<Wt::WText>("Last Name: " + logged_in_admin.getLastName()));
+		Wt::WLineEdit *_lastEdit = _personalLayout->addWidget(make_unique<Wt::WLineEdit>());
+		_lastEdit->setPlaceholderText("Enter your new Last Name");
+
+		_personalLayout->addWidget(make_unique<Wt::WText>("Phone Number: " + logged_in_admin.getNumber()));
+		Wt::WLineEdit *_phoneEdit = _personalLayout->addWidget(make_unique<Wt::WLineEdit>());
+		_phoneEdit->setPlaceholderText("Enter your new Phone Number");
+
+		Wt::WPushButton *_confirmButton = _pageLayout->addWidget(make_unique<Wt::WPushButton>("Confirm"));
+		_confirmButton->clicked().connect([=]
+		{
+			if (logged_in_admin.getPassword() == _pwOldEdit->text().narrow()) {
+				if ((_pwNewEdit->text() == _pwConNewEdit->text()) && (_pwNewEdit->text() != "")) pwTmp = _pwNewEdit->text().narrow();
+				cout << pwTmp << endl;
+				if (_firstEdit->text() != "") fnameTmp = _firstEdit->text().narrow();
+				if (_lastEdit->text() != "") lnameTmp = _lastEdit->text().narrow();
+				if (_phoneEdit->text() != "") phoneTmp = _phoneEdit->text().narrow();
+			}
+			// else emit error
+			GRSS::updateUsers();
+			GRSS::loadInfo();
+			vector<Administrator>::iterator it = existingAdmins.begin();
+			while (it != existingAdmins.end() && (*it).adminID != logged_in_admin.adminID) ++it;
+			logged_in_admin = *it;
+			GRSS::viewUserDetails();
+			// update details that were changed and go back to view user details
+		});
+	}
 }
 
 // view transactions
@@ -1340,7 +1652,7 @@ void GRSS::viewTransactions()
 				_pageLayout->addWidget(make_unique<Wt::WText>("Location Information: " + (*it).getRequestData().getStNum() + " " + (*it).getRequestData().getStName() + ", " + (*it).getRequestData().getPostCode()));
 				Wt::WTextArea *_locationDescArea = _pageLayout->addWidget(make_unique<Wt::WTextArea>((*it).getRequestData().getLocDesc()));
 				_locationDescArea->setReadOnly(true);
-				_pageLayout->addWidget(make_unique<Wt::WText>("Incident infomration: " + (*it).getRequestData().getServiceType()));
+				_pageLayout->addWidget(make_unique<Wt::WText>("Incident Information: " + (*it).getRequestData().getServiceType()));
 				Wt::WTextArea *_incDescArea = _pageLayout->addWidget(make_unique<Wt::WTextArea>((*it).getRequestData().getIncDesc()));
 				_incDescArea->setReadOnly(true);
 				_pageLayout->addWidget(make_unique<Wt::WText>("Specialist Information: " + related.getFullName() + " " + related.getQualNum() /* add average rating info? */));
@@ -1348,7 +1660,7 @@ void GRSS::viewTransactions()
 				_pageLayout->addWidget(make_unique<Wt::WText>("Customer Information: " + logged_in_customer.getFullName()));
 				_pageLayout->addWidget(make_unique<Wt::WText>((*it).getReceiptData().getCardNum() + " " + (*it).getReceiptData().getCardExpiry()));
 				_pageLayout->addWidget(make_unique<Wt::WText>("Payment Information: " + (*it).getReceiptData().getCallOut() + " " + (*it).getReceiptData().getServiceCost()));
-				_pageLayout->addWidget(make_unique<Wt::WText>("Review Informaion: " + (*it).getReviewData().getJobRating() + " " + (*it).getReviewData().getReviewDesc()));
+				_pageLayout->addWidget(make_unique<Wt::WText>("Review Information: " + (*it).getReviewData().getJobRating() + " " + (*it).getReviewData().getReviewDesc()));
 				_pageLayout->addWidget(make_unique<Wt::WText>());
 			}
 		}
@@ -1373,7 +1685,7 @@ void GRSS::viewTransactions()
 				_pageLayout->addWidget(make_unique<Wt::WText>("Location Information: " + (*it).getRequestData().getStNum() + " " + (*it).getRequestData().getStName() + ", " + (*it).getRequestData().getPostCode()));
 				Wt::WTextArea *_locationDescArea = _pageLayout->addWidget(make_unique<Wt::WTextArea>((*it).getRequestData().getLocDesc()));
 				_locationDescArea->setReadOnly(true);
-				_pageLayout->addWidget(make_unique<Wt::WText>("Incident infomration: " + (*it).getRequestData().getServiceType()));
+				_pageLayout->addWidget(make_unique<Wt::WText>("Incident Information: " + (*it).getRequestData().getServiceType()));
 				Wt::WTextArea *_incDescArea = _pageLayout->addWidget(make_unique<Wt::WTextArea>((*it).getRequestData().getIncDesc()));
 				_incDescArea->setReadOnly(true);
 				_pageLayout->addWidget(make_unique<Wt::WText>("Specialist Information: " + logged_in_specialist.getFullName() + " " + logged_in_specialist.getQualNum() /* add average rating info? */));
@@ -1381,9 +1693,99 @@ void GRSS::viewTransactions()
 				_pageLayout->addWidget(make_unique<Wt::WText>("Customer Information: " + related.getFullName()));
 				_pageLayout->addWidget(make_unique<Wt::WText>((*it).getReceiptData().getCardNum() + " " + (*it).getReceiptData().getCardExpiry()));
 				_pageLayout->addWidget(make_unique<Wt::WText>("Payment Information: " + (*it).getReceiptData().getCallOut() + " " + (*it).getReceiptData().getServiceCost()));
-				_pageLayout->addWidget(make_unique<Wt::WText>("Review Informaion: " + (*it).getReviewData().getJobRating() + " " + (*it).getReviewData().getReviewDesc()));
+				_pageLayout->addWidget(make_unique<Wt::WText>("Review Information: " + (*it).getReviewData().getJobRating() + " " + (*it).getReviewData().getReviewDesc()));
 				_pageLayout->addWidget(make_unique<Wt::WText>());
 			}
 		}
+	}
+	else if(userFlag == 3)
+		{
+
+		for (vector<Transaction>::iterator it = previousTransactions.begin(); it != previousTransactions.end(); ++it)
+		{
+			Customer relatedCust;
+			Specialist relatedSpec;
+			for (vector<Specialist>::iterator itr = existingSpecialists.begin(); itr != existingSpecialists.end(); ++itr)
+			{
+				if ((*itr).specialistID == (*it).getSpecID())
+				{
+					relatedSpec = (*itr);
+					break;
+				}
+			}
+			for (vector<Customer>::iterator itr = existingCustomers.begin(); itr != existingCustomers.end(); ++itr)
+			{
+				if ((*itr).custID == (*it).getCustID())
+				{
+					relatedCust = (*itr);
+					break;
+				}
+			}
+			_pageLayout->addWidget(make_unique<Wt::WText>("Transaction " + to_string(++i)));
+			_pageLayout->addWidget(make_unique<Wt::WText>("Location Information: " + (*it).getRequestData().getStNum() + " " + (*it).getRequestData().getStName() + ", " + (*it).getRequestData().getPostCode()));
+			Wt::WTextArea *_locationDescArea = _pageLayout->addWidget(make_unique<Wt::WTextArea>((*it).getRequestData().getLocDesc()));
+			_locationDescArea->setReadOnly(true);
+			_pageLayout->addWidget(make_unique<Wt::WText>("Incident Information: " + (*it).getRequestData().getServiceType()));
+			Wt::WTextArea *_incDescArea = _pageLayout->addWidget(make_unique<Wt::WTextArea>((*it).getRequestData().getIncDesc()));
+			_incDescArea->setReadOnly(true);
+			_pageLayout->addWidget(make_unique<Wt::WText>("Specialist Information: " + relatedSpec.getFullName() + " " + relatedSpec.getQualNum() /* add average rating info? */));
+			_pageLayout->addWidget(make_unique<Wt::WText>((*it).getReceiptData().getBSB() + " " + (*it).getReceiptData().getAccNum() + " " + (*it).getReceiptData().getAccName()));
+			_pageLayout->addWidget(make_unique<Wt::WText>("Customer Information: " + relatedCust.getFullName()));
+			_pageLayout->addWidget(make_unique<Wt::WText>((*it).getReceiptData().getCardNum() + " " + (*it).getReceiptData().getCardExpiry()));
+			_pageLayout->addWidget(make_unique<Wt::WText>("Payment Information: " + (*it).getReceiptData().getCallOut() + " " + (*it).getReceiptData().getServiceCost()));
+			_pageLayout->addWidget(make_unique<Wt::WText>("Review Information: " + (*it).getReviewData().getJobRating() + " " + (*it).getReviewData().getReviewDesc()));
+			_pageLayout->addWidget(make_unique<Wt::WText>());
+		}
+	}
+}
+
+void GRSS::updateUsers()
+{
+	if (userFlag == 1)
+	{
+		vector<Customer>::iterator it = existingCustomers.begin();
+		while (it != existingCustomers.end() && (*it).custID != logged_in_customer.custID) ++it;
+		if (pwTmp != "") (*it).setPassword(pwTmp);
+		if (fnameTmp != "") (*it).setFirstName(fnameTmp);
+		if (lnameTmp != "") (*it).setLastName(lnameTmp);
+		if (phoneTmp != "") (*it).setNumber(phoneTmp);
+		if (licNumTmp != "") (*it).setLicenseNumber(licNumTmp);
+		if (emailTmp != "") (*it).setEmail(emailTmp);
+		if (cardNumTmp != "") (*it).setCardNumber(cardNumTmp);
+		if (cardExpTmp != "") (*it).setCardExpiry(cardExpTmp);
+		if (cardSecTmp != "") (*it).setCardSec(cardSecTmp);
+		if (modelYearTmp != "") (*it).setCarYear(modelYearTmp);
+		if (makeTmp != "") (*it).setCarMake(makeTmp);
+		if (modelTmp != "") (*it).setCarModel(modelTmp);
+		if (shapeTmp != "") (*it).setCarShape(shapeTmp);
+		if (engineSizeTmp != "") (*it).setCarEngineSize(engineSizeTmp);
+		if (colourTmp != "") (*it).setCarColour(colourTmp);
+		Customer::saveCustomerAll(existingCustomers);
+	}
+	else if (userFlag == 2)
+	{
+		vector<Specialist>::iterator it = existingSpecialists.begin();
+		while (it != existingSpecialists.end() && (*it).specialistID != logged_in_specialist.specialistID) ++it;
+		if (pwTmp != "") (*it).setPassword(pwTmp);
+		if (fnameTmp != "") (*it).setFirstName(fnameTmp);
+		if (lnameTmp != "") (*it).setLastName(lnameTmp);
+		if (phoneTmp != "") (*it).setNumber(phoneTmp);
+		if (licNumTmp != "") (*it).setLicenseNumber(licNumTmp);
+		if (emailTmp != "") (*it).setEmail(emailTmp);
+		if (BSBTmp != "") (*it).setBsb(BSBTmp);
+		if (accNumTmp != "") (*it).setAccount_num(accNumTmp);
+		if (accNameTmp != "") (*it).setAccount_name(accNameTmp);
+		if (qualNumTmp != "") (*it).setQualification(qualNumTmp);
+		Specialist::saveAll(existingSpecialists);
+	}
+	else if (userFlag == 3)
+	{
+		vector<Administrator>::iterator it = existingAdmins.begin();
+		while (it != existingAdmins.end() && (*it).adminID != logged_in_admin.adminID) ++it;
+		if (pwTmp != "") (*it).setPassword(pwTmp);
+		if (fnameTmp != "") (*it).setFirstName(fnameTmp);
+		if (lnameTmp != "") (*it).setLastName(lnameTmp);
+		if (phoneTmp != "") (*it).setNumber(phoneTmp);
+		Administrator::saveAdministratorAll(existingAdmins);
 	}
 }

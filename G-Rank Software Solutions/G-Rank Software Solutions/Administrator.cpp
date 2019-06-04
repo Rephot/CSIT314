@@ -22,6 +22,21 @@ void Administrator::saveAdministrator() {
 	outFile.close();
 }
 
+void Administrator::saveAdministratorAll(vector<Administrator> inAdmin) {
+	ofstream outFile;
+	outFile.open("Administrators.csv");
+
+	vector<Administrator>::iterator it = inAdmin.begin();
+	if (outFile.is_open()) {
+		while (it != inAdmin.end())
+		{
+			outFile << it->adminID << "`" << it->username << "`" << it->password << "`" << it->fName << "`" << it->lName << "`" << it->phNumber << "\n";
+			it++;
+		}
+	}
+	outFile.close();
+}
+
 void Administrator::returnUser() {
 	cout << "adminID: " << adminID << endl;
 	User::returnUser();
@@ -43,7 +58,6 @@ vector<Administrator> Administrator::loadAdministrators() {
 			getline(inFile, password, '`');
 			getline(inFile, fName, '`');
 			getline(inFile, lName, '`');
-			getline(inFile, DOB, '`');
 			getline(inFile, phNumber);
 
 			users.push_back(Administrator(adminID, username, password, fName, lName, phNumber));

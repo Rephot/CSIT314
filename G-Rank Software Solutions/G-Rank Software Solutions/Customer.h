@@ -20,6 +20,7 @@ public:
 	static vector<Customer> GRSSload();
 	void returnUser();
 	void saveCustomer();
+	static void saveCustomerAll(vector<Customer>);
 	string custID;//C: type can be changed later
 	string returnSubFlag();
 	string getCardNumber();

@@ -151,6 +151,39 @@ void Customer::saveCustomer() {
 	outFile.close();
 }
 
+void Customer::saveCustomerAll(vector<Customer> inCust) {
+	ofstream outFile;
+	outFile.open("Customers.csv");
+
+	vector<Customer>::iterator it = inCust.begin();
+	if (outFile.is_open()) {
+		while (it != inCust.end())
+		{
+			outFile << it->custID << "`"
+				<< it->username << "`"
+				<< it->password << "`"
+				<< it->fName << "`"
+				<< it->lName << "`"
+				<< it->licenseNumber << "`"
+				<< it->phNumber << "`"
+				<< it->email << "`"
+				<< it->licPlate << "`"
+				<< it->car_year << "`"
+				<< it->car_make << "`"
+				<< it->car_model << "`"
+				<< it->car_shape << "`"
+				<< it->car_colour << "`"
+				<< it->car_engine_size << "`"
+				<< it->sub_flag << "`"
+				<< it->card_num << "`"
+				<< it->security_code << "`"
+				<< it->expiry << "\n";
+			it++;
+		}
+	}
+	outFile.close();
+}
+
 void Customer::returnUser() {
 	cout << "custID: " << custID << endl;
 	User::returnUser();
