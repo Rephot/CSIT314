@@ -351,12 +351,14 @@ int main(int argc, char **argv) {
 	Transaction t;
 	t.create("1", c.custID, c.getCardNumber(), c.getCardExpiry(), "yesy", "2518", "10", "flat tyre", "is real flat");
 
-	Specialist s = Specialist("s1", "StestUser1", "1234", "Diedre", "Irwin", "98961952", "0495789206", "widen@icloud.com", "MVTC431165", "805-571", "98909247", "uberSpecialist1");
+	vector<Specialist> s = Specialist::GRSSload();
 
-	t.addAvailableSpecialist(s, "$10");
+	t.loadAvailableSpecialists();
 
 	vector<Specialist> s1 = t.getAvailableSpecialists();
-	cout << s1.back().callOutFee << " | " << s.callOutFee << endl;
+	cout << s1.back().callOutFee << " | " << s.back().callOutFee << endl;
+
+	t.saveAvailableSpecialists();
 
 	//selectRequest(1, specialists[0]);
 	//selectRequest(1, specialists[1]);

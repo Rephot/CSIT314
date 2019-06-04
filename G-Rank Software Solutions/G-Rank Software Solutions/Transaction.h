@@ -21,7 +21,7 @@ public:
 	void setSpecialist(Specialist);
 	void addAvailableSpecialist(Specialist, string);
 	vector<Specialist> getAvailableSpecialists();
-	void loadAvailableSpecialists(vector<Specialist>);
+	void loadAvailableSpecialists();
 	void saveAvailableSpecialists();
 	void leaveReview(string, string);
 	void generateReceipt(string, string, string, string, string, string, string);

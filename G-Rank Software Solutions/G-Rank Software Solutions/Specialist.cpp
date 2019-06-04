@@ -174,6 +174,22 @@ void Specialist::save() {
 	outFile.close();
 }
 
+string Specialist::getQualification() {
+	return qualification_num;
+}
+
+string Specialist::getBsb() {
+	return bsb;
+}
+
+string Specialist::getAccount_num() {
+	return account_num;
+}
+
+string Specialist::getAccount_name() {
+	return account_name;
+}
+
 void Specialist::selectRequest(int requestID) {
 }
 

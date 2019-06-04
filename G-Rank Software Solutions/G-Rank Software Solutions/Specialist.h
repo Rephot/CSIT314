@@ -36,6 +36,10 @@ public:
 	void selectRequest(int);
 	void addArea(string);
 	void returnUser();
+	string getQualification();
+	string getBsb();
+	string getAccount_num();
+	string getAccount_name();
 	static vector<vector<ServiceRequest>> available;
 	static Specialist* load();
 	static vector<Specialist> GRSSload();
