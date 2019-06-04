@@ -1,8 +1,6 @@
 #ifndef CUSTOMER_H
 #define CUSTOMER_H
 
-//credit card details for subsription payments and optionally service transaction
-
 #include <fstream>
 #include <iostream>
 #include <vector>
@@ -14,14 +12,11 @@ using namespace std;
 class Customer : public User{
 public:
 	Customer();
-	Customer(int, string, string, string, string, time_t, string);
 	Customer(string, string, string, string, string, string, string, string, string, string, string, string, string, string, string, string, string, string, string);
-	static Customer* load();
 	static vector<Customer> GRSSload();
-	void returnUser();
 	void saveCustomer();
 	static void saveCustomerAll(vector<Customer>);
-	string custID;//C: type can be changed later
+	string custID;
 	string returnSubFlag();
 	string getCardNumber();
 	string getCardSec();

@@ -10,38 +10,26 @@ class Transaction {
 public:
 	Transaction();
 	Transaction(string, string, string, string, string, string, string, string, string, string, string, string, string, string, string, string, string, string, string);
-	void create(string, string, string, string, string, string, string, string, string);
-	ServiceRequest getRequestData();
-	// void saveTransaction();
-	string getArea();
-	Review getReviewData();
-	Receipt getReceiptData();
 	static vector<Transaction> GRSSload(string);
-	void setSpecialist(Specialist);
-	void addAvailableSpecialist(Specialist, string);
-	vector<Specialist> getAvailableSpecialists();
-	void loadAvailableSpecialists();
-	void saveAvailableSpecialists();
-	string getTransactionID();
-	string getCustID();
-	string getSpecID();
 	void GRSScreate(string, string, string, string, string, string, string, string, string, string, string);
 	void GRSSsave(string);
 	static void GRSSsaveAll(string, vector<Transaction>);
 	void GRSSspecialistAvailable(string);
 	void GRSSaddReceiptData(string, string, string, string);
 	void GRSSaddReviewData(string, string);
-	void complete(Customer);
-	void leaveReview(string, string);
-	void generateReceipt(string, string, string, string, string, string, string);
+	ServiceRequest getRequestData();
+	Review getReviewData();
+	Receipt getReceiptData();
 	string getRelSpec();
+	string getTransactionID();
+	string getCustID();
+	string getSpecID();
 
 private:
-	string transactionID, relSpecID, relCustID, amount, callOut, completed;
+	string transactionID, relSpecID, relCustID, completed;
 	ServiceRequest requestData;
 	Review reviewData;
 	Receipt receiptData;
-	vector<Specialist> availableSpecialists;
 };
 
 #endif

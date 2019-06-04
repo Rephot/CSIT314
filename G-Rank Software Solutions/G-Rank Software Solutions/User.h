@@ -11,9 +11,7 @@ using namespace std;
 class User{
 public:
 	User();
-	User(string, string, string, string, time_t, string);
 	User(string, string, string, string, string, string, string);
-	void returnUser();
 	string getUserName();
 	string getPassword();
 	string getFullName();
@@ -29,9 +27,9 @@ public:
 	void setNumber(string);
 	void setEmail(string);
 	void setLicenseNumber(string);
+
 protected:
 	string username, password, fName, lName, licenseNumber, phNumber, email;
-	time_t DOB;
 };
 
 #endif

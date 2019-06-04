@@ -2,16 +2,6 @@
 
 User::User() {}
 
-User::User(string uname, string pwd, string fname, string lname, time_t dob, string number) {
-	username = uname;
-	password = pwd;
-	fName = fname;
-	lName = lname;
-	DOB = dob;
-	phNumber = number;
-	// subscriber = true/false;
-}
-
 User::User(string uname, string pwd, string fname, string lname, string lNum, string number, string mail) {
 	username = uname;
 	password = pwd;
@@ -20,7 +10,6 @@ User::User(string uname, string pwd, string fname, string lname, string lNum, st
 	licenseNumber = lNum;
 	phNumber = number;
 	email = mail;
-	// subscriber = true/false;
 }
 
 string User::getUserName() {
@@ -81,11 +70,4 @@ void User::setLicenseNumber(string licenseNumber) {
 
 void User::setPassword(string pwd) {
 	this->password = pwd;
-}
-
-void User::returnUser() {
-	cout << "Username: " << username << endl;
-	cout << "Password: " << password << endl;
-	cout << "Full Name: " << fName << " " << lName << endl;
-	cout << "Phone Number: " << phNumber << endl;
 }

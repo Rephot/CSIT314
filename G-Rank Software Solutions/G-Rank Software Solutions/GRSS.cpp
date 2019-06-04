@@ -2,6 +2,7 @@
 
 regex emailPattern("(\\w+)@(\\w+)(\\.(\\w+))+");
 
+// local tmp storage values for user creation
 // registerpage tmp
 string userTmp;
 string pwTmp;
@@ -64,7 +65,6 @@ GRSS::GRSS(const Wt::WEnvironment &env) : Wt::WApplication(env)
 void GRSS::initCSS()
 {
 	app->styleSheet().addRule("#content", "display: block; margin: auto;");
-	app->styleSheet().addRule("#dashboard", "width: 100%; margin-left: 0%;");
 	app->styleSheet().addRule("body", "background-color: #abcdef;");
 	app->styleSheet().addRule("#buttons", "background-color: #9abcde;");
 	app->styleSheet().addRule("#groupTitle", "background-color: #789abc;"); 
@@ -223,11 +223,6 @@ void GRSS::loginPage()
 			{
 				GRSS::userMenu();
 			}
-			// else // emit error incorrect password
-		}
-		else
-		{
-			// emit error invalid user
 		}
 	});
 }
@@ -321,10 +316,6 @@ bool GRSS::validateUsersPassword(Wt::WString username, Wt::WString password)
 
 void GRSS::registerPage()
 {
-	/*
-	// USER
-   username, password;
-	*/
 	_pageContent->clear();
 	_pageLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
 	_pageContent->setId("pageContent");
@@ -387,15 +378,10 @@ void GRSS::registerPage()
 		}
 		else _missingText->setHidden(false);
 	});
-	// the aim with multi-page registrations is to restrict the amount of information entered on each page for UX
 }
 
 void GRSS::registerPage2()
 {
-	/*
-	// CUSTOMER details
-	string fName, lName, phNumber, licenseNumber, email;
-	*/
 	_pageContent->clear();
 	_pageLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
 	_pageContent->setId("pageContent");
@@ -459,15 +445,6 @@ void GRSS::registerPage2()
 
 void GRSS::registerPage3()
 {
-	/*
-	// customers car
-	int cust_id, modelYear;
-	string make, model, licencePlate, colour, shape;
-	double engineSize;
-
-	// specialists
-	string to int operationalArea
-	*/
 	// 3rd page registration: home address, car details, bankCard details
 	_pageContent->clear();
 	_pageLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
@@ -481,7 +458,6 @@ void GRSS::registerPage3()
 	_buttonGroup->addButton(_specRadio, 1);
 	Wt::WRadioButton *_custRadio = _buttonLayout->addWidget(make_unique<Wt::WRadioButton>("Customer"));
 	_buttonGroup->addButton(_custRadio, 2);
-	// changes the content of a stacked widget
 
 	// 3rd page form customer
 	Wt::WContainerWidget *_thirdPageForm = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
@@ -493,7 +469,6 @@ void GRSS::registerPage3()
 		// usertype flag for user creation
 		if (rawButtonGroup->id(selection) == 1) {
 			// 3rd page form specialist
-
 			_thirdPageForm->clear();
 			userFlag = 2;
 			Wt::WVBoxLayout *_thirdPageLayout = _thirdPageForm->setLayout(make_unique<Wt::WVBoxLayout>());
@@ -580,7 +555,6 @@ void GRSS::registerPage3()
 			});
 
 			Wt::WText *_shapeText = _thirdPageLayout->addWidget(make_unique<Wt::WText>("Shape"));
-			// replace with combo box MAYBE
 			Wt::WLineEdit* _shapeField = _thirdPageLayout->addWidget(make_unique<Wt::WLineEdit>());
 			_shapeField->setPlaceholderText("Ute");
 			_shapeField->changed().connect([=]
@@ -627,7 +601,7 @@ void GRSS::registerPage3()
 		colourTmp = "";
 		GRSS::registerPage2();
 	});
-	// confirm will create user profile and log them in (this assumes they've confirmed their account via email...)
+	// confirm will create user profile and take them to the loginPage to log in
 	Wt::WPushButton *_confirmButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Next"));
 	_confirmButton->clicked().connect([=](const Wt::WMouseEvent &e)
 	{
@@ -733,7 +707,7 @@ void GRSS::registerPage4()
 	Wt::WPushButton *_confirmButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Confirm"));
 	_confirmButton->clicked().connect([=](const Wt::WMouseEvent &e)
 	{
-		// this should point to loginPage() such that the user can log in with the newly created user
+		// this points to loginPage() such that the user can log in with the newly created user
 		// customer creation
 		if (userFlag == 1) {
 			Customer joined = Customer(("c" + to_string(existingCustomers.size() + 1)), userTmp, pwTmp, fnameTmp, lnameTmp, licNumTmp, phoneTmp, emailTmp, licPlateTmp, modelYearTmp, makeTmp, modelTmp, shapeTmp, colourTmp, engineSizeTmp, subFlagTmp, cardNumTmp, cardSecTmp, cardExpTmp);
@@ -769,7 +743,6 @@ bool GRSS::userAvailable(Wt::WString username)
 
 void GRSS::userMenu()
 {
-	// want to put current request somewhere in this menu, probably after the buttons, ONLY IF they have a current request
 	_pageContent->clear();
 	inProgress = Transaction::GRSSload("GRSScreated.csv"); // customer creates
 	specAvailable = Transaction::GRSSload("GRSSspecAvailable.csv"); // specialists says they're available
@@ -777,8 +750,6 @@ void GRSS::userMenu()
 	completed = Transaction::GRSSload("GRSSjobCompleted.csv"); // specialist marks job as completed, customer will add review and rating and confirm payment
 	Wt::WVBoxLayout *_menuLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
 
-	// links to for now 3 options that the customer can do
-	// connect to create service request page
 	if (userFlag == 1)
 	{
 		Wt::WPushButton *_requestButton = _menuLayout->addWidget(make_unique<Wt::WPushButton>("Service Request"));
@@ -849,13 +820,11 @@ void GRSS::userMenu()
 	{
 		// view all users
 		Wt::WPushButton *_allUsersButton = _menuLayout->addWidget(make_unique<Wt::WPushButton>("View Users"));
-		// connect to view requests page
 		_allUsersButton->clicked().connect([=]
 		{
 			GRSS::viewAllUsers();
 
 		});
-		// delete user
 	}
 
 	// connect to view manage details page
@@ -883,7 +852,6 @@ void GRSS::userMenu()
 // customer request menus
 void GRSS::createRequestPage()
 {
-	// STRETCH add map widget, and only if you can pass data to and get data from
 	_pageContent->clear();
 	_pageLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
 
@@ -928,7 +896,6 @@ void GRSS::createRequestPage()
 	});
 
 	Wt::WPushButton *_confirmButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Confirm"));
-	// present with dialog/page for information confirmation, then connect to saveRequest such that specialist can respond
 	_confirmButton->clicked().connect([=]
 	{
 		stNameTmp = _streetField->text().narrow();
@@ -980,7 +947,7 @@ void GRSS::customerRequest()
 			Wt::WHBoxLayout *_requestHLayout = _requestContainer->setLayout(make_unique<Wt::WHBoxLayout>());
 			Wt::WContainerWidget *_requestInfoContainer = _requestHLayout->addWidget(make_unique<Wt::WContainerWidget>(), 1);
 			Wt::WVBoxLayout *_requestInfoLayout = _requestInfoContainer->setLayout(make_unique<Wt::WVBoxLayout>());
-			_requestInfoLayout->addWidget(make_unique<Wt::WText>("Specialist Information: " + related.getFullName() + " " + related.getQualNum() /* add rating info*/));
+			_requestInfoLayout->addWidget(make_unique<Wt::WText>("Specialist Information: " + related.getFullName() + " " + related.getQualNum()));
 			Wt::WPushButton *_acceptRequestButton = _requestHLayout->addWidget(make_unique<Wt::WPushButton>("Accept"), 0, Wt::AlignmentFlag::Middle);
 			_acceptRequestButton->setHeight(75);
 			_acceptRequestButton->clicked().connect([=]
@@ -1023,7 +990,7 @@ void GRSS::requestInProgress()
 			Wt::WHBoxLayout *_requestHLayout = _requestContainer->setLayout(make_unique<Wt::WHBoxLayout>());
 			Wt::WContainerWidget *_requestInfoContainer = _requestHLayout->addWidget(make_unique<Wt::WContainerWidget>(), 1);
 			Wt::WVBoxLayout *_requestInfoLayout = _requestInfoContainer->setLayout(make_unique<Wt::WVBoxLayout>());
-			_requestInfoLayout->addWidget(make_unique<Wt::WText>("Specialist Information: " + related.getFullName() + " " + related.getQualNum() /* add rating info*/));
+			_requestInfoLayout->addWidget(make_unique<Wt::WText>("Specialist Information: " + related.getFullName() + " " + related.getQualNum()));
 		}
 	}
 }
@@ -1054,7 +1021,7 @@ void GRSS::requestComplete()
 			_pageLayout->addWidget(make_unique<Wt::WText>("Incident infomration: " + (*it).getRequestData().getServiceType()));
 			Wt::WTextArea *_incDescArea = _pageLayout->addWidget(make_unique<Wt::WTextArea>((*it).getRequestData().getIncDesc()));
 			_incDescArea->setReadOnly(true);
-			_pageLayout->addWidget(make_unique<Wt::WText>("Specialist Information: " + related.getFullName() + " " + related.getQualNum() /* add rating info*/));
+			_pageLayout->addWidget(make_unique<Wt::WText>("Specialist Information: " + related.getFullName() + " " + related.getQualNum()));
 			_pageLayout->addWidget(make_unique<Wt::WText>((*it).getReceiptData().getBSB() + " " + (*it).getReceiptData().getAccNum() + " " + (*it).getReceiptData().getAccName()));
 			_pageLayout->addWidget(make_unique<Wt::WText>("Customer Information: " + logged_in_customer.getFullName()));
 			_pageLayout->addWidget(make_unique<Wt::WText>((*it).getReceiptData().getCardNum() + " " + (*it).getReceiptData().getCardExpiry()));
@@ -1461,7 +1428,6 @@ void GRSS::editUserDetails()
 				if (_sizeEdit->text() != "") engineSizeTmp = _sizeEdit->text().narrow();
 				if (_colourEdit->text() != "") colourTmp = _colourEdit->text().narrow();
 			}
-			// else emit error
 			GRSS::updateUsers();
 			GRSS::loadInfo();
 			vector<Customer>::iterator it = existingCustomers.begin();
@@ -1590,7 +1556,6 @@ void GRSS::editUserDetails()
 				if (_nameEdit->text() != "") accNameTmp = _nameEdit->text().narrow();
 				if (_qualEdit->text() != "") qualNumTmp = _qualEdit->text().narrow();
 			}
-			// else emit error
 			GRSS::updateUsers();
 			GRSS::loadInfo();
 			vector<Specialist>::iterator it = existingSpecialists.begin();
@@ -1645,7 +1610,6 @@ void GRSS::editUserDetails()
 				if (_lastEdit->text() != "") lnameTmp = _lastEdit->text().narrow();
 				if (_phoneEdit->text() != "") phoneTmp = _phoneEdit->text().narrow();
 			}
-			// else emit error
 			GRSS::updateUsers();
 			GRSS::loadInfo();
 			vector<Administrator>::iterator it = existingAdmins.begin();
@@ -1687,7 +1651,7 @@ void GRSS::viewTransactions()
 				_pageLayout->addWidget(make_unique<Wt::WText>("Incident Information: " + (*it).getRequestData().getServiceType()));
 				Wt::WTextArea *_incDescArea = _pageLayout->addWidget(make_unique<Wt::WTextArea>((*it).getRequestData().getIncDesc()));
 				_incDescArea->setReadOnly(true);
-				_pageLayout->addWidget(make_unique<Wt::WText>("Specialist Information: " + related.getFullName() + " " + related.getQualNum() /* add average rating info? */));
+				_pageLayout->addWidget(make_unique<Wt::WText>("Specialist Information: " + related.getFullName() + " " + related.getQualNum()));
 				_pageLayout->addWidget(make_unique<Wt::WText>((*it).getReceiptData().getBSB() + " " + (*it).getReceiptData().getAccNum() + " " + (*it).getReceiptData().getAccName()));
 				Wt::WPushButton *_revButton = _pageLayout->addWidget(make_unique<Wt::WPushButton>("Reviews of this Specialist"));
 				_revButton->clicked().connect([=]
@@ -1724,7 +1688,7 @@ void GRSS::viewTransactions()
 				_pageLayout->addWidget(make_unique<Wt::WText>("Incident Information: " + (*it).getRequestData().getServiceType()));
 				Wt::WTextArea *_incDescArea = _pageLayout->addWidget(make_unique<Wt::WTextArea>((*it).getRequestData().getIncDesc()));
 				_incDescArea->setReadOnly(true);
-				_pageLayout->addWidget(make_unique<Wt::WText>("Specialist Information: " + logged_in_specialist.getFullName() + " " + logged_in_specialist.getQualNum() /* add average rating info? */));
+				_pageLayout->addWidget(make_unique<Wt::WText>("Specialist Information: " + logged_in_specialist.getFullName() + " " + logged_in_specialist.getQualNum()));
 				_pageLayout->addWidget(make_unique<Wt::WText>((*it).getReceiptData().getBSB() + " " + (*it).getReceiptData().getAccNum() + " " + (*it).getReceiptData().getAccName()));
 				_pageLayout->addWidget(make_unique<Wt::WText>("Customer Information: " + related.getFullName()));
 				_pageLayout->addWidget(make_unique<Wt::WText>((*it).getReceiptData().getCardNum() + " " + (*it).getReceiptData().getCardExpiry()));
@@ -1763,7 +1727,7 @@ void GRSS::viewTransactions()
 			_pageLayout->addWidget(make_unique<Wt::WText>("Incident Information: " + (*it).getRequestData().getServiceType()));
 			Wt::WTextArea *_incDescArea = _pageLayout->addWidget(make_unique<Wt::WTextArea>((*it).getRequestData().getIncDesc()));
 			_incDescArea->setReadOnly(true);
-			_pageLayout->addWidget(make_unique<Wt::WText>("Specialist Information: " + relatedSpec.getFullName() + " " + relatedSpec.getQualNum() /* add average rating info? */));
+			_pageLayout->addWidget(make_unique<Wt::WText>("Specialist Information: " + relatedSpec.getFullName() + " " + relatedSpec.getQualNum()));
 			_pageLayout->addWidget(make_unique<Wt::WText>((*it).getReceiptData().getBSB() + " " + (*it).getReceiptData().getAccNum() + " " + (*it).getReceiptData().getAccName()));
 			_pageLayout->addWidget(make_unique<Wt::WText>("Customer Information: " + relatedCust.getFullName()));
 			_pageLayout->addWidget(make_unique<Wt::WText>((*it).getReceiptData().getCardNum() + " " + (*it).getReceiptData().getCardExpiry()));

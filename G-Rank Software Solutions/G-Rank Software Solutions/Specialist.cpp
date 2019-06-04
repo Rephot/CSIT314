@@ -5,12 +5,7 @@
 
 using namespace std;
 
-vector <vector<ServiceRequest>> Specialist::available;
-int total_specialists1;
-
-Specialist::Specialist() {
-
-}
+Specialist::Specialist() {}
 
 Specialist::Specialist(string uname, string pwd, string fname, string lname, string number, string area, int specID) 
 {
@@ -19,7 +14,6 @@ Specialist::Specialist(string uname, string pwd, string fname, string lname, str
 	fName = fname;
 	lName = lname;
 	phNumber = number;
-	//operationalArea = area;
 	specialistID = specID;
 }
 
@@ -54,16 +48,6 @@ Specialist::Specialist(string specID, string uname, string pwd, string fname, st
 	account_name = acc_name;
 }
 
-void Specialist::viewRequests() {
-	for (int i = 0; i < ServiceRequest::numCurrentRequests; i++) {
-		for (std::set<string>::iterator it = operationalAreas.begin(); it != operationalAreas.end(); ++it) {
-			if (ServiceRequest::currentRequests[i].incidentLocation == *it) {
-				cout << ServiceRequest::toString(ServiceRequest::currentRequests[i]) << endl;
-			}
-		}
-	}
-}
-
 void Specialist::setQualification(string qualification_num) {
 	this->qualification_num = qualification_num;
 }
@@ -78,52 +62,6 @@ void Specialist::setAccount_num(string account_num) {
 
 void Specialist::setAccount_name(string account_name) {
 	this->account_name = account_name;
-}
-
-Specialist* Specialist::load() {
-	Specialist* specialists;
-	total_specialists1 = 0;
-	string line,  specID,  uname,  pwd,  fname,  lname,  license_num,  phnumber,  email,  qualification_num,  bsb,  acc_num,  acc_name, areas;
-	string userFile = "Specialists.csv";
-
-	// Creating input filestream
-	ifstream file(userFile);
-	while (getline(file, line)) total_specialists1++;
-	specialists = new Specialist[total_specialists1 + 1];
-
-	// get existing users from file
-	ifstream inFile;
-	inFile.open(userFile);
-	int i = 0;
-	if (inFile.is_open())
-	{
-		while (getline(inFile, specID, '`'))
-		{
-			getline(inFile, uname, '`');
-			getline(inFile, pwd, '`');
-			getline(inFile, fname, '`');
-			getline(inFile, lname, '`');
-			getline(inFile, license_num, '`');
-			getline(inFile, phnumber, '`');
-			getline(inFile, email, '`');
-			getline(inFile, qualification_num, '`');
-			getline(inFile, areas, '`');
-			getline(inFile, bsb, '`');
-			getline(inFile, acc_num, '`');
-			getline(inFile, acc_name);
-
-			specialists[i] = Specialist(specID, uname, pwd, fname, lname, license_num, phnumber, email, qualification_num, bsb, acc_num, acc_name);
-			std::stringstream ss(areas);
-			std::string token;
-			while (std::getline(ss, token, '|')) {
-				specialists[i].operationalAreas.insert(token);
-			}
-			i++;
-		}
-		inFile.close();
-	}
-
-	return specialists;
 }
 
 vector<Specialist> Specialist::GRSSload() {
@@ -221,34 +159,6 @@ void Specialist::saveAll(vector<Specialist> inSpec) {
 		}
 	}
 	outFile.close();
-}
-
-string Specialist::getQualification() {
-	return qualification_num;
-}
-
-string Specialist::getBsb() {
-	return bsb;
-}
-
-string Specialist::getAccount_num() {
-	return account_num;
-}
-
-string Specialist::getAccount_name() {
-	return account_name;
-}
-
-void Specialist::selectRequest(int requestID) {
-}
-
-void Specialist::addArea(string postcode) {
-	operationalAreas.insert(postcode);
-}
-
-void Specialist::returnUser() {
-	User::returnUser();//C: User::returnUser() just calls the parent function on the same object that calls this function (inheritance)
-	//cout << "Operation Area: " << operationalArea << endl;
 }
 
 string Specialist::getQualNum()

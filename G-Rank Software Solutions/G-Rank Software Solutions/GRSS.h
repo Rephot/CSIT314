@@ -47,11 +47,6 @@ private:
 	bool validateLogin(Wt::WString); // passed entered username to check if user exists
 	// ↑this is used to confirm, ↓this is then used to validate
 	bool validateUsersPassword(Wt::WString, Wt::WString); // passed enterd username and password to check if the password is correct for that user
-	int userFlag;
-	// may replace with logged_in_user???
-	Customer logged_in_customer;
-	Specialist logged_in_specialist;
-	Administrator logged_in_admin;
 	void initCSS();
 	void initContentLayout();
 	void title();
@@ -78,6 +73,11 @@ private:
 	void viewAllUsers();
 	void updateUsers();
 	void delUser();
+
+	int userFlag;
+	Customer logged_in_customer;
+	Specialist logged_in_specialist;
+	Administrator logged_in_admin;
 
 public:
 	vector<Customer> existingCustomers;

@@ -37,11 +37,6 @@ void Administrator::saveAdministratorAll(vector<Administrator> inAdmin) {
 	outFile.close();
 }
 
-void Administrator::returnUser() {
-	cout << "adminID: " << adminID << endl;
-	User::returnUser();
-}
-
 vector<Administrator> Administrator::loadAdministrators() {
 	vector<Administrator> users;
 	string line, username, password, fName, lName, phNumber, adminID, DOB;
@@ -66,30 +61,4 @@ vector<Administrator> Administrator::loadAdministrators() {
 	}
 
 	return users;
-}
-
-void Administrator::viewTransactions(vector<Transaction> transactions) {
-	//view all
-}
-
-void Administrator::viewUsers(vector<Specialist> spec, vector<Customer> cust) {
-	//view all
-}
-
-void Administrator::suspendUser(string custID, vector<Customer> customers) {
-	//match to list and ban
-	for (std::vector<Customer>::iterator it = customers.begin(); it != customers.end(); ++it) {
-		if (it->custID == custID) {
-			customers.erase(it);
-		}
-	}
-}
-
-void Administrator::suspendUser(string custID, vector<Specialist> specialists) {
-	//match to list and ban
-	for (std::vector<Specialist>::iterator it = specialists.begin(); it != specialists.end(); ++it) {
-		if (it->specialistID == custID) {
-			specialists.erase(it);
-		}
-	}
 }
