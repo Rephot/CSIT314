@@ -204,3 +204,34 @@ string Customer::getCarColour()
 {
 	return car_colour;
 }
+
+void Customer::setSubFlag(string sub_flag) {
+	this->sub_flag = sub_flag;
+}
+void Customer::setCardNumber(string card_num) {
+	this->card_num = card_num;
+}
+void Customer::setCardSec(string security_code) {
+	this->security_code = security_code;
+}
+void Customer::setCardExpiry(string expiry) {
+	this->expiry = expiry;
+}
+void Customer::setCarYear(string car_year) {
+	this->car_year = car_year;
+}
+void Customer::setCarMake(string car_make) {
+	this->car_make = car_make;
+}
+void Customer::setCarModel(string car_model) {
+	this->car_model = car_model;
+}
+void Customer::setCarShape(string car_shape) {
+	this->car_shape = car_shape;
+}
+void Customer::setCarEngineSize(string car_engine_size) {
+	this->car_engine_size = car_engine_size;
+}
+void Customer::setCarColour(string car_colour) {
+	this->car_colour = car_colour;
+}

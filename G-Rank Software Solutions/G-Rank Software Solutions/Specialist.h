@@ -42,6 +42,10 @@ public:
 	string getBsb();
 	string getAccount_num();
 	string getAccount_name();
+	void setQualification(string);
+	void setBsb(string);
+	void setAccount_num(string);
+	void setAccount_name(string);
 	static vector<vector<ServiceRequest>> available;
 	static Specialist* load();
 	static vector<Specialist> GRSSload();

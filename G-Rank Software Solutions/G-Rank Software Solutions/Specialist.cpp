@@ -68,6 +68,22 @@ Specialist::Specialist(string specID, string uname, string pwd, string fname, st
 	return available;
 }*/
 
+void Specialist::setQualification(string qualification_num) {
+	this->qualification_num = qualification_num;
+}
+
+void Specialist::setBsb(string bsb) {
+	this->bsb = bsb;
+}
+
+void Specialist::setAccount_num(string account_num) {
+	this->account_num = account_num;
+}
+
+void Specialist::setAccount_name(string account_name) {
+	this->account_name = account_name;
+}
+
 Specialist* Specialist::load() {
 	Specialist* specialists;
 	total_specialists1 = 0;
