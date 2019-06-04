@@ -26,6 +26,7 @@ public:
 	void complete(Customer);
 	void leaveReview(string, string);
 	void generateReceipt(string, string, string, string, string, string, string);
+	string getRelSpec();
 
 private:
 	string transactionID, relSpecID, relCustID, amount, callOut, completed;

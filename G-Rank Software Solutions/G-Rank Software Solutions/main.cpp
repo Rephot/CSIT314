@@ -317,6 +317,7 @@ void firstMenu(int choice) {
 	else return;
 }
 
+//C: Here is a quick function that returns a vector of transactions that are in the specialists area
 vector<Transaction> viewAvailableRequests(Specialist spec, vector<Transaction> transactions) {
 	vector<Transaction> available;
 
@@ -329,6 +330,19 @@ vector<Transaction> viewAvailableRequests(Specialist spec, vector<Transaction> t
 	}
 
 	return available;
+}
+
+//C: A method that returns all reviews that have been made for a specialist
+vector<Review> viewReviews(Specialist spec, vector<Transaction> transactions) {
+	vector<Review> reviews;
+	
+	for (std::vector<Transaction>::iterator ti = transactions.begin(); ti != transactions.end(); ++ti) {
+		if (ti->getRelSpec() == spec.specialistID) {
+			reviews.push_back(ti->getReviewData());
+		}
+	}
+
+	return reviews;
 }
 
 int main(int argc, char **argv) {

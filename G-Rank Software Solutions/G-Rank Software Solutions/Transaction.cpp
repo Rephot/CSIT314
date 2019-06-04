@@ -63,6 +63,10 @@ void Transaction::addAvailableSpecialist(Specialist spec, string price) {
 	availableSpecialists.back().callOutFee = price;
 }
 
+string Transaction::getRelSpec() {
+	return relSpecID;
+}
+
 void Transaction::loadAvailableSpecialists() {
 	string transID, specialists, specID, uname, pwd, fname, lname, license_num, phnumber, email, qualification_num, bsb, acc_num, acc_name, areas, callOut;
 	string userFile = "availableSpecialists.csv";
