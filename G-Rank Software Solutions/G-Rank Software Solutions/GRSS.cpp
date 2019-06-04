@@ -838,6 +838,11 @@ void GRSS::userMenu()
 			
 		});
 	}
+	else if (userFlag == 3)
+	{
+		// view all users
+		// delete user
+	}
 
 	// connect to view manage details page
 	Wt::WPushButton *_viewDetailsButton = _menuLayout->addWidget(make_unique<Wt::WPushButton>("User Details"));

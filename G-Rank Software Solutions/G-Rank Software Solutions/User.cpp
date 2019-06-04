@@ -43,10 +43,6 @@ string User::getLastName() {
 	return lName;
 }
 
-time_t User::getDOB() {
-	return DOB;
-}
-
 string User::getNumber() {
 	return phNumber;
 }
@@ -84,7 +80,7 @@ void User::setLicenseNumber(string licenseNumber) {
 }
 
 void User::setPassword(string pwd) {
-	this->password == pwd;
+	this->password = pwd;
 }
 
 void User::returnUser() {
