@@ -1608,7 +1608,6 @@ void GRSS::editUserDetails()
 		{
 			if (logged_in_admin.getPassword() == _pwOldEdit->text().narrow()) {
 				if ((_pwNewEdit->text() == _pwConNewEdit->text()) && (_pwNewEdit->text() != "")) pwTmp = _pwNewEdit->text().narrow();
-				cout << pwTmp << endl;
 				if (_firstEdit->text() != "") fnameTmp = _firstEdit->text().narrow();
 				if (_lastEdit->text() != "") lnameTmp = _lastEdit->text().narrow();
 				if (_phoneEdit->text() != "") phoneTmp = _phoneEdit->text().narrow();

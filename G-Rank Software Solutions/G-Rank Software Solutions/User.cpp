@@ -83,9 +83,8 @@ void User::setLicenseNumber(string licenseNumber) {
 	this->licenseNumber = licenseNumber;
 }
 
-bool User::setPassword(string pwd) {
+void User::setPassword(string pwd) {
 	this->password == pwd;
-	return true;
 }
 
 void User::returnUser() {
