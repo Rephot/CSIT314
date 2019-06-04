@@ -318,64 +318,43 @@ void firstMenu(int choice) {
 }
 
 int main(int argc, char **argv) {
-	// test user file contents
-	//User user1(username, password, fName, lName, 0, phNumber);// creates user
-	//system("CLS");//clears console
 
-	/*print all user details
-	for (int i = 0; i < count + 1; i++) {
-		users[i].returnUser();
-		cout << endl;
-	}*/
-
-	//user1.returnUser();//displays user credentials
-	//Sleep(2500);//pauses for 2.5 seconds
-	//system("CLS");//clears console
-
-	// main menu
-	//int respondTo;
-
-	//ServiceRequest req;
-	//req.loadRequests();
-	//Sleep(10000);//pauses for 5 seconds
-
-	//Car car = Car(customers[0], "abc012", 2017, "Toyota", "Corolla", "Hatchback", 1.8, "White");
-	//car.save();
-
-	//cars = Car::loadCars();
 	Administrator admin = Administrator("a1", "cbl755", "1234", "Chris", "Lawson", "0411000111");
-	admin.saveAdministrator();
+	//admin.saveAdministrator();
 
+	//create a customer
 	Customer c = Customer("c100", "CtestUser100", "1234", "Alex", "Quinn", "36657448", "0431121981", "ladder@zoho.com", "XSGV98", "2008", "Toyota", "Yaris", "Hatch", "1.3L", "Gold", "1", "5287218173532550", "224", "6/21");
 
+	//create a new transaction (done by customer to create service request)
 	Transaction t;
 	t.create("1", c.custID, c.getCardNumber(), c.getCardExpiry(), "yesy", "2518", "10", "flat tyre", "is real flat");
 
+	//loading specialists
 	vector<Specialist> s = Specialist::GRSSload();
 
+	//after listing all available requests to specialist and getting the object based on which one they want to be available for call this where $25 is the callout fee
 	t.addAvailableSpecialist(s.front(), "$25");
 
+	//customer chooses a specialist
 	t.setSpecialist(s.front());
 
+	//once specialist completes the request they set it to complete and pass the customer object
 	t.complete(c);
 
+	//the customer can leave a review on the transaction
 	t.leaveReview("2.4", "Very friendly and did a good job on my car");
 
+	//just added to vector to test saving
 	vector<Transaction> tv;
 	tv.push_back(t);
 
 	//t.GRSSsave(tv);
 
+	//testing callout fee and checking whether the object is a copy or a reference when added the transaction.availableSpecialists
 	vector<Specialist> s1 = t.getAvailableSpecialists();
 	cout << s1.front().callOutFee << " | " << s.front().callOutFee << endl;
 
 	t.saveAvailableSpecialists();
-
-	//selectRequest(1, specialists[0]);
-	//selectRequest(1, specialists[1]);
-	//selectRequest(1, specialists[0]);
-
-	//showAvailable(1);
 	
 	//specialists = Specialist::load();
 	//customers = Customer::load();
