@@ -5,12 +5,11 @@ Administrator::Administrator() {
 
 }
 
-Administrator::Administrator(int userID, string uname, string pwd, string fname, string lname, time_t dob, string number) {
+Administrator::Administrator(string userID, string uname, string pwd, string fname, string lname, string number) {
 	username = uname;
 	password = pwd;
 	fName = fname;
 	lName = lname;
-	DOB = dob;
 	phNumber = number;
 	adminID = userID;
 }
@@ -19,7 +18,7 @@ void Administrator::saveAdministrator() {
 	ofstream outFile;
 	outFile.open("Administrators.csv", ios_base::app);
 
-	outFile << to_string(adminID) << "`" << username << "`" << password << "`" << fName << "`" << lName << "`" << DOB << "`" << phNumber << "\n";
+	outFile << adminID << "`" << username << "`" << password << "`" << fName << "`" << lName << "`" << phNumber << "\n";
 	outFile.close();
 }
 
@@ -47,7 +46,7 @@ vector<Administrator> Administrator::loadAdministrators() {
 			getline(inFile, DOB, '`');
 			getline(inFile, phNumber);
 
-			users.push_back(Administrator(stoi(custID), username, password, fName, lName, stoi(DOB), phNumber));
+			users.push_back(Administrator(custID, username, password, fName, lName, phNumber));
 		}
 		inFile.close();
 	}

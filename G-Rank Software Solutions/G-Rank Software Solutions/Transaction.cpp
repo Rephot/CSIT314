@@ -26,6 +26,19 @@ void Transaction::create(string transactionID, string custID, string custCardNum
 	receiptData = Receipt();
 }
 
+void Transaction::leaveReview(string jobRating, string reviewDesc) {
+	if (completed == "1") {
+		reviewData = Review(jobRating, reviewDesc);
+	}
+	else {
+		cout << "Transaction is not complete, you cannot leave a review" << endl;
+	}
+}
+
+void Transaction::generateReceipt(string specBSB, string specAccNum, string specAccName, string custCardNum, string custCardExpiry, string callFee, string amountDue) {
+
+}
+
 string Transaction::getArea() {
 	return requestData.getPostCode();
 }
@@ -34,8 +47,9 @@ void Transaction::setSpecialist(Specialist spec) {
 	relSpecID = spec.specialistID;
 }
 
-void Transaction::addAvailableSpecialist(Specialist spec) {
+void Transaction::addAvailableSpecialist(Specialist spec, string price) {
 	availableSpecialists.push_back(spec);
+	availableSpecialists.back().callOutFee = price;
 }
 
 void Transaction::loadAvailableSpecialists(vector<Specialist> spec) {

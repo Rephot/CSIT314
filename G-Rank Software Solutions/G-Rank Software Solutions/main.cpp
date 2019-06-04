@@ -13,6 +13,7 @@
 #include "GRSS.h"
 #include "Reviews.h"
 #include "car.h"
+#include "Administrator.h"
 
 using namespace std;
 
@@ -342,6 +343,20 @@ int main(int argc, char **argv) {
 	//car.save();
 
 	//cars = Car::loadCars();
+	Administrator admin = Administrator("a1", "cbl755", "1234", "Chris", "Lawson", "0411000111");
+	admin.saveAdministrator();
+
+	Customer c = Customer("c100", "CtestUser100", "1234", "Alex", "Quinn", "36657448", "0431121981", "ladder@zoho.com", "XSGV98", "2008", "Toyota", "Yaris", "Hatch", "1.3L", "Gold", "1", "5287218173532550", "224", "6/21");
+
+	Transaction t;
+	t.create("1", c.custID, c.getCardNumber(), c.getCardExpiry(), "yesy", "2518", "10", "flat tyre", "is real flat");
+
+	Specialist s = Specialist("s1", "StestUser1", "1234", "Diedre", "Irwin", "98961952", "0495789206", "widen@icloud.com", "MVTC431165", "805-571", "98909247", "uberSpecialist1");
+
+	t.addAvailableSpecialist(s, "$10");
+
+	vector<Specialist> s1 = t.getAvailableSpecialists();
+	cout << s1.back().callOutFee << " | " << s.callOutFee << endl;
 
 	//selectRequest(1, specialists[0]);
 	//selectRequest(1, specialists[1]);

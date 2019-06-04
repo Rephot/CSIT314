@@ -40,7 +40,7 @@ public:
 	static Specialist* load();
 	static vector<Specialist> GRSSload();
 	vector<string> operationalAreas;
-	string specialistID;
+	string specialistID, callOutFee;
 
 private:
 	string bsb, account_num, account_name, qualification_num, licenseNumber, emailAddress;

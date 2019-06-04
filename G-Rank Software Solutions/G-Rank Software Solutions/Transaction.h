@@ -19,10 +19,12 @@ public:
 	static vector<Transaction> GRSSload(vector<Customer>);
 	static void GRSSsave(vector<Transaction>);
 	void setSpecialist(Specialist);
-	void addAvailableSpecialist(Specialist);
+	void addAvailableSpecialist(Specialist, string);
 	vector<Specialist> getAvailableSpecialists();
 	void loadAvailableSpecialists(vector<Specialist>);
 	void saveAvailableSpecialists();
+	void leaveReview(string, string);
+	void generateReceipt(string, string, string, string, string, string, string);
 
 private:
 	string transactionID, relSpecID, relCustID, amount, callOut, completed;
