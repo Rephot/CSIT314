@@ -22,6 +22,8 @@ void Transaction::create(string transactionID, string custID, string custCardNum
 	relCustID = custID;
 	completed = "0";
 	requestData = ServiceRequest(transactionID, custID, custCardNum, custCardExpiry, stName, postCode, stNum, serviceType, incDesc);
+	reviewData = Review();
+	receiptData = Receipt();
 }
 
 void Transaction::GRSScreate(string transactionID, string custID, string custCardNum, string custCardExpiry, string stName, string postCode, string stNum, string locDesc, string serviceType, string incDesc, string subFlag) {
@@ -53,6 +55,19 @@ void Transaction::GRSSaddReceiptData(string bsb, string accnum, string accname, 
 	receiptData.setServiceCost(servicecost);
 }
 
+void Transaction::leaveReview(string jobRating, string reviewDesc) {
+	if (completed == "1") {
+		reviewData = Review(jobRating, reviewDesc);
+	}
+	else {
+		cout << "Transaction is not complete, you cannot leave a review" << endl;
+	}
+}
+
+void Transaction::generateReceipt(string specBSB, string specAccNum, string specAccName, string custCardNum, string custCardExpiry, string callFee, string amountDue) {
+
+}
+
 string Transaction::getArea() {
 	return requestData.getPostCode();
 }
@@ -61,12 +76,28 @@ void Transaction::setSpecialist(Specialist spec) {
 	relSpecID = spec.specialistID;
 }
 
-void Transaction::addAvailableSpecialist(Specialist spec) {
-	availableSpecialists.push_back(spec);
+void Transaction::complete(Customer cust) {
+	completed = "1";
+	Specialist spec;
+	for (std::vector<Specialist>::iterator it = availableSpecialists.begin(); it != availableSpecialists.end(); ++it) {
+		if (it->specialistID == relSpecID) {
+			spec = *it;
+		}
+	}
+	receiptData = Receipt(spec.getBsb(), spec.getAccount_num(), spec.getAccount_name(), cust.getCardNumber(), cust.getCardExpiry(), spec.callOutFee, spec.callOutFee);
 }
 
-void Transaction::loadAvailableSpecialists(vector<Specialist> spec) {
-	string transID, specialists;
+void Transaction::addAvailableSpecialist(Specialist spec, string price) {
+	availableSpecialists.push_back(spec);
+	availableSpecialists.back().callOutFee = price;
+}
+
+string Transaction::getRelSpec() {
+	return relSpecID;
+}
+
+void Transaction::loadAvailableSpecialists() {
+	string transID, specialists, specID, uname, pwd, fname, lname, license_num, phnumber, email, qualification_num, bsb, acc_num, acc_name, areas, callOut;
 	string userFile = "availableSpecialists.csv";
 
 
@@ -74,17 +105,37 @@ void Transaction::loadAvailableSpecialists(vector<Specialist> spec) {
 	inFile.open(userFile);
 	if (inFile.is_open())
 	{
-		while (getline(inFile, transID, '`'))
+		while (getline(inFile, transID, ','))
 		{
 			getline(inFile, specialists);
 			if (transID == this->transactionID) {
+				
+				
 				std::stringstream ss(specialists);
+
+				getline(ss, specID, '`');
+				getline(ss, uname, '`');
+				getline(ss, pwd, '`');
+				getline(ss, fname, '`');
+				getline(ss, lname, '`');
+				getline(ss, license_num, '`');
+				getline(ss, phnumber, '`');
+				getline(ss, email, '`');
+				getline(ss, qualification_num, '`');
+				getline(ss, areas, '`');
+				getline(ss, bsb, '`');
+				getline(ss, acc_num, '`');
+				getline(ss, acc_name, '`');
+				getline(ss, callOut);
+
+				Specialist s = Specialist(specID, uname, pwd, fname, lname, license_num, phnumber, email, qualification_num, bsb, acc_num, acc_name);
+				std::stringstream sss(areas);
 				std::string token;
-				while (std::getline(ss, token, '|')) {
-					for (std::vector<Specialist>::iterator it = spec.begin(); it != spec.end(); ++it) {
-						if (it->specialistID == token) availableSpecialists.push_back(*it);
-					}
+				while (std::getline(sss, token, '|')) {
+					s.operationalAreas.push_back(token);
 				}
+
+				this->addAvailableSpecialist(s, callOut);
 			}
 			
 		}
@@ -97,12 +148,31 @@ void Transaction::saveAvailableSpecialists()
 	ofstream outFile;
 	outFile.open("availableSpecialists.csv");
 
-	outFile << transactionID << "`";
+	outFile << transactionID << ",";
 
 	vector<Specialist>::iterator it = availableSpecialists.begin();
 	while (it != availableSpecialists.end())
 	{
-		outFile << it->specialistID << "|";
+		outFile << it->specialistID << "`"
+			<< it->getUserName() << "`"
+			<< it->getPassword() << "`"
+			<< it->getFirstName() << "`"
+			<< it->getLastName() << "`"
+			<< it->getLicenseNumber() << "`"
+			<< it->getNumber() << "`"
+			<< it->getEmail() << "`"
+			<< it->getQualification() << "`";
+
+		for (std::vector<string>::iterator t = it->operationalAreas.begin(); t != it->operationalAreas.end(); ++t) {
+			if (t != it->operationalAreas.begin()) outFile << "|";
+			outFile << *t;
+		}
+
+		outFile << "`"
+			<< it->getBsb() << "`"
+			<< it->getAccount_num() << "`"
+			<< it->getAccount_name() << "`"
+			<< it->callOutFee << "\n";
 		it++;
 	}
 

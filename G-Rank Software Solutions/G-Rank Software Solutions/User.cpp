@@ -59,6 +59,30 @@ string User::getLicenseNumber() {
 	return licenseNumber;
 }
 
+void User::setUserName(string username) {
+	this->username = username;
+}
+
+void User::setFirstName(string fName) {
+	this->fName = fName;
+}
+
+void User::setLastName(string lName) {
+	this->lName = lName;
+}
+
+void User::setNumber(string phNumber) {
+	this->phNumber = phNumber;
+}
+
+void User::setEmail(string email) {
+	this->email = email;
+}
+
+void User::setLicenseNumber(string licenseNumber) {
+	this->licenseNumber = licenseNumber;
+}
+
 bool User::setPassword(string pwd) {
 	this->password == pwd;
 	return true;

@@ -17,15 +17,16 @@ using namespace std;
 class Administrator : public User {
 public:
 	Administrator();
-	Administrator(int, string, string, string, string, time_t, string);
+	Administrator(string, string, string, string, string, string);
 	static vector<Administrator> loadAdministrators();
 	void returnUser();
 	void saveAdministrator();
 	void viewTransactions(vector<Transaction>);
 	void suspendUser(string, vector<Customer>);
 	void suspendUser(string, vector<Specialist>);
+	void viewUsers(vector<Specialist>, vector<Customer>);
 
-	int adminID;//C: type can be changed later
+	string adminID;//C: type can be changed later
 private:
 	// BankCard cardDetails;
 };

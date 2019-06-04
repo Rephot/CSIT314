@@ -18,9 +18,9 @@ public:
 	Receipt getReceiptData();
 	static vector<Transaction> GRSSload(string);
 	void setSpecialist(Specialist);
-	void addAvailableSpecialist(Specialist);
+	void addAvailableSpecialist(Specialist, string);
 	vector<Specialist> getAvailableSpecialists();
-	void loadAvailableSpecialists(vector<Specialist>);
+	void loadAvailableSpecialists();
 	void saveAvailableSpecialists();
 	string getTransactionID();
 	string getCustID();
@@ -31,6 +31,10 @@ public:
 	void GRSSspecialistAvailable(string);
 	void GRSSaddReceiptData(string, string, string, string);
 	void GRSSaddReviewData(string, string);
+	void complete(Customer);
+	void leaveReview(string, string);
+	void generateReceipt(string, string, string, string, string, string, string);
+	string getRelSpec();
 
 private:
 	string transactionID, relSpecID, relCustID, amount, callOut, completed;

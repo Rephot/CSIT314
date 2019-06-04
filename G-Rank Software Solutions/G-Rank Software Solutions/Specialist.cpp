@@ -54,14 +54,20 @@ Specialist::Specialist(string specID, string uname, string pwd, string fname, st
 	account_name = acc_name;
 }
 
-void Specialist::viewRequests() {
-	for (int i = 0; i < ServiceRequest::numCurrentRequests; i++) {
-		for (std::set<string>::iterator it = operationalAreas.begin(); it != operationalAreas.end(); ++it) {
-			if (ServiceRequest::currentRequests[i].incidentLocation == *it) {
-				cout << ServiceRequest::toString(ServiceRequest::currentRequests[i]) << endl;
-			}
-		}
-	}
+void Specialist::setQualification(string qualification_num) {
+	this->qualification_num = qualification_num;
+}
+
+void Specialist::setBsb(string bsb) {
+	this->bsb = bsb;
+}
+
+void Specialist::setAccount_num(string account_num) {
+	this->account_num = account_num;
+}
+
+void Specialist::setAccount_name(string account_name) {
+	this->account_name = account_name;
 }
 
 Specialist* Specialist::load() {
@@ -172,6 +178,22 @@ void Specialist::save() {
 		<< account_num << "`"
 		<< account_name << "\n";
 	outFile.close();
+}
+
+string Specialist::getQualification() {
+	return qualification_num;
+}
+
+string Specialist::getBsb() {
+	return bsb;
+}
+
+string Specialist::getAccount_num() {
+	return account_num;
+}
+
+string Specialist::getAccount_name() {
+	return account_name;
 }
 
 void Specialist::selectRequest(int requestID) {

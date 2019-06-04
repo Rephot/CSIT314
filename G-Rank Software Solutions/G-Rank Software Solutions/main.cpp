@@ -13,6 +13,7 @@
 #include "GRSS.h"
 #include "Reviews.h"
 #include "car.h"
+#include "Administrator.h"
 
 using namespace std;
 
@@ -314,38 +315,87 @@ void firstMenu(int choice) {
 	else return;
 }
 
-int main(int argc, char **argv) {
-	// test user file contents
-	//User user1(username, password, fName, lName, 0, phNumber);// creates user
-	//system("CLS");//clears console
+//C: Here is a quick function that returns a vector of transactions that are in the specialists area
+vector<Transaction> viewAvailableRequests(Specialist spec, vector<Transaction> transactions) {
+	vector<Transaction> available;
 
-	/*print all user details
-	for (int i = 0; i < count + 1; i++) {
-		users[i].returnUser();
-		cout << endl;
+	for (std::vector<string>::iterator it = spec.operationalAreas.begin(); it != spec.operationalAreas.end(); ++it) {
+		for (std::vector<Transaction>::iterator ti = transactions.begin(); ti != transactions.end(); ++ti) {
+			if (ti->getArea() == *it) {
+				available.push_back(*ti);
+			}
+		}
+	}
+
+	return available;
+}
+
+//C: A method that returns all reviews that have been made for a specialist
+vector<Review> viewReviews(Specialist spec, vector<Transaction> transactions) {
+	vector<Review> reviews;
+	
+	for (std::vector<Transaction>::iterator ti = transactions.begin(); ti != transactions.end(); ++ti) {
+		if (ti->getRelSpec() == spec.specialistID) {
+			reviews.push_back(ti->getReviewData());
+		}
+	}
+
+	return reviews;
+}
+
+int main(int argc, char **argv) {
+
+	Administrator admin = Administrator("a1", "cbl755", "1234", "Chris", "Lawson", "0411000111");
+	//admin.saveAdministrator();
+
+	//create a customer
+	Customer c = Customer("c100", "CtestUser100", "1234", "Alex", "Quinn", "36657448", "0431121981", "ladder@zoho.com", "XSGV98", "2008", "Toyota", "Yaris", "Hatch", "1.3L", "Gold", "1", "5287218173532550", "224", "6/21");
+
+	//create a new transaction (done by customer to create service request)
+	Transaction t;
+	t.create("1", c.custID, c.getCardNumber(), c.getCardExpiry(), "yesy", "2518", "10", "flat tyre", "is real flat");
+
+	//loading specialists
+	vector<Specialist> s = Specialist::GRSSload();
+
+	/* C: Here is a quick function that returns a vector of transactions that are in the specialists area
+	vector<Transaction> viewAvailableRequests(Specialist spec, vector<Transaction> transactions) {
+		vector<Transaction> available;
+
+		for (std::vector<string>::iterator it = spec.operationalAreas.begin(); it != spec.operationalAreas.end(); ++it) {
+			for (std::vector<Transaction>::iterator ti = transactions.begin(); ti != transactions.end(); ++ti) {
+				if (ti->getArea() == *it) {
+					available.push_back(*ti);
+				}
+			}
+		}
+
+		return available;
 	}*/
 
-	//user1.returnUser();//displays user credentials
-	//Sleep(2500);//pauses for 2.5 seconds
-	//system("CLS");//clears console
+	//after listing all available requests to specialist and getting the object based on which one they want to be available for call this where $25 is the callout fee
+	t.addAvailableSpecialist(s.front(), "$25");
 
-	// main menu
-	//int respondTo;
+	//customer chooses a specialist
+	t.setSpecialist(s.front());
 
-	//ServiceRequest req;
-	//req.loadRequests();
-	//Sleep(10000);//pauses for 5 seconds
+	//once specialist completes the request they set it to complete and pass the customer object
+	t.complete(c);
 
-	//Car car = Car(customers[0], "abc012", 2017, "Toyota", "Corolla", "Hatchback", 1.8, "White");
-	//car.save();
+	//the customer can leave a review on the transaction
+	t.leaveReview("2.4", "Very friendly and did a good job on my car");
 
-	//cars = Car::loadCars();
+	//just added to vector to test saving
+	vector<Transaction> tv;
+	tv.push_back(t);
 
-	//selectRequest(1, specialists[0]);
-	//selectRequest(1, specialists[1]);
-	//selectRequest(1, specialists[0]);
+	//t.GRSSsave(tv);
 
-	//showAvailable(1);
+	//testing callout fee and checking whether the object is a copy or a reference when added the transaction.availableSpecialists
+	vector<Specialist> s1 = t.getAvailableSpecialists();
+	cout << s1.front().callOutFee << " | " << s.front().callOutFee << endl;
+
+	t.saveAvailableSpecialists();
 	
 	//specialists = Specialist::load();
 	//customers = Customer::load();

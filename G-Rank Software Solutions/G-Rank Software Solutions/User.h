@@ -24,6 +24,13 @@ public:
 	string getNumber();
 	string getEmail();
 	string getLicenseNumber();
+	void setUserName(string);
+	void setFullName(string);
+	void setFirstName(string);
+	void setLastName(string);
+	void setNumber(string);
+	void setEmail(string);
+	void setLicenseNumber(string);
 protected:
 	string username, password, fName, lName, licenseNumber, phNumber, email;
 	time_t DOB;

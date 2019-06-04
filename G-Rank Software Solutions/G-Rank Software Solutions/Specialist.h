@@ -15,11 +15,18 @@ public:
 	Specialist(string, string, string, string, string, string, int);
 	Specialist(string, string, string, string, string, string, string, string, string, string, string, string, set<string>);
 	Specialist(string, string, string, string, string, string, string, string, string, string, string, string);
-	void viewRequests();
 	void save();
 	void selectRequest(int);
 	void addArea(string);
 	void returnUser();
+	string getQualification();
+	string getBsb();
+	string getAccount_num();
+	string getAccount_name();
+	void setQualification(string);
+	void setBsb(string);
+	void setAccount_num(string);
+	void setAccount_name(string);
 	static vector<vector<ServiceRequest>> available;
 	static Specialist* load();
 	static vector<Specialist> GRSSload();
@@ -29,8 +36,8 @@ public:
 	string getBSB();
 	string getAccNum();
 	string getAccName();
-
+	
 private:
-	string bsb, account_num, account_name, qualification_num, licenseNumber;
+	string bsb, account_num, account_name, qualification_num;
 };
 #endif

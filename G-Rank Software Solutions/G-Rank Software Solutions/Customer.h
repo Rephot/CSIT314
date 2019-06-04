@@ -31,6 +31,16 @@ public:
 	string getCarShape();
 	string getCarEngineSize();
 	string getCarColour();
+	void setSubFlag(string);
+	void setCardNumber(string);
+	void setCardSec(string);
+	void setCardExpiry(string);
+	void setCarYear(string);
+	void setCarMake(string);
+	void setCarModel(string);
+	void setCarShape(string);
+	void setCarEngineSize(string);
+	void setCarColour(string);
 private:
 	string sub_flag, card_num, security_code, expiry, licPlate, car_year, car_make, car_model, car_shape, car_colour, car_engine_size;
 };
