@@ -208,7 +208,7 @@ void Specialist::saveAll(vector<Specialist> inSpec) {
 				<< it->email << "`"
 				<< it->qualification_num << "`";
 
-			for (std::set<string>::iterator itr = it->operationalAreas.begin(); itr != it->operationalAreas.end(); ++it) {
+			for (std::set<string>::iterator itr = it->operationalAreas.begin(); itr != it->operationalAreas.end(); ++itr) {
 				if (itr != it->operationalAreas.begin()) outFile << "|";
 				outFile << *itr;
 			}

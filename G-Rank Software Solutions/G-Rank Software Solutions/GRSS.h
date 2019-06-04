@@ -74,7 +74,10 @@ private:
 	void viewUserDetails();
 	void editUserDetails();
 	void viewTransactions();
+	void viewReviews(Specialist);
+	void viewAllUsers();
 	void updateUsers();
+	void delUser();
 
 public:
 	vector<Customer> existingCustomers;
