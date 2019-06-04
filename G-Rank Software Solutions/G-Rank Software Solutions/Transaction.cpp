@@ -21,7 +21,7 @@ void Transaction::create(string transactionID, string custID, string custCardNum
 	this->transactionID = transactionID;
 	relCustID = custID;
 	completed = "0";
-	requestData = ServiceRequest(transactionID, custID, custCardNum, custCardExpiry, stName, postCode, stNum, serviceType, incDesc);
+	requestData = ServiceRequest(stName, postCode, stNum, serviceType, incDesc);
 	reviewData = Review();
 	receiptData = Receipt();
 }
@@ -45,6 +45,17 @@ string Transaction::getArea() {
 
 void Transaction::setSpecialist(Specialist spec) {
 	relSpecID = spec.specialistID;
+}
+
+void Transaction::complete(Customer cust) {
+	completed = "1";
+	Specialist spec;
+	for (std::vector<Specialist>::iterator it = availableSpecialists.begin(); it != availableSpecialists.end(); ++it) {
+		if (it->specialistID == relSpecID) {
+			spec = *it;
+		}
+	}
+	receiptData = Receipt(spec.getBsb(), spec.getAccount_num(), spec.getAccount_name(), cust.getCardNumber(), cust.getCardExpiry(), spec.callOutFee, spec.callOutFee);
 }
 
 void Transaction::addAvailableSpecialist(Specialist spec, string price) {

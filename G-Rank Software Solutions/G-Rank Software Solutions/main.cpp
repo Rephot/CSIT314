@@ -355,6 +355,17 @@ int main(int argc, char **argv) {
 
 	t.addAvailableSpecialist(s.front(), "$25");
 
+	t.setSpecialist(s.front());
+
+	t.complete(c);
+
+	t.leaveReview("2.4", "Very friendly and did a good job on my car");
+
+	vector<Transaction> tv;
+	tv.push_back(t);
+
+	//t.GRSSsave(tv);
+
 	vector<Specialist> s1 = t.getAvailableSpecialists();
 	cout << s1.front().callOutFee << " | " << s.front().callOutFee << endl;
 

@@ -23,6 +23,7 @@ public:
 	vector<Specialist> getAvailableSpecialists();
 	void loadAvailableSpecialists();
 	void saveAvailableSpecialists();
+	void complete(Customer);
 	void leaveReview(string, string);
 	void generateReceipt(string, string, string, string, string, string, string);
 
