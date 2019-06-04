@@ -31,7 +31,7 @@ Specialist::Specialist(string specID, string uname, string pwd, string fname, st
 	this->lName = lname;
 	licenseNumber = license_num;
 	this->phNumber = phnumber;
-	emailAddress = email;
+	this->email = email;
 	this->qualification_num = qualification_num;
 	this->bsb = bsb;
 	account_num = acc_num;
@@ -47,7 +47,7 @@ Specialist::Specialist(string specID, string uname, string pwd, string fname, st
 	this->lName = lname;
 	licenseNumber = license_num;
 	this->phNumber = phnumber;
-	emailAddress = email;
+	this->email = email;
 	this->qualification_num = qualification_num;
 	this->bsb = bsb;
 	account_num = acc_num;

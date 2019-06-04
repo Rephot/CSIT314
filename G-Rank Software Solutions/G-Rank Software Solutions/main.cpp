@@ -353,10 +353,10 @@ int main(int argc, char **argv) {
 
 	vector<Specialist> s = Specialist::GRSSload();
 
-	t.loadAvailableSpecialists();
+	t.addAvailableSpecialist(s.front(), "$25");
 
 	vector<Specialist> s1 = t.getAvailableSpecialists();
-	cout << s1.back().callOutFee << " | " << s.back().callOutFee << endl;
+	cout << s1.front().callOutFee << " | " << s.front().callOutFee << endl;
 
 	t.saveAvailableSpecialists();
 
