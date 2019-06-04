@@ -23,7 +23,7 @@ string shapeTmp;
 string engineSizeTmp;
 string colourTmp;
 // spec
-vector<string> opAreaTmp;
+set<string> opAreaTmp;
 int check[15] = {};
 string postCodes[15] = { "2515", "2516", "2517", "2518", "2519", "2500", "2525", "2526", "2527", "2528", "2529", "2530", "2502", "2505", "2506" };
 string qualNumTmp;
@@ -37,6 +37,16 @@ string subFlagTmp;
 string BSBTmp;
 string accNumTmp;
 string accNameTmp;
+
+// create request tmp
+// location
+string stNameTmp;
+string stNumTmp;
+string postCodeTmp;
+string locationDescTmp;
+// incident
+string incidentTypeTmp;
+string incidentDescTmp;
 
 GRSS::GRSS(const Wt::WEnvironment &env) : Wt::WApplication(env)
 {
@@ -84,7 +94,76 @@ void GRSS::loadInfo()
 {
 	existingCustomers = Customer::GRSSload();
 	existingSpecialists = Specialist::GRSSload();
-	previousTransactions = Transaction::GRSSload(existingCustomers);
+	inProgress = Transaction::GRSSload("GRSScreated.csv"); // customer creates
+	specAvailable = Transaction::GRSSload("GRSSspecAvailable.csv"); // specialists says they're available
+	specAccepted = Transaction::GRSSload("GRSSspecialistAccepted.csv"); // customer chooses specialist
+	completed = Transaction::GRSSload("GRSSjobCompleted.csv"); // specialist marks job as completed, customer will add review and rating and confirm payment
+	previousTransactions = Transaction::GRSSload("Transactions.csv"); // load all completed jobs
+}
+
+void GRSS::unLoadData(Transaction finished)
+{
+	inProgress = Transaction::GRSSload("GRSScreated.csv"); // customer creates
+	specAvailable = Transaction::GRSSload("GRSSspecAvailable.csv"); // specialists says they're available
+	specAccepted = Transaction::GRSSload("GRSSspecialistAccepted.csv"); // customer chooses specialist
+	completed = Transaction::GRSSload("GRSSjobCompleted.csv"); // specialist marks job as completed, customer will add review and rating and confirm payment
+	vector<Transaction>::iterator it;
+	if (!(inProgress.empty()))
+	{
+		it = inProgress.begin();
+		while (it != inProgress.end())
+		{
+			if (finished.getTransactionID() == (*it).getTransactionID()) inProgress.erase(it);
+			if (!(inProgress.empty()))
+			{
+				if (it != inProgress.end()) it++;
+			}
+			else break;
+		}
+	}
+	if (!(specAvailable.empty()))
+	{
+		it = specAvailable.begin();
+		while (it != specAvailable.end())
+		{
+			if (finished.getTransactionID() == (*it).getTransactionID()) specAvailable.erase(it);
+			if (!(specAvailable.empty()))
+			{
+				if (it != specAvailable.end()) it++;
+			}
+			else break;
+		}
+	}
+	if (!(specAccepted.empty()))
+	{
+		it = specAccepted.begin();
+		while (it != specAccepted.end())
+		{
+			if (finished.getTransactionID() == (*it).getTransactionID()) specAccepted.erase(it);
+			if (!(specAccepted.empty()))
+			{
+				if (it != specAccepted.end()) it++;
+			}
+			else break;
+		}
+	}
+	if(!(completed.empty()))
+	{
+		it = completed.begin();
+		while (it != completed.end())
+		{
+			if (finished.getTransactionID() == (*it).getTransactionID()) completed.erase(it);
+			if (!(completed.empty()))
+			{
+				if (it != completed.end()) it++;
+			}
+			else break;
+		}
+	}
+	Transaction::GRSSsaveAll("GRSScreated.csv", inProgress);
+	Transaction::GRSSsaveAll("GRSSspecAvailable.csv", specAvailable);
+	Transaction::GRSSsaveAll("GRSSspecialistAccepted.csv", specAccepted);
+	Transaction::GRSSsaveAll("GRSSjobCompleted.csv", completed);
 }
 
 void GRSS::loginPage()
@@ -106,10 +185,8 @@ void GRSS::loginPage()
 	_passwordField->setEchoMode(Wt::EchoMode::Password);
 	_passwordField->enterPressed().connect([=]
 	{
-		cout << "\n" << _usernameField->text() << "\n";
 		if (GRSS::validateLogin(_usernameField->text()))
 		{
-			cout << "\n" << _passwordField->text() << "\n";
 			if (GRSS::validateUsersPassword(_usernameField->text(), _passwordField->text()))
 			{
 				GRSS::userMenu();
@@ -135,10 +212,8 @@ void GRSS::loginPage()
 	Wt::WPushButton *_signInButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Sign In"));
 	_signInButton->clicked().connect([=]
 	{
-		cout << "\n" << _usernameField->text() << "\n";
 		if (GRSS::validateLogin(_usernameField->text()))
 		{
-			cout << "\n" << _passwordField->text() << "\n";
 			if (GRSS::validateUsersPassword(_usernameField->text(), _passwordField->text()))
 			{
 				GRSS::userMenu();
@@ -156,17 +231,17 @@ bool GRSS::validateLogin(Wt::WString username)
 {
 	vector<Customer>::iterator cItr = existingCustomers.begin();
 	vector<Specialist>::iterator sItr = existingSpecialists.begin();
-	while (cItr != existingCustomers.end())
+	do
 	{
-		Wt::WString user = cItr->getUserName();
+		Wt::WString user = cItr->getUserName();;
 		if (user == username)
 		{
 			userFlag = 1;
 			return true;
 		}
 		else if (cItr != existingCustomers.end()) cItr++;
-	}
-	while (sItr != existingSpecialists.end())
+	} while (cItr != existingCustomers.end());
+	do
 	{
 		Wt::WString user = sItr->getUserName();
 		user = sItr->getUserName();
@@ -176,7 +251,7 @@ bool GRSS::validateLogin(Wt::WString username)
 			return true;
 		}
 		else if (sItr != existingSpecialists.end()) sItr++;
-	}
+	} while (sItr != existingSpecialists.end());
 	return false;
 }
 
@@ -316,10 +391,6 @@ void GRSS::registerPage2()
 	Wt::WText *_emailText = _pageLayout->addWidget(make_unique<Wt::WText>("Email Address"));
 	Wt::WLineEdit* _emailField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
 	_emailField->setPlaceholderText("example@email.com");
-	_emailField->changed().connect([=] {
-		
-
-	});
 
 	// create buttons for confirm and cancel
 	Wt::WContainerWidget *_buttonsContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
@@ -406,99 +477,30 @@ void GRSS::registerPage3()
 
 			Wt::WText *_postCodeArea = _thirdPageLayout->addWidget(make_unique<Wt::WText>("Choose your operating areas"));
 
-			Wt::WContainerWidget *_checkContainer = _thirdPageLayout->addWidget(make_unique<Wt::WContainerWidget>());
-			Wt::WVBoxLayout *_checkVBoxLayout = _checkContainer->setLayout(make_unique<Wt::WVBoxLayout>());
-			Wt::WContainerWidget *_checkContainer1 = _checkVBoxLayout->addWidget(make_unique<Wt::WContainerWidget>());
-			Wt::WHBoxLayout *_checkHBoxLayout1 = _checkContainer1->setLayout(make_unique<Wt::WHBoxLayout>());
-			Wt::WCheckBox *_postCode2515 = _checkHBoxLayout1->addWidget(make_unique<Wt::WCheckBox>("2515"));
-			_postCode2515->changed().connect([=]
+			Wt::WSelectionBox *_postCodeSelection = _thirdPageLayout->addWidget(make_unique<Wt::WSelectionBox>());
+			_postCodeSelection->addItem("2515");
+			_postCodeSelection->addItem("2516");
+			_postCodeSelection->addItem("2517");
+			_postCodeSelection->addItem("2518");
+			_postCodeSelection->addItem("2519");
+			_postCodeSelection->addItem("2500");
+			_postCodeSelection->addItem("2525");
+			_postCodeSelection->addItem("2526");
+			_postCodeSelection->addItem("2527");
+			_postCodeSelection->addItem("2528");
+			_postCodeSelection->addItem("2529");
+			_postCodeSelection->addItem("2530");
+			_postCodeSelection->addItem("2502");
+			_postCodeSelection->addItem("2505");
+			_postCodeSelection->addItem("2506");
+			_postCodeSelection->setSelectionMode(Wt::SelectionMode::Extended);
+			_postCodeSelection->activated().connect([=]
 			{
-				(_postCode2515->isChecked()) ? check[0] = 1 : check[0] = 0;
-			});
-			Wt::WCheckBox *_postCode2516 = _checkHBoxLayout1->addWidget(make_unique<Wt::WCheckBox>("2516"));
-			_postCode2516->changed().connect([=]
-			{
-				(_postCode2516->isChecked()) ? check[0] = 1 : check[0] = 0;
-			});
-			Wt::WCheckBox *_postCode2517 = _checkHBoxLayout1->addWidget(make_unique<Wt::WCheckBox>("2517"));
-			_postCode2517->changed().connect([=]
-			{
-				(_postCode2517->isChecked()) ? check[0] = 1 : check[0] = 0;
-			});
-
-			Wt::WContainerWidget *_checkContainer2 = _checkVBoxLayout->addWidget(make_unique<Wt::WContainerWidget>());
-			Wt::WHBoxLayout *_checkHBoxLayout2 = _checkContainer2->setLayout(make_unique<Wt::WHBoxLayout>());
-			Wt::WCheckBox *_postCode2518 = _checkHBoxLayout2->addWidget(make_unique<Wt::WCheckBox>("2518"));
-			_postCode2518->changed().connect([=]
-			{
-				(_postCode2518->isChecked()) ? check[0] = 1 : check[0] = 0;
-			});
-			Wt::WCheckBox *_postCode2519 = _checkHBoxLayout2->addWidget(make_unique<Wt::WCheckBox>("2519"));
-			_postCode2519->changed().connect([=]
-			{
-				(_postCode2519->isChecked()) ? check[0] = 1 : check[0] = 0;
-			});
-			Wt::WCheckBox *_postCode2500 = _checkHBoxLayout2->addWidget(make_unique<Wt::WCheckBox>("2500"));
-			_postCode2500->changed().connect([=]
-			{
-				(_postCode2500->isChecked()) ? check[0] = 1 : check[0] = 0;
-			});
-
-
-			Wt::WContainerWidget *_checkContainer3 = _checkVBoxLayout->addWidget(make_unique<Wt::WContainerWidget>());
-			Wt::WHBoxLayout *_checkHBoxLayout3 = _checkContainer3->setLayout(make_unique<Wt::WHBoxLayout>());
-			Wt::WCheckBox *_postCode2525 = _checkHBoxLayout3->addWidget(make_unique<Wt::WCheckBox>("2525"));
-			_postCode2525->changed().connect([=]
-			{
-				(_postCode2525->isChecked()) ? check[0] = 1 : check[0] = 0;
-			});
-			Wt::WCheckBox *_postCode2526 = _checkHBoxLayout3->addWidget(make_unique<Wt::WCheckBox>("2526"));
-			_postCode2526->changed().connect([=]
-			{
-				(_postCode2526->isChecked()) ? check[0] = 1 : check[0] = 0;
-			});
-			Wt::WCheckBox *_postCode2527 = _checkHBoxLayout3->addWidget(make_unique<Wt::WCheckBox>("2527"));
-			_postCode2527->changed().connect([=]
-			{
-				(_postCode2527->isChecked()) ? check[0] = 1 : check[0] = 0;
-			});
-
-
-			Wt::WContainerWidget *_checkContainer4 = _checkVBoxLayout->addWidget(make_unique<Wt::WContainerWidget>());
-			Wt::WHBoxLayout *_checkHBoxLayout4 = _checkContainer4->setLayout(make_unique<Wt::WHBoxLayout>());
-			Wt::WCheckBox *_postCode2528 = _checkHBoxLayout4->addWidget(make_unique<Wt::WCheckBox>("2528"));
-			_postCode2528->changed().connect([=]
-			{
-				(_postCode2528->isChecked()) ? check[0] = 1 : check[0] = 0;
-			});
-			Wt::WCheckBox *_postCode2529 = _checkHBoxLayout4->addWidget(make_unique<Wt::WCheckBox>("2529"));
-			_postCode2529->changed().connect([=]
-			{
-				(_postCode2529->isChecked()) ? check[0] = 1 : check[0] = 0;
-			});
-			Wt::WCheckBox *_postCode2530 = _checkHBoxLayout4->addWidget(make_unique<Wt::WCheckBox>("2530"));
-			_postCode2530->changed().connect([=]
-			{
-				(_postCode2530->isChecked()) ? check[0] = 1 : check[0] = 0;
-			});
-
-
-			Wt::WContainerWidget *_checkContainer5 = _checkVBoxLayout->addWidget(make_unique<Wt::WContainerWidget>());
-			Wt::WHBoxLayout *_checkHBoxLayout5 = _checkContainer5->setLayout(make_unique<Wt::WHBoxLayout>());
-			Wt::WCheckBox *_postCode2502 = _checkHBoxLayout5->addWidget(make_unique<Wt::WCheckBox>("2502"));
-			_postCode2502->changed().connect([=]
-			{
-				(_postCode2502->isChecked()) ? check[0] = 1 : check[0] = 0;
-			});
-			Wt::WCheckBox *_postCode2505 = _checkHBoxLayout5->addWidget(make_unique<Wt::WCheckBox>("2505"));
-			_postCode2505->changed().connect([=]
-			{
-				(_postCode2505->isChecked()) ? check[0] = 1 : check[0] = 0;
-			});
-			Wt::WCheckBox *_postCode2506 = _checkHBoxLayout5->addWidget(make_unique<Wt::WCheckBox>("2506"));
-			_postCode2506->changed().connect([=]
-			{
-				(_postCode2506->isChecked()) ? check[0] = 1 : check[0] = 0;
+				std::set<int> selection = _postCodeSelection->selectedIndexes();
+				for (std::set<int>::iterator it = selection.begin(); it != selection.end(); ++it)
+				{
+					opAreaTmp.insert(_postCodeSelection->itemText(*it).narrow());
+				}
 			});
 		}
 		else if (rawButtonGroup->id(selection) == 2) {
@@ -556,7 +558,7 @@ void GRSS::registerPage3()
 				shapeTmp = _shapeField->text().narrow();
 			});
 
-			Wt::WText *_engineSizeText = _thirdPageLayout->addWidget(make_unique<Wt::WText>("Car Colour"));
+			Wt::WText *_engineSizeText = _thirdPageLayout->addWidget(make_unique<Wt::WText>("Car Engine Size"));
 			Wt::WLineEdit* _engineSizeField = _thirdPageLayout->addWidget(make_unique<Wt::WLineEdit>());
 			_engineSizeField->setPlaceholderText("3.4L");
 			_engineSizeField->changed().connect([=]
@@ -602,9 +604,9 @@ void GRSS::registerPage3()
 		if (userFlag == 1) {
 			for (int i = 0; i < 15; i++)
 			{
-				if (check[i] == 1)
+				if (check[i] != 0)
 				{
-					opAreaTmp.push_back(postCodes[i]);
+					opAreaTmp.insert(postCodes[i]);
 				}
 			}
 		}
@@ -614,7 +616,6 @@ void GRSS::registerPage3()
 
 void GRSS::registerPage4()
 {
-	cout << "\n" << userFlag << "\n"; 
 	if (userFlag == 1) {
 		// customers
 		_pageContent->clear();
@@ -711,6 +712,7 @@ void GRSS::registerPage4()
 		}
 		// specialist creation
 		else if (userFlag == 2) {
+			if (!opAreaTmp.empty()) cout << "notEmpty\n";
 			Specialist joined = Specialist(("s" + to_string(existingSpecialists.size() + 1)), userTmp, pwTmp, fnameTmp, lnameTmp, licNumTmp, phoneTmp, emailTmp, qualNumTmp, BSBTmp, accNumTmp, accNameTmp, opAreaTmp);
 			joined.save();
 			existingSpecialists.push_back(joined);
@@ -740,18 +742,51 @@ void GRSS::userMenu()
 {
 	// want to put current request somewhere in this menu, probably after the buttons, ONLY IF they have a current request
 	_pageContent->clear();
+	inProgress = Transaction::GRSSload("GRSScreated.csv"); // customer creates
+	specAvailable = Transaction::GRSSload("GRSSspecAvailable.csv"); // specialists says they're available
+	specAccepted = Transaction::GRSSload("GRSSspecialistAccepted.csv"); // customer chooses specialist
+	completed = Transaction::GRSSload("GRSSjobCompleted.csv"); // specialist marks job as completed, customer will add review and rating and confirm payment
 	Wt::WVBoxLayout *_menuLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
 
 	// links to for now 3 options that the customer can do
 	// connect to create service request page
 	if (userFlag == 1)
 	{
-		Wt::WPushButton *_requestButton = _menuLayout->addWidget(make_unique<Wt::WPushButton>("Create Service Request"));
+		Wt::WPushButton *_requestButton = _menuLayout->addWidget(make_unique<Wt::WPushButton>("Service Request"));
 		// connect to service creation page
 		_requestButton->clicked().connect([=]
 		{
-			// STRETCH: if has current request ? goes to request : goes to create request;
-			GRSS::createRequestPage();
+			bool hasCurrent = false;
+			for (vector<Transaction>::iterator it = inProgress.begin(); it != inProgress.end(); it++)
+			{
+				if ((*it).getCustID() == logged_in_customer.custID)
+				{
+					hasCurrent = true;
+					break;
+				}
+			}
+			bool hasAccepted = false;
+			for (vector<Transaction>::iterator it = specAccepted.begin(); it != specAccepted.end(); it++)
+			{
+				if ((*it).getCustID() == logged_in_customer.custID)
+				{
+					hasAccepted = true;
+					break;
+				}
+			}
+			bool hasCompleted = false;
+			for (vector<Transaction>::iterator it = completed.begin(); it != completed.end(); it++)
+			{
+				if ((*it).getCustID() == logged_in_customer.custID)
+				{
+					hasCompleted = true;
+					break;
+				}
+			}
+			if (hasCompleted) GRSS::requestComplete();
+			else if (hasCurrent && hasAccepted) GRSS::requestInProgress();
+			else if (hasCurrent) GRSS::customerRequest();
+			else GRSS::createRequestPage();
 		});
 	}
 	else if (userFlag == 2)
@@ -759,9 +794,19 @@ void GRSS::userMenu()
 		// view current requests in area
 		Wt::WPushButton *_currentRequestsButton = _menuLayout->addWidget(make_unique<Wt::WPushButton>("Current Requests"));
 		// connect to view requests page
-		_currentRequestsButton->clicked().connect([=](const Wt::WMouseEvent &e)
+		_currentRequestsButton->clicked().connect([=]
 		{
-			GRSS::viewRequests();
+			bool hasAccepted = false;
+			for (vector<Transaction>::iterator it = specAccepted.begin(); it != specAccepted.end(); it++)
+			{
+				if ((*it).getSpecID() == logged_in_specialist.specialistID)
+				{
+					hasAccepted = true;
+					break;
+				}
+			}
+			(!hasAccepted) ? GRSS::viewRequests() : GRSS::specialistRequest();
+			
 		});
 	}
 
@@ -786,30 +831,20 @@ void GRSS::userMenu()
 		GRSS::viewReviews();
 	});
 
-	// logout ??
+	// logout
+	Wt::WPushButton *_logoutButton = _menuLayout->addWidget(make_unique<Wt::WPushButton>("Log Out"));
+	_logoutButton->clicked().connect([=]
+	{
+		GRSS::loginPage();
+	});
 }
 
+// customer request menus
 void GRSS::createRequestPage()
 {
 	// STRETCH add map widget, and only if you can pass data to and get data from
-	// really want this to either create new request or if they've created a request, shows them that request and the specialists that have responded
 	_pageContent->clear();
 	_pageLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
-	/*
-	ServiceRequest newRequest;
-	// identifying number
-	client = user.getFullName();
-	time_t timeCreated = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-	char timeCreatedTime[26];
-	ctime_s(timeCreatedTime, 26, &timeCreated);
-	string dateTimeRequested = timeCreatedTime;
-	newRequest.clientName = client;
-	newRequest.incidentLocation = location;
-	newRequest.sType = sType;
-	newRequest.serviceRequestedAt = dateTimeRequested;
-	newRequest.requestID = ++numRequests;
-	broadcastServiceRequest(newRequest);
-	*/
 
 	// location information
 	_pageLayout->addWidget(make_unique<Wt::WText>("Location:"));
@@ -842,15 +877,171 @@ void GRSS::createRequestPage()
 	// connect to customer menu
 	_cancelButton->clicked().connect([=]
 	{
-		// enum serviceStatus {requested, respondedTo, accepted, inProgress, complete, cancelled, investigation}
+		stNameTmp = "";
+		stNumTmp = "";
+		postCodeTmp = "";
+		locationDescTmp = "";
+		incidentTypeTmp = "";
+		incidentDescTmp = "";
 		GRSS::userMenu();
 	});
 
 	Wt::WPushButton *_confirmButton = _buttonsLayout->addWidget(make_unique<Wt::WPushButton>("Confirm"));
 	// present with dialog/page for information confirmation, then connect to saveRequest such that specialist can respond
+	_confirmButton->clicked().connect([=]
+	{
+		stNameTmp = _streetField->text().narrow();
+		stNumTmp = _streetNumberField->text().narrow();
+		postCodeTmp = _postField->text().narrow();
+		locationDescTmp = _locationDescriptionArea->text().narrow();
+		incidentTypeTmp = _serviceType->valueText().narrow();
+		incidentDescTmp = _descriptionArea->text().narrow();
 
+		// saves info as new transaction
+		Transaction requested;
+		requested.GRSScreate(("t" + to_string(previousTransactions.size() + inProgress.size() + 1)), logged_in_customer.custID, logged_in_customer.getCardNumber(), logged_in_customer.getCardExpiry(), stNameTmp, postCodeTmp, stNumTmp, locationDescTmp, incidentTypeTmp, incidentDescTmp, logged_in_customer.returnSubFlag());
+		inProgress.push_back(requested);
+
+		requested.GRSSsave("GRSScreated.csv");
+
+		GRSS::customerRequest();
+	});
 }
 
+void GRSS::customerRequest()
+{
+	_pageContent->clear();
+	Wt::WVBoxLayout *_pageLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
+	Wt::WPushButton *_backButton = _pageLayout->addWidget(make_unique<Wt::WPushButton>("Back"));
+	_backButton->clicked().connect([=] { GRSS::userMenu(); });
+	_pageLayout->addWidget(make_unique<Wt::WText>(stNumTmp + " " + stNameTmp + ", " + postCodeTmp));
+	Wt::WTextArea *_locationDescArea = _pageLayout->addWidget(make_unique<Wt::WTextArea>(locationDescTmp));
+	_locationDescArea->setReadOnly(true);
+	_pageLayout->addWidget(make_unique<Wt::WText>(incidentTypeTmp));
+	Wt::WTextArea *_incDescArea = _pageLayout->addWidget(make_unique<Wt::WTextArea>(incidentDescTmp));
+	_incDescArea->setReadOnly(true);
+
+	for (vector<Transaction>::iterator it = specAvailable.begin(); it != specAvailable.end(); ++it)
+	{
+		Specialist related;
+		if (logged_in_customer.custID == (*it).getCustID())
+		{
+			for (vector<Specialist>::iterator itr = existingSpecialists.begin(); itr != existingSpecialists.end(); ++itr)
+			{
+				if ((*itr).specialistID == (*it).getSpecID())
+				{
+					related = (*itr);
+					break;
+				}
+			}
+
+			Wt::WContainerWidget *_requestContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
+			Wt::WHBoxLayout *_requestHLayout = _requestContainer->setLayout(make_unique<Wt::WHBoxLayout>());
+			Wt::WContainerWidget *_requestInfoContainer = _requestHLayout->addWidget(make_unique<Wt::WContainerWidget>(), 1);
+			Wt::WVBoxLayout *_requestInfoLayout = _requestInfoContainer->setLayout(make_unique<Wt::WVBoxLayout>());
+			_requestInfoLayout->addWidget(make_unique<Wt::WText>("Specialist Information: " + related.getFullName() + " " + related.getQualNum() /* add rating info*/));
+			Wt::WPushButton *_acceptRequestButton = _requestHLayout->addWidget(make_unique<Wt::WPushButton>("Accept"), 0, Wt::AlignmentFlag::Middle);
+			_acceptRequestButton->setHeight(75);
+			_acceptRequestButton->clicked().connect([=]
+			{
+				(*it).GRSSsave("GRSSspecialistAccepted.csv");
+				GRSS::userMenu();
+			});
+		}
+	}
+}
+
+void GRSS::requestInProgress()
+{
+	_pageContent->clear();
+	Wt::WVBoxLayout *_pageLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
+	Wt::WPushButton *_backButton = _pageLayout->addWidget(make_unique<Wt::WPushButton>("Back"));
+	_backButton->clicked().connect([=] { GRSS::userMenu(); });
+	_pageLayout->addWidget(make_unique<Wt::WText>(stNumTmp + " " + stNameTmp + ", " + postCodeTmp));
+	Wt::WTextArea *_locationDescArea = _pageLayout->addWidget(make_unique<Wt::WTextArea>(locationDescTmp));
+	_locationDescArea->setReadOnly(true);
+	_pageLayout->addWidget(make_unique<Wt::WText>(incidentTypeTmp));
+	Wt::WTextArea *_incDescArea = _pageLayout->addWidget(make_unique<Wt::WTextArea>(incidentDescTmp));
+	_locationDescArea->setReadOnly(true);
+
+	for (vector<Transaction>::iterator it = specAvailable.begin(); it != specAvailable.end(); ++it)
+	{
+		Specialist related;
+		if (logged_in_customer.custID == (*it).getCustID())
+		{
+			for (vector<Specialist>::iterator itr = existingSpecialists.begin(); itr != existingSpecialists.end(); ++itr)
+			{
+				if ((*itr).specialistID == (*it).getSpecID())
+				{
+					related = (*itr);
+					break;
+				}
+			}
+
+			Wt::WContainerWidget *_requestContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
+			Wt::WHBoxLayout *_requestHLayout = _requestContainer->setLayout(make_unique<Wt::WHBoxLayout>());
+			Wt::WContainerWidget *_requestInfoContainer = _requestHLayout->addWidget(make_unique<Wt::WContainerWidget>(), 1);
+			Wt::WVBoxLayout *_requestInfoLayout = _requestInfoContainer->setLayout(make_unique<Wt::WVBoxLayout>());
+			_requestInfoLayout->addWidget(make_unique<Wt::WText>("Specialist Information: " + related.getFullName() + " " + related.getQualNum() /* add rating info*/));
+		}
+	}
+}
+
+void GRSS::requestComplete()
+{
+	_pageContent->clear();
+	Wt::WVBoxLayout *_pageLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
+	Wt::WPushButton *_backButton = _pageLayout->addWidget(make_unique<Wt::WPushButton>("Back"));
+	_backButton->clicked().connect([=] { GRSS::userMenu(); });
+
+	for (vector<Transaction>::iterator it = completed.begin(); it != completed.end(); ++it)
+	{
+		Specialist related;
+		if (logged_in_customer.custID == (*it).getCustID())
+		{
+			for (vector<Specialist>::iterator itr = existingSpecialists.begin(); itr != existingSpecialists.end(); ++itr)
+			{
+				if ((*itr).specialistID == (*it).getSpecID())
+				{
+					related = (*itr);
+					break;
+				}
+			}
+			_pageLayout->addWidget(make_unique<Wt::WText>("Location Information: " + (*it).getRequestData().getStNum() + " " + (*it).getRequestData().getStName() + ", " + (*it).getRequestData().getPostCode()));
+			Wt::WTextArea *_locationDescArea = _pageLayout->addWidget(make_unique<Wt::WTextArea>((*it).getRequestData().getLocDesc()));
+			_locationDescArea->setReadOnly(true);
+			_pageLayout->addWidget(make_unique<Wt::WText>("Incident infomration: " + (*it).getRequestData().getServiceType()));
+			Wt::WTextArea *_incDescArea = _pageLayout->addWidget(make_unique<Wt::WTextArea>((*it).getRequestData().getIncDesc()));
+			_incDescArea->setReadOnly(true);
+			_pageLayout->addWidget(make_unique<Wt::WText>("Specialist Information: " + related.getFullName() + " " + related.getQualNum() /* add rating info*/));
+			cout << (*it).getReceiptData().getBSB() << " " << (*it).getReceiptData().getAccNum() << " " << (*it).getReceiptData().getAccName();
+			_pageLayout->addWidget(make_unique<Wt::WText>((*it).getReceiptData().getBSB() + " " + (*it).getReceiptData().getAccNum() + " " + (*it).getReceiptData().getAccName()));
+			_pageLayout->addWidget(make_unique<Wt::WText>("Customer Information: " + logged_in_customer.getFullName()));
+			_pageLayout->addWidget(make_unique<Wt::WText>((*it).getReceiptData().getCardNum() + " " + (*it).getReceiptData().getCardExpiry()));
+			_pageLayout->addWidget(make_unique<Wt::WText>((*it).getReceiptData().getCallOut() + " " + (*it).getReceiptData().getServiceCost()));
+			_pageLayout->addWidget(make_unique<Wt::WText>("Rate the specialist:"));
+			Wt::WDoubleSpinBox *_ratingSpin = _pageLayout->addWidget(make_unique<Wt::WDoubleSpinBox>());
+			_ratingSpin->setRange(0, 5);
+			_ratingSpin->setValue(3.5);
+			_ratingSpin->setDecimals(1);
+			_ratingSpin->setSingleStep(0.1);
+			_ratingSpin->setValueText(to_string(_ratingSpin->value()));
+			_pageLayout->addWidget(make_unique<Wt::WText>("Review the specialist:"));
+			Wt::WTextArea *_reviewDesc = _pageLayout->addWidget(make_unique<Wt::WTextArea>());
+			_reviewDesc->setPlaceholderText("Review how the specialist did on this job...");
+			Wt::WPushButton *_confirmButton = _pageLayout->addWidget(make_unique<Wt::WPushButton>("Confirm"));
+			_confirmButton->clicked().connect([=]
+			{
+				(*it).GRSSaddReviewData(to_string(_ratingSpin->value()), _reviewDesc->text().narrow());
+				(*it).GRSSsave("Transactions.csv");
+				GRSS::unLoadData(*it);
+				GRSS::userMenu();
+			});
+		}
+	}
+}
+
+// specialist request menus
 void GRSS::viewRequests()
 {
 	// generates a list of current requests that match the current specialists operational area
@@ -860,18 +1051,65 @@ void GRSS::viewRequests()
 	Wt::WVBoxLayout *_pageLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
 	Wt::WPushButton *_backButton = _pageLayout->addWidget(make_unique<Wt::WPushButton>("Back"));
 	_backButton->clicked().connect([=] { GRSS::userMenu(); });
-	//while there are requests matching area
-	for (int i = 0; i < 8; i++) {
-		Wt::WContainerWidget *_requestContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
-		Wt::WHBoxLayout *_requestHLayout = _requestContainer->setLayout(make_unique<Wt::WHBoxLayout>());
-		Wt::WContainerWidget *_requestInfoContainer = _requestHLayout->addWidget(make_unique<Wt::WContainerWidget>(), 1);
-		Wt::WVBoxLayout *_requestInfoLayout = _requestInfoContainer->setLayout(make_unique<Wt::WVBoxLayout>());
-		_requestInfoLayout->addWidget(make_unique<Wt::WText>("Address Information: St No.(if non-zero), St Name, PostCode"));
-		_requestInfoLayout->addWidget(make_unique<Wt::WText>("Incident Info: type"));
-		Wt::WTextArea *_requestDescription = _requestInfoLayout->addWidget(make_unique<Wt::WTextArea>("Incident Description"));
-		_requestDescription->setReadOnly(true);
-		Wt::WPushButton *_acceptRequestButton = _requestHLayout->addWidget(make_unique<Wt::WPushButton>("Accept"), 0, Wt::AlignmentFlag::Middle);
-		_acceptRequestButton->setHeight(75);
+	// while there are requests matching area
+	for (vector<Transaction>::iterator it = inProgress.begin(); it != inProgress.end(); ++it)
+	{
+		if (std::find(logged_in_specialist.operationalAreas.begin(), logged_in_specialist.operationalAreas.end(), (*it).getRequestData().getPostCode()) != logged_in_specialist.operationalAreas.end())
+		{
+			Wt::WContainerWidget *_requestContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
+			Wt::WHBoxLayout *_requestHLayout = _requestContainer->setLayout(make_unique<Wt::WHBoxLayout>());
+			Wt::WContainerWidget *_requestInfoContainer = _requestHLayout->addWidget(make_unique<Wt::WContainerWidget>(), 1);
+			Wt::WVBoxLayout *_requestInfoLayout = _requestInfoContainer->setLayout(make_unique<Wt::WVBoxLayout>());
+			_requestInfoLayout->addWidget(make_unique<Wt::WText>("Address Information: " + (*it).getRequestData().getStNum() + " " + (*it).getRequestData().getStName() + " " + (*it).getRequestData().getPostCode()));
+			Wt::WTextArea *_locDescription = _requestInfoLayout->addWidget(make_unique<Wt::WTextArea>((*it).getRequestData().getLocDesc()));
+			_locDescription->setReadOnly(true);
+			_requestInfoLayout->addWidget(make_unique<Wt::WText>("Incident Info: " + (*it).getRequestData().getServiceType()));
+			Wt::WTextArea *_requestDescription = _requestInfoLayout->addWidget(make_unique<Wt::WTextArea>((*it).getRequestData().getIncDesc()));
+			_requestDescription->setReadOnly(true);
+			Wt::WPushButton *_acceptRequestButton = _requestHLayout->addWidget(make_unique<Wt::WPushButton>("Accept"), 0, Wt::AlignmentFlag::Middle);
+			_acceptRequestButton->setHeight(75);
+			_acceptRequestButton->clicked().connect([=]
+			{
+				(*it).GRSSspecialistAvailable(logged_in_specialist.specialistID);
+				(*it).GRSSsave("GRSSspecAvailable.csv");
+			});
+		}
+	}
+}
+
+void GRSS::specialistRequest()
+{
+	specAccepted = Transaction::GRSSload("GRSSspecialistAccepted.csv");
+	_pageContent->clear();
+	Wt::WVBoxLayout *_pageLayout = _pageContent->setLayout(make_unique<Wt::WVBoxLayout>());
+	Wt::WPushButton *_backButton = _pageLayout->addWidget(make_unique<Wt::WPushButton>("Back"));
+	_backButton->clicked().connect([=] { GRSS::userMenu(); });
+	// shows current job with a completion button
+	vector<Transaction>::iterator it = specAccepted.begin();
+
+	for (; it != specAccepted.end(); ++it)
+	{
+		if ((*it).getSpecID() == logged_in_specialist.specialistID)
+		{
+
+			Wt::WContainerWidget *_requestContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
+			Wt::WHBoxLayout *_requestHLayout = _requestContainer->setLayout(make_unique<Wt::WHBoxLayout>());
+			Wt::WContainerWidget *_requestInfoContainer = _requestHLayout->addWidget(make_unique<Wt::WContainerWidget>(), 1);
+			Wt::WVBoxLayout *_requestInfoLayout = _requestInfoContainer->setLayout(make_unique<Wt::WVBoxLayout>());
+			_requestInfoLayout->addWidget(make_unique<Wt::WText>("Address Information: " + (*it).getRequestData().getStNum() + " " + (*it).getRequestData().getStName() + " " + (*it).getRequestData().getPostCode()));
+			Wt::WTextArea *_locDescription = _requestInfoLayout->addWidget(make_unique<Wt::WTextArea>((*it).getRequestData().getLocDesc()));
+			_locDescription->setReadOnly(true);
+			_requestInfoLayout->addWidget(make_unique<Wt::WText>("Incident Info: " + (*it).getRequestData().getServiceType()));
+			Wt::WTextArea *_requestDescription = _requestInfoLayout->addWidget(make_unique<Wt::WTextArea>((*it).getRequestData().getIncDesc()));
+			_requestDescription->setReadOnly(true);
+			Wt::WPushButton *_completeRequestButton = _requestHLayout->addWidget(make_unique<Wt::WPushButton>("Complete"), 0, Wt::AlignmentFlag::Middle);
+			_completeRequestButton->setHeight(75);
+			_completeRequestButton->clicked().connect([=]
+			{
+				(*it).GRSSaddReceiptData(logged_in_specialist.getBSB(), logged_in_specialist.getAccNum(), logged_in_specialist.getAccName(), to_string(rand() % 100 + 100));
+				(*it).GRSSsave("GRSSjobCompleted.csv");
+			});
+		}
 	}
 }
 
@@ -971,7 +1209,73 @@ void GRSS::viewUserDetails()
 	}
 	else if (userFlag == 2)
 	{
+		_pageLayout->addWidget(make_unique<Wt::WText>("User Details:"))->setId("buttons");
+		Wt::WContainerWidget *_userContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WContainerWidget *_usernameContainer = _userContainer->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WHBoxLayout *_usernameLayout = _usernameContainer->setLayout(make_unique<Wt::WHBoxLayout>());
+		_usernameLayout->addWidget(make_unique<Wt::WText>("Username:"), 1);
+		_usernameLayout->addWidget(make_unique<Wt::WText>(logged_in_specialist.getUserName()));
 
+		_pageLayout->addWidget(make_unique<Wt::WText>("Personal Details:"))->setId("buttons");
+		Wt::WContainerWidget *_personalContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WContainerWidget *_firstContainer = _personalContainer->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WHBoxLayout *_firstLayout = _firstContainer->setLayout(make_unique<Wt::WHBoxLayout>());
+		_firstLayout->addWidget(make_unique<Wt::WText>("First Name:"), 1);
+		_firstLayout->addWidget(make_unique<Wt::WText>(logged_in_specialist.getFirstName()));
+
+		Wt::WContainerWidget *_lastContainer = _personalContainer->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WHBoxLayout *_lastLayout = _lastContainer->setLayout(make_unique<Wt::WHBoxLayout>());
+		_lastLayout->addWidget(make_unique<Wt::WText>("Last Name:"), 1);
+		_lastLayout->addWidget(make_unique<Wt::WText>(logged_in_specialist.getLastName()));
+
+		Wt::WContainerWidget *_phoneContainer = _personalContainer->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WHBoxLayout *_phoneLayout = _phoneContainer->setLayout(make_unique<Wt::WHBoxLayout>());
+		_phoneLayout->addWidget(make_unique<Wt::WText>("Phone Number:"), 1);
+		_phoneLayout->addWidget(make_unique<Wt::WText>(logged_in_specialist.getNumber()));
+
+		Wt::WContainerWidget *_licNumContainer = _personalContainer->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WHBoxLayout *_licNumLayout = _licNumContainer->setLayout(make_unique<Wt::WHBoxLayout>());
+		_licNumLayout->addWidget(make_unique<Wt::WText>("License Number:"), 1);
+		_licNumLayout->addWidget(make_unique<Wt::WText>(logged_in_specialist.getLicenseNumber()));
+
+		Wt::WContainerWidget *_emailContainer = _personalContainer->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WHBoxLayout *_emailLayout = _emailContainer->setLayout(make_unique<Wt::WHBoxLayout>());
+		_emailLayout->addWidget(make_unique<Wt::WText>("eMail Address:"), 1);
+		_emailLayout->addWidget(make_unique<Wt::WText>(logged_in_specialist.getEmail()));
+
+		_pageLayout->addWidget(make_unique<Wt::WText>("Payment Details:"))->setId("buttons");
+		Wt::WContainerWidget *_paymentContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WContainerWidget *_BSBContainer = _paymentContainer->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WHBoxLayout *_BSBLayout = _BSBContainer->setLayout(make_unique<Wt::WHBoxLayout>());
+		_BSBLayout->addWidget(make_unique<Wt::WText>("BSB:"), 1);
+		_BSBLayout->addWidget(make_unique<Wt::WText>(logged_in_specialist.getBSB()));
+
+		Wt::WContainerWidget *_accNumContainer = _paymentContainer->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WHBoxLayout *_accNumLayout = _accNumContainer->setLayout(make_unique<Wt::WHBoxLayout>());
+		_accNumLayout->addWidget(make_unique<Wt::WText>("Account Number:"), 1);
+		_accNumLayout->addWidget(make_unique<Wt::WText>(logged_in_specialist.getAccNum()));
+
+		Wt::WContainerWidget *_accNameContainer = _paymentContainer->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WHBoxLayout *_accNameLayout = _accNameContainer->setLayout(make_unique<Wt::WHBoxLayout>());
+		_accNameLayout->addWidget(make_unique<Wt::WText>("Account Name:"), 1);
+		_accNameLayout->addWidget(make_unique<Wt::WText>(logged_in_specialist.getAccName()));
+
+		_pageLayout->addWidget(make_unique<Wt::WText>("Specialist Details:"))->setId("buttons");
+		Wt::WContainerWidget *_specialistContainer = _pageLayout->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WContainerWidget *_qualNumContainer = _specialistContainer->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WHBoxLayout *_qualNumLayout = _qualNumContainer->setLayout(make_unique<Wt::WHBoxLayout>());
+		_qualNumLayout->addWidget(make_unique<Wt::WText>("Qualification Number:"), 1);
+		_qualNumLayout->addWidget(make_unique<Wt::WText>(logged_in_specialist.getQualNum()));
+
+		Wt::WContainerWidget *_opAreaContainer = _specialistContainer->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WHBoxLayout *_opAreaLayout = _opAreaContainer->setLayout(make_unique<Wt::WHBoxLayout>());
+		_opAreaLayout->addWidget(make_unique<Wt::WText>("Qualification Number:"), 1);
+		Wt::WContainerWidget *_opAreasContainer = _opAreaLayout->addWidget(make_unique<Wt::WContainerWidget>());
+		Wt::WVBoxLayout *_operAreasLayout = _opAreasContainer->setLayout(make_unique<Wt::WVBoxLayout>());
+		for (set<string>::iterator it = logged_in_specialist.operationalAreas.begin(); it != logged_in_specialist.operationalAreas.end(); ++it)
+		{
+			_operAreasLayout->addWidget(make_unique<Wt::WText>(*it));
+		}		
 	}
 }
 
@@ -1006,7 +1310,7 @@ void GRSS::editUserDetails()
 	// email
 	Wt::WText *_emailText = _pageLayout->addWidget(make_unique<Wt::WText>("Current eMail" /* + Current email*/));
 	Wt::WLineEdit *_newEmailField = _pageLayout->addWidget(make_unique<Wt::WLineEdit>());
-	_newEmailField->setPlaceholderText("Enter your new phone number");
+	_newEmailField->setPlaceholderText("Enter your new eMail address");
 
 	Wt::WPushButton *_confirmButton = _pageLayout->addWidget(make_unique<Wt::WPushButton>("Confirmm"));
 	_confirmButton->clicked().connect([=]

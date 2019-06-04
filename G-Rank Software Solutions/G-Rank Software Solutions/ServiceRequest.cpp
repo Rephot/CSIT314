@@ -16,11 +16,12 @@ ServiceRequest::ServiceRequest()
 	requestID = 0;
 }
 
-ServiceRequest::ServiceRequest(string nameSt, string codePost, string numSt, string typeService, string descInc)
+ServiceRequest::ServiceRequest(string nameSt, string codePost, string numSt, string descLoc, string typeService, string descInc)
 {
 	stName = nameSt;
 	postCode = codePost;
 	stNum = numSt;
+	locDesc = descLoc;
 	serviceType = typeService;
 	incDesc = descInc;
 }
@@ -141,6 +142,11 @@ string ServiceRequest::getPostCode()
 string ServiceRequest::getStNum()
 {
 	return stNum;
+}
+
+string ServiceRequest::getLocDesc()
+{
+	return locDesc;
 }
 
 string ServiceRequest::getServiceType()

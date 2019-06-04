@@ -35,6 +35,8 @@ public:
 	void createReview(Customer); // types are temporary will replace with more suitable
 	string getJobRating();
 	string getReviewDesc();
+	void setJobRating(string);
+	void setJobReview(string);
 
 private:
 	float rating;

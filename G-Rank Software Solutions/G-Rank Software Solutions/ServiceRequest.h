@@ -15,7 +15,7 @@ using namespace std;
 class ServiceRequest {
 public:
 	ServiceRequest();
-	ServiceRequest(string, string, string, string, string);
+	ServiceRequest(string, string, string, string, string, string);
 	ServiceRequest(string, string, string, string, string, string, string, string, string);
 	void saveRequests();
 	void createServiceRequest(Customer);
@@ -30,11 +30,12 @@ public:
 	string getStName();
 	string getPostCode();
 	string getStNum();
+	string getLocDesc();
 	string getServiceType();
 	string getIncDesc();
 private:
 	string clientName, sType, serviceRequestedAt;
-	string stName, postCode, stNum, serviceType, incDesc;
+	string stName, postCode, stNum, locDesc, serviceType, incDesc;
 	
 };
 #endif

@@ -41,6 +41,10 @@ public:
 	string getCardExpiry();
 	string getCallOut();
 	string getServiceCost();
+	void setBSB(string);
+	void setAccNum(string);
+	void setAccName(string);
+	void setServiceCost(string);
 
 private:
 	string BSB, accNum, accName, cardNum, cardExpiry, callOut, serviceCost;

@@ -23,7 +23,7 @@ Specialist::Specialist(string uname, string pwd, string fname, string lname, str
 	specialistID = specID;
 }
 
-Specialist::Specialist(string specID, string uname, string pwd, string fname, string lname, string license_num, string phnumber, string email, string qualification_num, string bsb, string acc_num, string acc_name, vector<string> opArea) {
+Specialist::Specialist(string specID, string uname, string pwd, string fname, string lname, string license_num, string phnumber, string email, string qualification_num, string bsb, string acc_num, string acc_name, set<string> opArea) {
 	specialistID = specID;
 	username = uname;
 	password = pwd;
@@ -31,7 +31,7 @@ Specialist::Specialist(string specID, string uname, string pwd, string fname, st
 	this->lName = lname;
 	licenseNumber = license_num;
 	this->phNumber = phnumber;
-	emailAddress = email;
+	this->email = email;
 	this->qualification_num = qualification_num;
 	this->bsb = bsb;
 	account_num = acc_num;
@@ -47,7 +47,7 @@ Specialist::Specialist(string specID, string uname, string pwd, string fname, st
 	this->lName = lname;
 	licenseNumber = license_num;
 	this->phNumber = phnumber;
-	emailAddress = email;
+	this->email = email;
 	this->qualification_num = qualification_num;
 	this->bsb = bsb;
 	account_num = acc_num;
@@ -56,7 +56,7 @@ Specialist::Specialist(string specID, string uname, string pwd, string fname, st
 
 void Specialist::viewRequests() {
 	for (int i = 0; i < ServiceRequest::numCurrentRequests; i++) {
-		for (std::vector<string>::iterator it = operationalAreas.begin(); it != operationalAreas.end(); ++it) {
+		for (std::set<string>::iterator it = operationalAreas.begin(); it != operationalAreas.end(); ++it) {
 			if (ServiceRequest::currentRequests[i].incidentLocation == *it) {
 				cout << ServiceRequest::toString(ServiceRequest::currentRequests[i]) << endl;
 			}
@@ -100,7 +100,7 @@ Specialist* Specialist::load() {
 			std::stringstream ss(areas);
 			std::string token;
 			while (std::getline(ss, token, '|')) {
-				specialists[i].operationalAreas.push_back(token);
+				specialists[i].operationalAreas.insert(token);
 			}
 			i++;
 		}
@@ -139,7 +139,7 @@ vector<Specialist> Specialist::GRSSload() {
 			std::stringstream ss(areas);
 			std::string token;
 			while (std::getline(ss, token, '|')) {
-				specialists.back().operationalAreas.push_back(token);
+				specialists.back().operationalAreas.insert(token);
 			}
 		}
 		inFile.close();
@@ -162,7 +162,7 @@ void Specialist::save() {
 		<< email << "`"
 		<< qualification_num << "`";
 
-	for (std::vector<string>::iterator it = operationalAreas.begin(); it != operationalAreas.end(); ++it) {
+	for (std::set<string>::iterator it = operationalAreas.begin(); it != operationalAreas.end(); ++it) {
 		if (it != operationalAreas.begin()) outFile << "|";
 		outFile << *it;
 	}
@@ -178,10 +178,30 @@ void Specialist::selectRequest(int requestID) {
 }
 
 void Specialist::addArea(string postcode) {
-	operationalAreas.push_back(postcode);
+	operationalAreas.insert(postcode);
 }
 
 void Specialist::returnUser() {
 	User::returnUser();//C: User::returnUser() just calls the parent function on the same object that calls this function (inheritance)
 	//cout << "Operation Area: " << operationalArea << endl;
+}
+
+string Specialist::getQualNum()
+{
+	return qualification_num;
+}
+
+string Specialist::getBSB()
+{
+	return bsb;
+}
+
+string Specialist::getAccNum()
+{
+	return account_num;
+}
+
+string Specialist::getAccName()
+{
+	return account_name;
 }

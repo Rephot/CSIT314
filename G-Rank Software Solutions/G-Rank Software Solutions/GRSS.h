@@ -7,6 +7,7 @@
 #include <Wt/WButtonGroup.h>
 #include <Wt/WCheckBox.h>
 #include <Wt/WContainerwidget.h>
+#include <Wt/WDoubleSpinBox.h>
 #include <Wt/WEvent.h>
 #include <Wt/WHBoxLayout.h>
 #include <Wt/WLength.h>
@@ -14,6 +15,7 @@
 #include <Wt/WLink.h>
 #include <Wt/WPushButton.h>
 #include <Wt/WRadioButton.h>
+#include <Wt/WSelectionBox.h>
 #include <Wt/WString.h>
 #include <Wt/WText.h>
 #include <Wt/WTextArea.h>
@@ -22,6 +24,7 @@
 #include <fstream>
 #include <vector>
 #include <regex>
+#include <set>
 
 #include "Specialist.h"
 #include "Customer.h"
@@ -51,6 +54,7 @@ private:
 	void initContentLayout();
 	void title();
 	void loadInfo();
+	void unLoadData(Transaction);
 	void loginPage();
 	void registerPage();
 	void registerPage2();
@@ -59,8 +63,12 @@ private:
 	bool userAvailable(Wt::WString);
 
 	void userMenu();
-	void viewRequests();
 	void createRequestPage();
+	void customerRequest();
+	void requestInProgress();
+	void viewRequests();
+	void specialistRequest();
+	void requestComplete();
 	void viewUserDetails();
 	void editUserDetails();
 	void viewTransactions();
@@ -70,6 +78,10 @@ public:
 	vector<Customer> existingCustomers;
 	vector<Specialist> existingSpecialists;
 	vector<Transaction> previousTransactions;
+	vector<Transaction> inProgress; // customer created requests
+	vector<Transaction> specAvailable; // specialists responding
+	vector<Transaction> specAccepted; // customer has accepted a specialist
+	vector<Transaction> completed;
 	GRSS(const Wt::WEnvironment &env);
 };
 

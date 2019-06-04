@@ -108,3 +108,23 @@ string Receipt::getServiceCost()
 {
 	return serviceCost;
 }
+
+void Receipt::setBSB(string specbsb)
+{
+	BSB = specbsb;
+}
+
+void Receipt::setAccNum(string specAccNum)
+{
+	accNum = specAccNum;
+}
+
+void Receipt::setAccName(string specAccName)
+{
+	accName = specAccName;
+}
+
+void Receipt::setServiceCost(string serviceCost)
+{
+	this->serviceCost = serviceCost;
+}

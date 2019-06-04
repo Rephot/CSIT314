@@ -85,13 +85,11 @@ void manageDetailsMenu(int choice, Customer logged_in_user) {
 }
 
 void createRequestMenu(int choice, Customer logged_in_user) {
-	// run createServiceRequest();
 	ServiceRequest create;
 	create.createServiceRequest(logged_in_user);
 }
 
 void viewRequestMenu(int choice, Specialist logged_in_user) {
-	// run createServiceRequest();
 	logged_in_user.viewRequests();
 }
 

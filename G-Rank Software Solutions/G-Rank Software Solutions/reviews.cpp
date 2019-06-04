@@ -121,3 +121,13 @@ string Review::getReviewDesc()
 {
 	return reviewDesc;
 }
+
+void Review::setJobRating(string rate)
+{
+	jobRating = rate;
+}
+
+void Review::setJobReview(string rev)
+{
+	reviewDesc = rev;
+}
