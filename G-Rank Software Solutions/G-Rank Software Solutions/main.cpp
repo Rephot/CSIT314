@@ -93,7 +93,7 @@ void createRequestMenu(int choice, Customer logged_in_user) {
 
 void viewRequestMenu(int choice, Specialist logged_in_user) {
 	// run createServiceRequest();
-	logged_in_user.viewRequests();
+	//logged_in_user.viewRequests();
 }
 
 
@@ -317,6 +317,20 @@ void firstMenu(int choice) {
 	else return;
 }
 
+vector<Transaction> viewAvailableRequests(Specialist spec, vector<Transaction> transactions) {
+	vector<Transaction> available;
+
+	for (std::vector<string>::iterator it = spec.operationalAreas.begin(); it != spec.operationalAreas.end(); ++it) {
+		for (std::vector<Transaction>::iterator ti = transactions.begin(); ti != transactions.end(); ++ti) {
+			if (ti->getArea() == *it) {
+				available.push_back(*ti);
+			}
+		}
+	}
+
+	return available;
+}
+
 int main(int argc, char **argv) {
 
 	Administrator admin = Administrator("a1", "cbl755", "1234", "Chris", "Lawson", "0411000111");
@@ -331,6 +345,21 @@ int main(int argc, char **argv) {
 
 	//loading specialists
 	vector<Specialist> s = Specialist::GRSSload();
+
+	/* C: Here is a quick function that returns a vector of transactions that are in the specialists area
+	vector<Transaction> viewAvailableRequests(Specialist spec, vector<Transaction> transactions) {
+		vector<Transaction> available;
+
+		for (std::vector<string>::iterator it = spec.operationalAreas.begin(); it != spec.operationalAreas.end(); ++it) {
+			for (std::vector<Transaction>::iterator ti = transactions.begin(); ti != transactions.end(); ++ti) {
+				if (ti->getArea() == *it) {
+					available.push_back(*ti);
+				}
+			}
+		}
+
+		return available;
+	}*/
 
 	//after listing all available requests to specialist and getting the object based on which one they want to be available for call this where $25 is the callout fee
 	t.addAvailableSpecialist(s.front(), "$25");

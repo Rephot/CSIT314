@@ -19,11 +19,13 @@
 #include "User.h"
 #include <vector>
 #include "ServiceRequest.h"
+//#include "Transaction.h"
 //#include"common.h"
 
 using namespace std;
 
 //class User;
+//class Transaction;
 
 class Specialist : public User{
 public:
@@ -31,7 +33,7 @@ public:
 	Specialist(string, string, string, string, string, string, int);
 	Specialist(string, string, string, string, string, string, string, string, string, string, string, string, vector<string>);
 	Specialist(string, string, string, string, string, string, string, string, string, string, string, string);
-	void viewRequests();
+	//vector<Transaction> viewRequests(vector<Transaction>);
 	void save();
 	void selectRequest(int);
 	void addArea(string);

@@ -54,15 +54,19 @@ Specialist::Specialist(string specID, string uname, string pwd, string fname, st
 	account_name = acc_name;
 }
 
-void Specialist::viewRequests() {
-	for (int i = 0; i < ServiceRequest::numCurrentRequests; i++) {
-		for (std::vector<string>::iterator it = operationalAreas.begin(); it != operationalAreas.end(); ++it) {
-			if (ServiceRequest::currentRequests[i].incidentLocation == *it) {
-				cout << ServiceRequest::toString(ServiceRequest::currentRequests[i]) << endl;
+/*vector<Transaction> Specialist::viewRequests(vector<Transaction> transactions) {
+	vector<Transaction> available;
+
+	for (std::vector<string>::iterator it = operationalAreas.begin(); it != operationalAreas.end(); ++it) {
+		for (std::vector<Transaction>::iterator ti = transactions.begin(); ti != transactions.end(); ++ti) {
+			if (ti->getRequestData.getArea == *it) {
+				available.push_back(*ti);
 			}
 		}
 	}
-}
+
+	return available;
+}*/
 
 Specialist* Specialist::load() {
 	Specialist* specialists;
